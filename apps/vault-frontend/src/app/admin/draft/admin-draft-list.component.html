@@ -1,0 +1,10 @@
+<div class="draft-list admin">
+  <h5>All ongoing drafts</h5>
+  <ul class="draft-list">
+    <li *ngFor="let draft of drafts$ | ngrxPush; index as i">
+      <app-admin-draft-card
+        [id]="draft.id"
+      />
+    </li>
+  </ul>
+</div>

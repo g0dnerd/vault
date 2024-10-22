@@ -1,0 +1,21 @@
+<div class="tournaments-list">
+  <h1>Available Tournaments</h1>
+
+  @for (tournament of availableTournaments$ | async; track tournament.id) {
+    <app-tournament-register-panel
+      [userId]="(user$ | async)?.id"
+      [tournamentId]="tournament.id"
+      [tournamentName]="tournament.name"
+      [tournamentCapacity]="tournament.playerCapacity"
+      (registerTournament)="registerTournament($event)"
+    />
+  }
+  @empty {
+    <p>No tournaments available.</p>
+  }
+  
+
+  <ng-template #noTournaments>
+    <p>No tournaments available.</p>
+  </ng-template>
+</div>

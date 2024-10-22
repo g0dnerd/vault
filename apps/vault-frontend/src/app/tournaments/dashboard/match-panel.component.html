@@ -1,0 +1,83 @@
+<div class="card">
+  <h4 class="card-header">My current match</h4>
+  <div class="card-body match-details">
+    <h5 class="card-text">
+      My Opponent at Table
+      <span id="my-table">{{ (currentMatch$ | ngrxPush)?.game?.tableNumber }}</span>:
+      <span id="my-opponent">{{ (currentMatch$ | ngrxPush)?.opponent?.enrollment?.user?.username }}</span>
+    </h5>
+    @defer {
+      <form
+        *ngIf="!((currentMatch$ | ngrxPush)?.result) else confirmResult"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="report-result"
+        id="report-result-form"
+      >
+        <div class="mb-3">
+          <label class="form-label">Player 1 wins</label>
+          <input
+            type="number"
+            min="0"
+            max="2"
+            formControlName="player1Wins"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['player1Wins'].errors }"
+          />
+          <div *ngIf="submitted && f['player1Wins'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['player1Wins'].errors['required']">
+              Player 1 wins are required
+            </div>
+          </div>
+          <label class="form-label">Player 2 wins</label>
+          <input
+            type="number"
+            min="0"
+            max="2"
+            formControlName="player2Wins"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['player2Wins'].errors }"
+          />
+        </div>
+        <button [disabled]="loading" class="btn btn-primary">
+          <span
+            *ngIf="loading"
+            class="spinner-border spinner-border-sm me-1"
+          ></span>
+          Report result
+        </button>
+      </form>
+      <ng-template #confirmResult>
+        <p *ngIf="(currentMatch$ | ngrxPush)?.result?.result === 0; else noDraw">
+          It's a {{ (currentMatch$ | ngrxPush)?.result?.player1Wins }}-{{ (currentMatch$ | ngrxPush)?.result?.player2Wins }} draw
+          <span *ngIf="(currentMatch$ | ngrxPush)?.result?.confirmed; else resultOpen">(Result confirmed)</span>
+        </p>
+        <ng-template #noDraw>
+          <p *ngIf="(currentMatch$ | ngrxPush)?.result?.result === -1; else p2Win">
+            {{ (currentMatch$ | ngrxPush)?.game?.player1?.enrollment?.user?.username }}
+            wins
+            {{ (currentMatch$ | ngrxPush)?.result?.player1Wins }}-{{ (currentMatch$ | ngrxPush)?.result?.player2Wins }}
+            <span *ngIf="(currentMatch$ | ngrxPush)?.result?.confirmed; else resultOpen">(Result confirmed)</span>
+          </p>
+          <ng-template #p2Win>
+            {{ (currentMatch$ | ngrxPush)?.game?.player2?.enrollment?.user?.username }}
+            wins
+            {{ (currentMatch$ | ngrxPush)?.result?.player2Wins }}-{{ (currentMatch$ | ngrxPush)?.result?.player1Wins }}
+            <span *ngIf="(currentMatch$ | ngrxPush)?.result?.confirmed; else resultOpen">(Result confirmed)</span>
+          </ng-template>
+        </ng-template>
+        <ng-template #resultOpen>
+          <button [disabled]="loading" class="btn btn-primary">
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm me-1"
+            ></span>
+            Confirm result
+          </button>
+        </ng-template>
+      </ng-template>
+    }
+  </div>
+</div>

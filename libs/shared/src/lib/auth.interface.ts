@@ -1,0 +1,12 @@
+import { User } from "./user.interface";
+
+export interface AuthInterface {
+  token: string;
+  user: User;
+}
+
+export interface AuthPayload {
+  email: string;
+  password: string;
+  username?: string;
+}

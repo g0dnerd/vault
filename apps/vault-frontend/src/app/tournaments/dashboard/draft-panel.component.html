@@ -1,0 +1,10 @@
+<div class="card">
+    <h4 class="card-header">Current Draft</h4>
+  <div *ngIf="currentDraft$ | ngrxPush; else noDraft" class="card-body">
+    <p class="card-subtitle mb-2">Has draft started? {{ (currentDraft$ | ngrxPush)?.started }}</p>
+    <p class="card-subtitle mb-2">Cube ID: {{ (currentDraft$ | ngrxPush)?.cubeId }} </p>
+  </div>
+  <ng-template #noDraft class="card-body">
+      <p class="card-subtitle mb-2">No active draft found.</p>
+  </ng-template>
+</div>

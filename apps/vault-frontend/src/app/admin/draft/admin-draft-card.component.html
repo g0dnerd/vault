@@ -1,0 +1,12 @@
+<div class="card">
+  <h4 class="card-header">Draft playing some cube</h4>
+  <div class="card-body">
+    <h5 class="card-subtitle mb-2">Players:</h5>
+    <ul>
+      <li *ngFor="let player of ((draft$ | ngrxPush)?.players); index as i"
+        class="admin-draft-panel player-list">
+        {{ player.enrollment.user?.username }}
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="tournaments-list registered">
+  <h1>My Tournaments</h1>
+
+  <ul class="event-list">
+    <li *ngFor="let tournament of enrolledTournaments$ | ngrxPush; index as i">
+      <app-tournament-detail-card
+        [tournamentId]="tournament.id"
+        [tournamentName]="tournament.name"
+        [tournamentCapacity]="tournament.playerCapacity"
+      />
+    </li>
+    <li *ngIf="!(enrolledTournaments$ | ngrxPush)?.length">
+      You are not enrolled in any tournaments.
+    </li>
+  </ul>
+</div>

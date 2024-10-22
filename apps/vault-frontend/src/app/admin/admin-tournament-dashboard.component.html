@@ -1,0 +1,7 @@
+<div class="event-dashboard admin">
+  <h4>Admin Tournament Dashboard</h4>
+  <h1 class="event-name">{{ (tournament$ | ngrxPush)?.name }}</h1>
+  <app-admin-draft-list
+    [id]="id"
+  />
+</div>
