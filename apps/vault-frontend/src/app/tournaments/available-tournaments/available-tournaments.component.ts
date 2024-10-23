@@ -1,25 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
 
+import { Enrollment, Tournament, User } from '@vault/shared';
 import { RegisterPanelComponent } from './register-panel.component';
-import { Tournament, User } from '@vault/shared';
 import {
   AuthAppState,
   selectAvailableTournaments,
   selectAuthUser,
-  TournamentsState,
+  TournamentAppState,
 } from '../../store';
 import {
   initAvailable,
   register,
 } from '../../store/actions/tournaments.actions';
-
-export interface EnrollmentRegistration {
-  tournamentId: number;
-  userId: number;
-}
 
 @Component({
   standalone: true,
@@ -32,7 +27,7 @@ export class AvailableTournamentsComponent implements OnInit {
   user$: Observable<User | null> = of(null);
 
   constructor(
-    private readonly tournamentStore$: Store<TournamentsState>,
+    private readonly tournamentStore$: Store<TournamentAppState>,
     private readonly authStore$: Store<AuthAppState>
   ) {}
 
@@ -44,11 +39,10 @@ export class AvailableTournamentsComponent implements OnInit {
     this.user$ = this.authStore$.select(selectAuthUser);
   }
 
-  registerTournament(payload: EnrollmentRegistration) {
-    const { userId, tournamentId } = payload;
-    console.log(
-      `Register event emitter trying to dispatch registration for user ${userId} in tournament ${tournamentId}`
-    );
+  // Handler for the event emitter in `RegisterPanelComponent`,
+  // dispatches registration to `tournamentStore$`
+  registerTournament(registrationData: Enrollment) {
+    const { userId, tournamentId } = registrationData;
     this.tournamentStore$.dispatch(register({ tournamentId, userId }));
   }
 }

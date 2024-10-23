@@ -3,13 +3,13 @@ import { createReducer, on } from '@ngrx/store';
 import { User } from '@vault/shared';
 import * as AuthActions from '../actions/auth.actions';
 
-export interface ReducerAuthState {
+export interface AuthState {
   isAuthenticated: boolean | null;
   user: User | null;
   errorMessage: string | null;
 }
 
-export const initialState: ReducerAuthState = {
+export const initialState: AuthState = {
   isAuthenticated: null,
   user: null,
   errorMessage: null,
@@ -17,7 +17,7 @@ export const initialState: ReducerAuthState = {
 
 export const authReducer = createReducer(
   initialState,
-  // On successful authentication, sets the user into redux state and
+  // On successful authentication, sets the user into state and
   // sets the isAuthenticated flag to true
   on(AuthActions.authSuccess, (state, { authBlob }) => ({
     ...state,
@@ -26,7 +26,7 @@ export const authReducer = createReducer(
     errorMessage: null,
   })),
 
-  // On failed authentication, removes the user from redux state and
+  // On failed authentication, removes the user from state and
   // setts the isAuthenticated flag to false
   on(AuthActions.initAuthFailure, (state, { errorMessage }) => ({
     ...state,
@@ -34,29 +34,39 @@ export const authReducer = createReducer(
     user: null,
     errorMessage,
   })),
+
+  // On failed login, removes authentication and user from state
   on(AuthActions.loginFailure, (state, { errorMessage }) => ({
     ...state,
     isAuthenticated: false,
     user: null,
     errorMessage,
   })),
+
+  // On logout, removes authentication and user from state
   on(AuthActions.logout, (state) => ({
     ...state,
     isAuthenticated: false,
     user: null,
     errorMessage: null,
   })),
+
+  // On failed register, removes authentication and user from state
   on(AuthActions.registerFailure, (state, { errorMessage }) => ({
     ...state,
     isAuthenticated: false,
     user: null,
     errorMessage,
   })),
+
+  // On successful user update, set the new user object into state
   on(AuthActions.updateUserSuccess, (state, { authBlob: user }) => ({
     ...state,
     user,
     errorMessage: null,
   })),
+
+  // On failed user update, removes authentication and user from state
   on(AuthActions.updateUserFailure, (state, { errorMessage }) => ({
     ...state,
     errorMessage,

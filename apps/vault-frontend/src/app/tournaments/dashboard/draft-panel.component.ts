@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 
 import { Draft } from '@vault/shared';
-import { DraftState, selectCurrentDraft } from '../../store';
+import { DraftAppState, selectCurrentDraft } from '../../store';
 import { initCurrent } from '../../store/actions/draft.actions';
 
 @Component({
@@ -18,7 +18,7 @@ import { initCurrent } from '../../store/actions/draft.actions';
 export class DraftPanelComponent implements OnInit {
   currentDraft$: Observable<Draft | null> = of(null);
 
-  constructor(private readonly draftStore$: Store<DraftState>) { }
+  constructor(private readonly draftStore$: Store<DraftAppState>) {}
 
   ngOnInit() {
     // Dispatch a call to initialize the current draft to the draft store

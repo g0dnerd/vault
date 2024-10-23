@@ -14,14 +14,19 @@ import {
 import { MatchesService } from './matches.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { MatchEntity } from './entities/match.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('matches')
 @ApiTags('matches')
 export class MatchesController {
-  constructor(private readonly matchesService: MatchesService) { }
+  constructor(private readonly matchesService: MatchesService) {}
 
   @Post()
   @ApiCreatedResponse({ type: MatchEntity })
@@ -41,15 +46,24 @@ export class MatchesController {
   @ApiOkResponse({ type: MatchEntity })
   /// Gets the currently active match for the current user,
   /// where id is a tournament ID.
-  findCurrentUserCurrentMatch(@Request() req, @Param('tournamentId', ParseIntPipe) tournamentId: number) {
-    return this.matchesService.findCurrentMatchByUserId(req.user.id, tournamentId);
+  findCurrentUserCurrentMatch(
+    @Request() req,
+    @Param('tournamentId', ParseIntPipe) tournamentId: number
+  ) {
+    return this.matchesService.findCurrentMatchByUserId(
+      req.user.id,
+      tournamentId
+    );
   }
 
   @Get(':id/current/:tournamentId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: MatchEntity })
-  findCurrentMatchForUserId(@Param('id', ParseIntPipe) id: number, @Param('tournamentId', ParseIntPipe) tournamentId: number) {
+  findCurrentMatchForUserId(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('tournamentId', ParseIntPipe) tournamentId: number
+  ) {
     return this.matchesService.findCurrentMatchByUserId(id, tournamentId);
   }
 

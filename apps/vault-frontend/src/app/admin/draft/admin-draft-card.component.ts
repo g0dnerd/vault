@@ -1,12 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component, Input, numberAttribute, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 import { Observable, of } from 'rxjs';
 
 import { Draft } from '@vault/shared';
-import { DraftState, selectSelectedDraft } from '../../store';
+import { DraftAppState, selectSelectedDraft } from '../../store';
 import { selectDraft } from '../../store/actions/draft.actions';
-import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-admin-draft-card',
@@ -20,7 +20,7 @@ export class AdminDraftCardComponent implements OnInit {
 
   @Input({ transform: numberAttribute }) id = 0;
 
-  constructor(private readonly draftStore$: Store<DraftState>) { }
+  constructor(private readonly draftStore$: Store<DraftAppState>) {}
 
   ngOnInit() {
     this.draftStore$.dispatch(selectDraft({ id: this.id }));

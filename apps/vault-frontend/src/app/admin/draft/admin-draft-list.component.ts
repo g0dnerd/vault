@@ -5,7 +5,7 @@ import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 
 import { Draft } from '@vault/shared';
-import { DraftState, selectOngoingDrafts } from '../../store';
+import { DraftAppState, selectOngoingDrafts } from '../../store';
 import { initOngoing } from '../../store/actions/draft.actions';
 import { AdminDraftCardComponent } from './admin-draft-card.component';
 
@@ -19,7 +19,7 @@ import { AdminDraftCardComponent } from './admin-draft-card.component';
 export class AdminDraftListComponent implements OnInit {
   drafts$: Observable<Draft[]> = of([]);
 
-  constructor(private readonly draftsStore$: Store<DraftState>) { }
+  constructor(private readonly draftsStore$: Store<DraftAppState>) {}
 
   @Input({ transform: numberAttribute }) id = 0;
 

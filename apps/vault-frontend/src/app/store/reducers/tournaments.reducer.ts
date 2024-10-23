@@ -3,7 +3,7 @@ import { createReducer, on } from '@ngrx/store';
 import { Tournament } from '@vault/shared';
 import * as TournamentActions from '../actions/tournaments.actions';
 
-export interface ReducerTournamentsState {
+export interface TournamentState {
   all: Tournament[];
   available: Tournament[];
   enrolled: Tournament[];
@@ -11,7 +11,7 @@ export interface ReducerTournamentsState {
   errorMessage: string | null;
 }
 
-export const initialState: ReducerTournamentsState = {
+export const initialState: TournamentState = {
   all: [],
   available: [],
   enrolled: [],
@@ -31,32 +31,32 @@ export const tournamentsReducer = createReducer(
     all: [],
     errorMessage,
   })),
-  on(TournamentActions.initAvailableSuccess, (state, { availableTournaments: available }) => ({
-    ...state,
-    available,
-    errorMessage: null,
-  })),
   on(
-    TournamentActions.initAvailableFailure,
-    (state, { errorMessage }) => ({
+    TournamentActions.initAvailableSuccess,
+    (state, { availableTournaments: available }) => ({
       ...state,
-      available: [],
-      errorMessage,
+      available,
+      errorMessage: null,
     })
   ),
-  on(TournamentActions.initEnrolledSuccess, (state, { enrolledTournaments: enrolled }) => ({
+  on(TournamentActions.initAvailableFailure, (state, { errorMessage }) => ({
     ...state,
-    enrolled,
-    errorMessage: null,
+    available: [],
+    errorMessage,
   })),
   on(
-    TournamentActions.initEnrolledFailure,
-    (state, { errorMessage }) => ({
+    TournamentActions.initEnrolledSuccess,
+    (state, { enrolledTournaments: enrolled }) => ({
       ...state,
-      enrolled: [],
-      errorMessage,
+      enrolled,
+      errorMessage: null,
     })
   ),
+  on(TournamentActions.initEnrolledFailure, (state, { errorMessage }) => ({
+    ...state,
+    enrolled: [],
+    errorMessage,
+  })),
   on(TournamentActions.registerSuccess, (state, { tournament }) => ({
     ...state,
     enrolled: [...state.enrolled, tournament],
@@ -66,13 +66,16 @@ export const tournamentsReducer = createReducer(
     ...state,
     errorMessage,
   })),
-  on(TournamentActions.selectTournamentSuccess, (state, { tournament: selected }) => ({
-    ...state,
-    selected,
-  })),
+  on(
+    TournamentActions.selectTournamentSuccess,
+    (state, { tournament: selected }) => ({
+      ...state,
+      selected,
+    })
+  ),
   on(TournamentActions.selectTournamentFailure, (state, { errorMessage }) => ({
     ...state,
     selected: null,
     errorMessage,
-  })),
+  }))
 );

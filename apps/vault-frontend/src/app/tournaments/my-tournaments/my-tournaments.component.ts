@@ -1,14 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { PushPipe } from '@ngrx/component';
+import { Store } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
 
 import { Tournament } from '@vault/shared';
 import { TournamentDetailCardComponent } from './tournament-detail-card.component';
-import { Observable, of } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectEnrolledTournaments, TournamentsState } from '../../store';
-import { CommonModule } from '@angular/common';
+import { selectEnrolledTournaments, TournamentAppState } from '../../store';
 import { initEnrolled } from '../../store/actions/tournaments.actions';
-import { PushPipe } from '@ngrx/component';
 
 @Component({
   templateUrl: 'my-tournaments.component.html',
@@ -18,7 +18,7 @@ import { PushPipe } from '@ngrx/component';
 export class MyTournamentsComponent implements OnInit {
   enrolledTournaments$: Observable<Tournament[]> = of([]);
 
-  constructor(private readonly store$: Store<TournamentsState>) { }
+  constructor(private readonly store$: Store<TournamentAppState>) {}
 
   ngOnInit(): void {
     this.store$.dispatch(initEnrolled());

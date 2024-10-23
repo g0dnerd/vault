@@ -19,7 +19,7 @@ export enum AuthActionTypes {
 }
 
 // checks if valid authentication exists for the current user
-// and either returns an initAuthSuccess or initAuthFailure
+// and either returns an authSuccess or initAuthFailure
 export const initAuth = createAction(AuthActionTypes.INIT_AUTH);
 
 // Stores auth data in redux state and local storage and returns
@@ -36,11 +36,11 @@ export const initAuthFailure = createAction(
   props<{ errorMessage: string }>()
 );
 
-// Tries to authenticate to the backend using loginData and,
-// if successful, returns to returnUrl after
+// Tries to authenticate to the backend using loginData and
+// returns to returnUrl on success
 export const login = createAction(
   AuthActionTypes.LOGIN,
-  props<{ loginData: AuthPayload, returnUrl: string }>()
+  props<{ loginData: AuthPayload; returnUrl: string }>()
 );
 
 // Stores an error message in state and resets authentication because
