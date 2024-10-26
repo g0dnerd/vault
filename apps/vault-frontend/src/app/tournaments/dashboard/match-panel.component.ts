@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { firstValueFrom, Observable, of } from 'rxjs';
+import { first, firstValueFrom, Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
@@ -55,22 +55,13 @@ export class MatchPanelComponent implements OnInit {
         [Validators.required, Validators.min(0), Validators.max(2)],
       ],
     });
+  }
 
-
-    // Dispatch action to initialize current match to match store
-    this.matchStore$.dispatch(initCurrent({ tournamentId: this.tournamentId }));
-    // and subscribe to the result
+  async ngOnInit() {
     this.currentMatch$ = this.matchStore$.select(selectCurrentMatch);
     this.currentMatchId$ = this.matchStore$
       .select(selectCurrentMatchId)
       .pipe(first((id) => id != null));
-
-    // Subscribe to current match ID
-    // TODO: pull this from the existing observable instead
-    this.currentMatchId$ = this.matchStore$.select(selectCurrentMatchId);
-  }
-
-  async ngOnInit() {
     this.form.setValue({
       player1Wins: 0,
       player2Wins: 0,

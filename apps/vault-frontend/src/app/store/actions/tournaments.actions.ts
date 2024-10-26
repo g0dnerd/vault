@@ -22,9 +22,7 @@ export enum TournamentsActionTypes {
   SELECT_TOURNAMENT_FAILURE = `${TYPE} Select tournament failure`,
 }
 
-export const initAll = createAction(
-  TournamentsActionTypes.INIT_ALL
-);
+export const initAll = createAction(TournamentsActionTypes.INIT_ALL);
 
 export const initAllSuccess = createAction(
   TournamentsActionTypes.INIT_ALL_SUCCESS,

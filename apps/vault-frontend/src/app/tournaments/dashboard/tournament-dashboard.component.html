@@ -2,8 +2,8 @@
   <h4>Tournament Dashboard</h4>
   <h1 class="event-name">{{ (tournament$ | ngrxPush)?.name }}</h1>
   <ul class="player-info-list">
-    <app-draft-panel></app-draft-panel>
     @defer {
+    <app-draft-panel></app-draft-panel>
     <app-match-panel [tournamentId]="id" />
     }
   </ul>
