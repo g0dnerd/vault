@@ -1,21 +1,14 @@
-<div class="tournaments-list">
-  <h1>Available Tournaments</h1>
-
-  @for (tournament of availableTournaments$ | async; track tournament.id) {
+<h1>Available Tournaments</h1>
+<ul class="available-event-list">
+  @defer {
+  <li *ngFor="let tournament of availableTournaments$ | ngrxPush; index as i">
     <app-tournament-register-panel
-      [userId]="(user$ | async)?.id"
+      [userId]="(user$ | ngrxPush)?.id"
       [tournamentId]="tournament.id"
       [tournamentName]="tournament.name"
       [tournamentCapacity]="tournament.playerCapacity"
       (registerTournament)="registerTournament($event)"
     />
+  </li>
   }
-  @empty {
-    <p>No tournaments available.</p>
-  }
-  
-
-  <ng-template #noTournaments>
-    <p>No tournaments available.</p>
-  </ng-template>
-</div>
+</ul>

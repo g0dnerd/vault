@@ -1,22 +1,19 @@
 <div class="card">
-  <div
-    class="rounded-top text-white d-flex flex-row"
-    style="background-color: #000; height: 200px"
-  >
+  <div class="card-body text-white" style="background-color: #000">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="ms-4 mt-5 d-flex flex-column">
-        <h5>
-          <a [routerLink]="[tournamentId]">{{ tournamentName }}</a>
-        </h5>
-        <p>Player Capacity: {{ tournamentCapacity }}</p>
-        <button [disabled]="loading" class="btn btn-primary">
-          <span
-            *ngIf="loading"
-            class="spinner-border spinner-border-sm me-1"
-          ></span>
-          Register
-        </button>
-      </div>
+      <h5 class="card-title">
+        {{ tournamentName }}
+      </h5>
+      <p class="card-subtitle mb-2">
+        Player Capacity: {{ tournamentCapacity }}
+      </p>
+      <button [disabled]="loading" class="btn btn-primary">
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm me-1"
+        ></span>
+        Register
+      </button>
     </form>
   </div>
 </div>

@@ -1,7 +1,7 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
+import { PushPipe } from '@ngrx/component';
 
 import { Enrollment, Tournament, User } from '@vault/shared';
 import { RegisterPanelComponent } from './register-panel.component';
@@ -15,10 +15,11 @@ import {
   initAvailable,
   register,
 } from '../../store/actions/tournaments.actions';
+import { NgFor } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [RegisterPanelComponent, CommonModule],
+  imports: [RegisterPanelComponent, NgFor, PushPipe],
   templateUrl: 'available-tournaments.component.html',
   styleUrl: 'available-tournaments.component.css',
 })

@@ -1,13 +1,8 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 
-import {
-  AlertService,
-  EnrollmentsService,
-  TournamentService,
-} from '../../_services';
+import { EnrollmentsService, TournamentService } from '../../_services';
 import * as TournamentsActions from '../actions/tournaments.actions';
 
 // Gets all tournaments from the tournamentService

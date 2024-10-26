@@ -57,11 +57,19 @@ export const tournamentsReducer = createReducer(
     enrolled: [],
     errorMessage,
   })),
-  on(TournamentActions.registerSuccess, (state, { tournament }) => ({
-    ...state,
-    enrolled: [...state.enrolled, tournament],
-    errorMessage: null,
-  })),
+  on(TournamentActions.registerSuccess, (state, { tournament }) => {
+    let newAvailable = [...state.available];
+    const index = newAvailable.indexOf(tournament);
+    if (index !== -1) {
+      newAvailable.splice(index, 1);
+    }
+    return {
+      ...state,
+      available: newAvailable,
+      enrolled: [...state.enrolled, tournament],
+      errorMessage: null,
+    };
+  }),
   on(TournamentActions.registerFailure, (state, { errorMessage }) => ({
     ...state,
     errorMessage,
