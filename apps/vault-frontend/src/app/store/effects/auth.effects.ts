@@ -6,7 +6,7 @@ import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { AccountService, AuthService } from '../../_services';
 import * as AuthActions from '../actions/auth.actions';
 
-export const initAuthEffect = createEffect(
+export const initAuth = createEffect(
   (actions$ = inject(Actions), authService = inject(AuthService)) => {
     return actions$.pipe(
       ofType(AuthActions.initAuth),
@@ -29,13 +29,11 @@ export const initAuthEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const authSuccessEffect = createEffect(
+export const authSuccess = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(AuthActions.authSuccess),
-      tap(({ authBlob, returnUrl }) => {
-        const { token } = authBlob;
-        localStorage.setItem('token', token);
+      tap(({ returnUrl }) => {
         if (returnUrl) {
           router.navigate([returnUrl || '/']);
         }
@@ -45,7 +43,7 @@ export const authSuccessEffect = createEffect(
   { functional: true, dispatch: false }
 );
 
-export const loginEffect = createEffect(
+export const login = createEffect(
   (actions$ = inject(Actions), authService = inject(AuthService)) => {
     return actions$.pipe(
       ofType(AuthActions.login),
@@ -73,19 +71,6 @@ export const loginEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const logoutEffect = createEffect(
-  (actions$ = inject(Actions), router = inject(Router)) => {
-    return actions$.pipe(
-      ofType(AuthActions.logout),
-      tap(() => {
-        localStorage.removeItem('token');
-        router.navigate(['/account/login']);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
-
 export const updateUserEffect = createEffect(
   (actions$ = inject(Actions), accountService = inject(AccountService)) => {
     return actions$.pipe(
@@ -93,7 +78,7 @@ export const updateUserEffect = createEffect(
       mergeMap(({ email, username, userId }) => {
         return accountService.updateUserProfile(username, email, userId).pipe(
           map((authBlob) => {
-            return AuthActions.updateUserSuccess({ authBlob });
+            return AuthActions.updateUserSuccess({ user: authBlob });
           }),
           catchError((error) => {
             const errorMessage = error
@@ -128,7 +113,6 @@ export const registerEffect = createEffect(
             return AuthActions.authSuccess({ authBlob: { user, token } });
           }),
           catchError((error) => {
-            localStorage.removeItem('token');
             const errorMessage = error
               ? `${AuthActions.register.type} error[0]`
               : `${AuthActions.register.type} Error while registering`;

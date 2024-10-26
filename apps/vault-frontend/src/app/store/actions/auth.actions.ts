@@ -76,7 +76,7 @@ export const updateUser = createAction(
 // among API, cache and local storage.
 export const updateUserSuccess = createAction(
   AuthActionTypes.UPDATE_USER_SUCCESS,
-  props<{ authBlob: User }>()
+  props<{ user: User }>()
 );
 
 // Stores an error message in state and resets authentication because

@@ -6,12 +6,14 @@ import * as AuthActions from '../actions/auth.actions';
 export interface AuthState {
   isAuthenticated: boolean | null;
   user: User | null;
+  token: string | null;
   errorMessage: string | null;
 }
 
 export const initialState: AuthState = {
   isAuthenticated: null,
   user: null,
+  token: null,
   errorMessage: null,
 };
 
@@ -23,6 +25,7 @@ export const authReducer = createReducer(
     ...state,
     isAuthenticated: true,
     user: authBlob.user,
+    token: authBlob.token,
     errorMessage: null,
   })),
 
@@ -32,6 +35,7 @@ export const authReducer = createReducer(
     ...state,
     isAuthenticated: false,
     user: null,
+    token: null,
     errorMessage,
   })),
 
@@ -40,6 +44,7 @@ export const authReducer = createReducer(
     ...state,
     isAuthenticated: false,
     user: null,
+    token: null,
     errorMessage,
   })),
 
@@ -48,6 +53,7 @@ export const authReducer = createReducer(
     ...state,
     isAuthenticated: false,
     user: null,
+    token: null,
     errorMessage: null,
   })),
 
@@ -56,11 +62,12 @@ export const authReducer = createReducer(
     ...state,
     isAuthenticated: false,
     user: null,
+    token: null,
     errorMessage,
   })),
 
   // On successful user update, set the new user object into state
-  on(AuthActions.updateUserSuccess, (state, { authBlob: user }) => ({
+  on(AuthActions.updateUserSuccess, (state, { user }) => ({
     ...state,
     user,
     errorMessage: null,
