@@ -1,4 +1,5 @@
-import { Player } from './tournaments.interface';
+import { Player } from './player.interface';
+import { Result } from './result.interface';
 
 export interface Match {
   game: {
@@ -12,13 +13,4 @@ export interface Match {
   };
   opponent?: Player;
   result: Result;
-}
-
-export interface Result {
-  player1Wins: number;
-  player2Wins: number;
-  confirmed?: boolean;
-  result?: number;
-  matchId: number;
-  reportedBy?: Player;
 }
