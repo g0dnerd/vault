@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
-import { AuthResolver } from '../_helpers';
+import { AuthGuard } from '../_helpers';
 import { AvailableTournamentsComponent } from './available-tournaments';
 import { MyTournamentsComponent } from './my-tournaments';
 import { TournamentDashboardComponent } from './dashboard/tournament-dashboard.component';
@@ -28,30 +28,30 @@ export const TOURNAMENT_ROUTES: Routes = [
       provideEffects(matchEffects),
       provideState('match', matchReducer),
     ],
-    resolve: { auth: AuthResolver },
+    canActivate: [AuthGuard],
     data: { requiredRole: Role.Player },
   },
   {
     path: 'available',
     component: AvailableTournamentsComponent,
-    resolve: { auth: AuthResolver },
+    canActivate: [AuthGuard],
     data: { requiredRole: Role.Player },
   },
   {
     path: 'admin',
     component: AdminDashboardComponent,
-    resolve: { auth: AuthResolver },
+    canActivate: [AuthGuard],
     data: { requiredRole: Role.Admin },
   },
   {
     path: 'admin/:id',
     component: AdminTournamentDashboardComponent,
-    resolve: { auth: AuthResolver },
+    canActivate: [AuthGuard],
     data: { requiredRole: Role.Admin },
   },
   {
     path: ':id',
     component: TournamentDashboardComponent,
-    resolve: { auth: AuthResolver },
+    canActivate: [AuthGuard],
   },
 ];

@@ -1,40 +1,32 @@
 import { Route } from '@angular/router';
 
 import { LoginComponent, RegisterComponent } from './account';
-import { AuthResolver, UnAuthResolver } from './_helpers';
+import { AuthGuard, UnAuthGuard } from './_helpers';
 import { ProfileComponent } from './profile/profile.component';
 import { EditComponent } from './profile/edit.component';
 import { HomeComponent } from './home/home.component';
 
 export const appRoutes: Route[] = [
-  { path: '', component: HomeComponent, resolve: { auth: AuthResolver } },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   {
     path: 'account/login',
     component: LoginComponent,
-    resolve: {
-      auth: UnAuthResolver,
-    },
+    canActivate: [UnAuthGuard],
   },
   {
     path: 'account/register',
     component: RegisterComponent,
-    resolve: {
-      auth: UnAuthResolver,
-    },
+    canActivate: [UnAuthGuard],
   },
   {
     path: 'profile',
     component: ProfileComponent,
-    resolve: {
-      auth: AuthResolver,
-    },
+    canActivate: [AuthGuard],
   },
   {
     path: 'profile/edit',
     component: EditComponent,
-    resolve: {
-      auth: AuthResolver,
-    },
+    canActivate: [AuthGuard],
   },
   {
     path: 'tournaments',
