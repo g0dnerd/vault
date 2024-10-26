@@ -15,6 +15,42 @@ export class MatchesService {
     return this.prisma.match.findMany();
   }
 
+  findForDraft(draftId: number) {
+    return this.prisma.match.findMany({
+      where: {
+        round: {
+          draftId,
+          draft: {
+            started: true,
+            finished: false,
+          },
+        },
+      },
+      include: {
+        player1: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
+          },
+        },
+        player2: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async findCurrentMatchByUserId(userId: number, tournamentId: number) {
     // Find the active draft player for the given user and tournament
     const draftPlayer = await this.prisma.draftPlayer.findFirst({

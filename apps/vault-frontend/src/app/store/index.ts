@@ -87,6 +87,11 @@ export const selectCurrentMatchId = createSelector(
   selectMatch,
   (state: MatchState) => state.current!.game.id
 );
+// TODO: more granual selection
+export const selectOngoingMatches = createSelector(
+  selectMatch,
+  (state: MatchState) => state.ongoing
+);
 
 // ENROLLMENTS
 export interface EnrollmentAppState {

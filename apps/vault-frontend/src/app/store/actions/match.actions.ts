@@ -8,6 +8,9 @@ export enum MatchActionTypes {
   INIT_CURRENT = `${TYPE} Initialize current match`,
   INIT_CURRENT_SUCCESS = `${TYPE} Initialize current match success`,
   INIT_CURRENT_FAILURE = `${TYPE} Initialize current match failure`,
+  INIT_FOR_DRAFT = `${TYPE} Initialize matches for draft`,
+  INIT_FOR_DRAFT_SUCCESS = `${TYPE} Initialize matches for draft success`,
+  INIT_FOR_DRAFT_FAILURE = `${TYPE} Initialize matches for draft failure`,
   REPORT_RESULT = `${TYPE} Report result`,
   REPORT_RESULT_SUCCESS = `${TYPE} Report result success`,
   CONFIRM_RESULT = `${TYPE} Confirm result`,
@@ -29,6 +32,19 @@ export const initCurrentFailure = createAction(
   props<{ errorMessage: string }>()
 );
 
+export const initForDraft = createAction(
+  MatchActionTypes.INIT_FOR_DRAFT,
+  props<{ draftId: number }>()
+);
+export const initForDraftSuccess = createAction(
+  MatchActionTypes.INIT_FOR_DRAFT_SUCCESS,
+  props<{ ongoing: Match[] }>()
+);
+export const initForDraftFailure = createAction(
+  MatchActionTypes.INIT_FOR_DRAFT_FAILURE,
+  props<{ errorMessage: string }>()
+);
+
 // Reports a result and stores the updated game in state
 export const reportResult = createAction(
   MatchActionTypes.REPORT_RESULT,
@@ -36,7 +52,7 @@ export const reportResult = createAction(
 );
 export const reportResultSuccess = createAction(
   MatchActionTypes.REPORT_RESULT_SUCCESS,
-  props<{ game: Match }>()
+  props<{ current: Match }>()
 );
 
 // Confirms a result and stores the updated game in state

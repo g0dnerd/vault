@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class DraftsService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   create(createDraftDto: CreateDraftDto) {
     return this.prisma.draft.create({ data: createDraftDto });
@@ -32,7 +32,12 @@ export class DraftsService {
             },
           },
         },
-      }
+        cube: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
   }
 
@@ -55,7 +60,7 @@ export class DraftsService {
       },
       include: {
         players: true,
-      }
+      },
     });
   }
 

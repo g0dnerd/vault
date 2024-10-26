@@ -18,6 +18,10 @@ export class MatchService {
     return this.http.get<Match[]>(this.apiUrl);
   }
 
+  getMatchesForDraft(draftId: number): Observable<Match[]> {
+    return this.http.get<Match[]>(`${this.apiUrl}/draft/${draftId}`);
+  }
+
   getCurrentUserCurrentMatch(tournamentId: number): Observable<Match> {
     return this.http.get<Match>(`${this.apiUrl}/current/${tournamentId}`);
   }

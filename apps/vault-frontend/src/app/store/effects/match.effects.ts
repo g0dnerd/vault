@@ -33,6 +33,33 @@ export const initCurrent = createEffect(
   { functional: true, dispatch: true }
 );
 
+// Gets all ongoing matches in the given draft
+// and stores them in state on success.
+// Dispatches an `initForDraftFailure` on API error response.
+export const initForDraft = createEffect(
+  (actions$ = inject(Actions), matchService = inject(MatchService)) => {
+    return actions$.pipe(
+      ofType(MatchActions.initForDraft),
+      mergeMap(({ draftId }) => {
+        return matchService.getMatchesForDraft(draftId).pipe(
+          map((ongoing) => {
+            return MatchActions.initForDraftSuccess({ ongoing });
+          }),
+          catchError((error) => {
+            // TODO: Consolidate error responses
+            return of(
+              MatchActions.initForDraftFailure({
+                errorMessage: error.message,
+              })
+            );
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
 // Reports `result` to the matchService and stores the updated game including
 // result in state on success.
 // Dispatches an `initCurrentFailure` action on error.
@@ -44,7 +71,7 @@ export const reportResultEffect = createEffect(
         return matchService.reportResult(result).pipe(
           map((game) => {
             return MatchActions.reportResultSuccess({
-              game,
+              current: game,
             });
           }),
           catchError((error) => {
@@ -73,7 +100,7 @@ export const confirmResult = createEffect(
         return matchService.confirmResult(matchId).pipe(
           map((game) => {
             return MatchActions.reportResultSuccess({
-              game,
+              current: game,
             });
           }),
           catchError((error) => {
