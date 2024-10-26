@@ -1,3 +1,4 @@
+import { NgClass, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -6,15 +7,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { NgClass, NgIf } from '@angular/common';
+import { Observable, of } from 'rxjs';
 
-import { AlertService } from '../_services';
 import { User } from '@vault/shared';
+import { AlertService } from '../_services';
 import { AuthAppState, selectAuthUser } from '../store';
 import { updateUser } from '../store/actions/auth.actions';
-import { Observable, of } from 'rxjs';
-import { PushPipe } from '@ngrx/component';
 
 @Component({
   standalone: true,
@@ -48,7 +48,6 @@ export class EditComponent implements OnInit {
         email: user?.email,
         id: user?.id,
       });
-      console.log(JSON.stringify(user));
     });
   }
 
