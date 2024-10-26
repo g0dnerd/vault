@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { Match } from '@vault/shared';
+import { Match, MatchWithResult } from '@vault/shared';
 import * as MatchActions from '../actions/match.actions';
 
 export interface MatchState {
-  current: Match | null;
+  current: MatchWithResult | null;
   ongoing: Match[];
   errorMessage: string | null;
 }

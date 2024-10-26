@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Match, Result } from '@vault/shared';
+import { MatchWithResult, Match, Result } from '@vault/shared';
 
 const TYPE = '[Matches]';
 
@@ -25,7 +25,7 @@ export const initCurrent = createAction(
 );
 export const initCurrentSuccess = createAction(
   MatchActionTypes.INIT_CURRENT_SUCCESS,
-  props<{ current: Match }>()
+  props<{ current: MatchWithResult }>()
 );
 export const initCurrentFailure = createAction(
   MatchActionTypes.INIT_CURRENT_FAILURE,
@@ -52,7 +52,7 @@ export const reportResult = createAction(
 );
 export const reportResultSuccess = createAction(
   MatchActionTypes.REPORT_RESULT_SUCCESS,
-  props<{ current: Match }>()
+  props<{ current: MatchWithResult }>()
 );
 
 // Confirms a result and stores the updated game in state

@@ -15,8 +15,8 @@ export class MatchesService {
     return this.prisma.match.findMany();
   }
 
-  findForDraft(draftId: number) {
-    return this.prisma.match.findMany({
+  async findForDraft(draftId: number) {
+    const games = await this.prisma.match.findMany({
       where: {
         round: {
           draftId,
@@ -49,6 +49,7 @@ export class MatchesService {
         },
       },
     });
+    return games;
   }
 
   async findCurrentMatchByUserId(userId: number, tournamentId: number) {

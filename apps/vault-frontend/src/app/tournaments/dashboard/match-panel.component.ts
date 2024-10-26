@@ -10,17 +10,13 @@ import { first, firstValueFrom, Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
-import { Match } from '@vault/shared';
+import { MatchWithResult } from '@vault/shared';
 import {
   MatchAppState,
   selectCurrentMatch,
   selectCurrentMatchId,
 } from '../../store';
-import {
-  confirmResult,
-  initCurrent,
-  reportResult,
-} from '../../store/actions/match.actions';
+import { confirmResult, reportResult } from '../../store/actions/match.actions';
 import { AlertService } from '../../_services';
 
 @Component({
@@ -34,7 +30,7 @@ export class MatchPanelComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;
-  currentMatch$: Observable<Match | null> = of(null);
+  currentMatch$: Observable<MatchWithResult | null> = of(null);
   currentMatchId$: Observable<number> = of(0);
 
   @Input({ transform: numberAttribute }) tournamentId = 0;
