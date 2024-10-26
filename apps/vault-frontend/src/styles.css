@@ -16,10 +16,8 @@ html {
 
 @font-face {
   font-family: 'GeneralSans-Variable';
-  src: url('/GeneralSans-Variable.woff2')
-      format('woff2'),
-    url('/GeneralSans-Variable.ttf')
-      format('truetype');
+  src: url('/fonts/GeneralSans-Variable.woff2') format('woff2'),
+    url('/fonts/GeneralSans-Variable.ttf') format('truetype');
   font-weight: 200 700;
   font-display: swap;
   font-style: normal;
@@ -102,8 +100,7 @@ body.vault-app {
   width: 25px;
   height: 10px;
   transform: translateX(0);
-  background: url('/images/sprite-arrows.svg')
-    0 0px/25px no-repeat;
+  background: url('/images/sprite-arrows.svg') 0 0px/25px no-repeat;
 }
 
 .regular-button,
@@ -167,8 +164,7 @@ button:hover:not(.navbar-toggler, .btn-close) {
   display: inline-block;
   width: 60px;
   height: 56px;
-  background: url('/images/logo-vault-1.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/logo-vault-1.svg') 0 0 / contain no-repeat;
 }
 
 .vault-app .mb-1 .navbar li a {
@@ -241,7 +237,11 @@ button:not(.navbar-toggler, .btn-close).already-registered {
   pointer-events: none;
   color: #ccc;
 }
-button:not(.navbar-toggler, .btn-close, .btn-outline).already-registered::before {
+button:not(
+    .navbar-toggler,
+    .btn-close,
+    .btn-outline
+  ).already-registered::before {
   content: '';
   display: inline-block;
   width: 20px;
@@ -251,8 +251,7 @@ button:not(.navbar-toggler, .btn-close, .btn-outline).already-registered::before
   position: relative;
   top: 2px;
   opacity: 0.3;
-  background: url('/images/icons/icon-check-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-check-white.svg') 0 0 / contain no-repeat;
   top: 6px;
   opacity: 1;
 }
@@ -279,7 +278,6 @@ button:not(.navbar-toggler, .btn-close, .btn-outline).already-registered::before
 
 .vault-app .btn-outline-dark {
   background-color: #fff;
-
 }
 
 /* EVENTDASHBOARD */
@@ -459,8 +457,8 @@ img {
 .vault-app.darkmode .mb-1 .navbar-brand {
   width: 44px;
   height: 56px;
-  background: url('/images/logo-vault-clean.svg')
-    center center/contain no-repeat;
+  background: url('/images/logo-vault-clean.svg') center center/contain
+    no-repeat;
 }
 .vault-app.darkmode h1 {
   border-bottom: 1px solid white;
@@ -607,8 +605,7 @@ img {
   position: relative;
   top: 2px;
   opacity: 0.3;
-  background: url('/images/icons/icon-check-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-check-white.svg') 0 0 / contain no-repeat;
   top: 6px;
   opacity: 1;
 }
@@ -661,63 +658,56 @@ img {
   opacity: 0.3;
 }
 .vault-app.darkmode .event-list h5::before {
-  background: url('/images/icons/icon-calender-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-calender-white.svg') 0 0 / contain
+    no-repeat;
 }
 .vault-app.darkmode .draft-info::before {
-  background: url('/images/icons/icon-draft-white.svg')
-    0 0 / contain no-repeat;
-    width: 10px;
-    height: 10px;
+  background: url('/images/icons/icon-draft-white.svg') 0 0 / contain no-repeat;
+  width: 10px;
+  height: 10px;
   opacity: 1;
 }
 .vault-app.darkmode .event-dashboard .event-name::before {
-  background: url('/images/icons/icon-trophy-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-trophy-white.svg') 0 0 / contain no-repeat;
   width: 30px;
   height: 30px;
   margin-right: 10px;
   top: 5px;
 }
 .vault-app.darkmode .cube-info::before {
-  background: url('/images/icons/icon-cube-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-cube-white.svg') 0 0 / contain no-repeat;
   top: 4px;
 }
 .vault-app.darkmode .event-dashboard .current-match-panel::before,
 .vault-app.darkmode .match-details h5::before {
-  background: url('/images/icons/icon-match-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-match-white.svg') 0 0 / contain no-repeat;
   top: 4px;
 }
 .vault-app.darkmode .standings h5::before {
-  background: url('/images/icons/icon-standings-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-standings-white.svg') 0 0 / contain
+    no-repeat;
   top: 4px;
 }
 .vault-app.darkmode .draft-timetable h5::before {
-  background: url('/images/icons/icon-date-b-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-date-b-white.svg') 0 0 / contain no-repeat;
 }
 .vault-app.darkmode .pool-info h5 + a::before {
-  background: url('/images/icons/icon-pool-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-pool-white.svg') 0 0 / contain no-repeat;
   top: 4px;
 }
 .vault-app.darkmode .pairings-info h5 h5::before {
-  background: url('/images/icons/icon-pairing-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-pairing-white.svg') 0 0 / contain
+    no-repeat;
   top: 4px;
 }
 .vault-app.darkmode .pool-info-checked-in h5::before {
-  background: url('/images/icons/icon-check-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-check-white.svg') 0 0 / contain no-repeat;
   top: 6px;
   opacity: 1;
 }
 .vault-app.darkmode .seatings-info h5::before {
-  background: url('/images/icons/icon-seatings-white.svg')
-    0 0 / contain no-repeat;
+  background: url('/images/icons/icon-seatings-white.svg') 0 0 / contain
+    no-repeat;
 }
 .vault-app.darkmode .toc-container {
   max-width: 70ch;
