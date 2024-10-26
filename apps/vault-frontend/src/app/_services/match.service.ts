@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
 import { API_ROUTES, Match, Result } from '@vault/shared';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +16,6 @@ export class MatchService {
 
   getAllMatches(): Observable<Match[]> {
     return this.http.get<Match[]>(this.apiUrl);
-  }
-
-  getCurrentMatchByUserId(
-    userId: number,
-    tournamentId: number
-  ): Observable<Match> {
-    return this.http.get<Match>(
-      `${this.apiUrl}/${userId}/current/${tournamentId}`
-    );
   }
 
   getCurrentUserCurrentMatch(tournamentId: number): Observable<Match> {
@@ -42,7 +33,7 @@ export class MatchService {
 
   // POSTs a request to confirm the match for `matchId`
   confirmResult(matchId: number): Observable<Match> {
-    return this.http.patch<Match>(`${this.resultApiUrl}/${matchId}/confirm`, {
+    return this.http.patch<Match>(`${this.resultApiUrl}/${matchId}`, {
       confirmed: true,
     });
   }

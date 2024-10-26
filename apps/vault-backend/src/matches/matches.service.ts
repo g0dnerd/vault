@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Match } from '@prisma/client';
 
 @Injectable()
 export class MatchesService {
@@ -17,6 +16,7 @@ export class MatchesService {
   }
 
   async findCurrentMatchByUserId(userId: number, tournamentId: number) {
+    // Find the active draft player for the given user and tournament
     const draftPlayer = await this.prisma.draftPlayer.findFirst({
       where: {
         enrollment: {
@@ -30,6 +30,7 @@ export class MatchesService {
       },
     });
 
+    // Find the active match for that draft player
     const game = await this.prisma.match.findFirst({
       where: {
         OR: [{ player1Id: draftPlayer.id }, { player2Id: draftPlayer.id }],
@@ -38,20 +39,31 @@ export class MatchesService {
           finished: false,
         },
       },
+      // Include userId and username for both players
+      // so that we can return information on the opponent
       include: {
         player1: {
           select: {
-            enrollment: { select: { user: { select: { username: true } } } },
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
           },
         },
         player2: {
           select: {
-            enrollment: { select: { user: { select: { username: true } } } },
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
           },
         },
       },
     });
-
     const opponent =
       draftPlayer.id === game.player1Id ? game.player2 : game.player1;
 
@@ -64,9 +76,19 @@ export class MatchesService {
         player2Wins: true,
         confirmed: true,
         result: true,
+        reportedBy: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+              },
+            },
+          },
+        },
       },
     });
 
+    // Return the match, the result and the opponent
     return {
       game,
       result,
@@ -80,12 +102,22 @@ export class MatchesService {
       include: {
         player1: {
           select: {
-            enrollment: { select: { user: { select: { username: true } } } },
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
           },
         },
         player2: {
           select: {
-            enrollment: { select: { user: { select: { username: true } } } },
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
           },
         },
         round: {
@@ -119,6 +151,18 @@ export class MatchesService {
     const result = await this.prisma.result.findUnique({
       where: {
         matchId: game.id,
+      },
+      // TODO: Just return the reported by draft player ID instead and have that in redux in the frontend
+      include: {
+        reportedBy: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+              },
+            },
+          },
+        },
       },
     });
 

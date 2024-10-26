@@ -44,7 +44,3 @@ export const confirmResult = createAction(
   MatchActionTypes.CONFIRM_RESULT,
   props<{ matchId: number }>()
 );
-export const confirmResultSuccess = createAction(
-  MatchActionTypes.CONFIRM_RESULT_SUCCESS,
-  props<{ game: Match }>()
-);

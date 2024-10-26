@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
+// Intercepts HttpException responses from the API
+// and adds metadata to them
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
@@ -19,9 +21,5 @@ export class HttpExceptionFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
     });
-
-    console.error(
-      `Generic HTTP exception filter caught response with status code ${status} and path ${request.url}`
-    );
   }
 }

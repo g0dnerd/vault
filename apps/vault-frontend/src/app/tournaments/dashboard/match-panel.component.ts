@@ -56,10 +56,14 @@ export class MatchPanelComponent implements OnInit {
       ],
     });
 
+
     // Dispatch action to initialize current match to match store
     this.matchStore$.dispatch(initCurrent({ tournamentId: this.tournamentId }));
     // and subscribe to the result
     this.currentMatch$ = this.matchStore$.select(selectCurrentMatch);
+    this.currentMatchId$ = this.matchStore$
+      .select(selectCurrentMatchId)
+      .pipe(first((id) => id != null));
 
     // Subscribe to current match ID
     // TODO: pull this from the existing observable instead

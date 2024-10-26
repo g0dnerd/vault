@@ -22,11 +22,12 @@ async function main() {
     where: { name: 'Test Tournament 2' },
     update: {
       playerCapacity: 32,
+      public: true,
     },
     create: {
       name: 'Test Tournament 2',
       playerCapacity: 32,
-      public: false,
+      public: true,
     },
   });
 
@@ -56,7 +57,10 @@ async function main() {
     },
   });
 
-  const adminUserPassword = await bcrypt.hash('adminfoobar123', roundsOfHashing);
+  const adminUserPassword = await bcrypt.hash(
+    'adminfoobar123',
+    roundsOfHashing
+  );
   const adminUser = await prisma.user.upsert({
     where: { email: 'admin@foo.bar' },
     update: {
@@ -68,7 +72,7 @@ async function main() {
       roles: ['ADMIN'],
       email: 'admin@foo.bar',
       password: adminUserPassword,
-    }
+    },
   });
 
   const enrollment1 = await prisma.enrollment.upsert({
@@ -76,7 +80,7 @@ async function main() {
       playerTournament: {
         userId: user1.id,
         tournamentId: tournament1.id,
-      }
+      },
     },
     update: {},
     create: {
@@ -90,7 +94,7 @@ async function main() {
       playerTournament: {
         userId: user2.id,
         tournamentId: tournament1.id,
-      }
+      },
     },
     update: {},
     create: {
@@ -104,7 +108,7 @@ async function main() {
       tournamentPhase: {
         tournamentId: tournament1.id,
         phaseIndex: 1,
-      }
+      },
     },
     update: {},
     create: {
@@ -131,7 +135,7 @@ async function main() {
       phaseCube: {
         phaseId: phase1.id,
         cubeId: cube1.id,
-      }
+      },
     },
     update: {},
     create: {
@@ -145,7 +149,7 @@ async function main() {
       draftEnrollment: {
         draftId: draft1.id,
         enrollmentId: enrollment1.id,
-      }
+      },
     },
     update: {},
     create: {
@@ -159,7 +163,7 @@ async function main() {
       draftEnrollment: {
         draftId: draft1.id,
         enrollmentId: enrollment2.id,
-      }
+      },
     },
     update: {},
     create: {
@@ -173,7 +177,7 @@ async function main() {
       draftRound: {
         draftId: draft1.id,
         roundIndex: 1,
-      }
+      },
     },
     update: {},
     create: {

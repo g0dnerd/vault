@@ -1,4 +1,9 @@
 import { createSelector } from '@ngrx/store';
+import { AuthState } from './reducers/auth.reducer';
+import { TournamentsState } from './reducers/tournaments.reducer';
+import { DraftState } from './reducers/draft.reducer';
+import { MatchState } from './reducers/match.reducer';
+import { EnrollmentState } from './reducers/enrollment.reducer';
 
 import { Role } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
@@ -19,6 +24,10 @@ export const selectAuthStatus = createSelector(
   selectAuth,
   (state: AuthState) => state.isAuthenticated
 );
+export const selectAuthToken = createSelector(
+  selectAuth,
+  (state: AuthState) => state.token
+);
 export const selectAdminStatus = createSelector(
   selectAuth,
   (state: AuthState) => state.user?.roles?.includes(Role.Admin)
@@ -29,13 +38,15 @@ export const selectErrorMessage = createSelector(
 );
 
 // TOURNAMENTS
-export interface TournamentAppState {
+export interface TournamentAppState 
   tournaments: TournamentState;
+
 }
 export const selectTournaments = (state: TournamentAppState) =>
   state.tournaments;
 export const selectAllTournaments = createSelector(
   selectTournaments,
+
   (state: TournamentState) => state.all
 );
 export const selectAvailableTournaments = createSelector(
@@ -53,10 +64,10 @@ export const selectSelectedTournament = createSelector(
 
 // DRAFTS
 export interface DraftAppState {
-  draft: DraftState;
+  drafts: DraftState;
 }
-export const selectDrafts = (state: DraftAppState) => state.draft;
-export const selectOngoingDrafts = createSelector(
+export const selectDrafts = (state: DraftAppState) => state.drafts;
+export const selectOngoingDraft = createSelector(
   selectDrafts,
   (state: DraftState) => state.ongoing
 );
@@ -81,4 +92,14 @@ export const selectCurrentMatch = createSelector(
 export const selectCurrentMatchId = createSelector(
   selectMatch,
   (state: MatchState) => state.current!.game.id
+);
+
+// ENROLLMENTS
+export interface EnrollmentAppState {
+  enrollment: EnrollmentState;
+}
+export const selectEnrollment = (state: EnrollmentAppState) => state.enrollment;
+export const selectCurrentEnrollment = createSelector(
+  selectEnrollment,
+  (state: EnrollmentState) => state.current
 );
