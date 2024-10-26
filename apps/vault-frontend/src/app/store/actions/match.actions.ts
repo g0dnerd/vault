@@ -36,3 +36,9 @@ export const reportResultSuccess = createAction(
   MatchActionTypes.REPORT_RESULT_SUCCESS,
   props<{ game: Match }>()
 );
+
+// Confirms a result and stores the updated game in state
+export const confirmResult = createAction(
+  MatchActionTypes.CONFIRM_RESULT,
+  props<{ matchId: number }>()
+);
