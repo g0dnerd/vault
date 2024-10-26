@@ -1,9 +1,10 @@
 import { Role } from '@vault/shared';
-import { ReducerAuthState as AuthState } from './reducers/auth.reducer';
-import { ReducerTournamentsState } from './reducers/tournaments.reducer';
-import { ReducerDraftState } from './reducers/draft.reducer';
-import { ReducerMatchState } from './reducers/match.reducer';
 import { createSelector } from '@ngrx/store';
+import { AuthState } from './reducers/auth.reducer';
+import { TournamentsState } from './reducers/tournaments.reducer';
+import { DraftState } from './reducers/draft.reducer';
+import { MatchState } from './reducers/match.reducer';
+import { EnrollmentState } from './reducers/enrollment.reducer';
 
 // AUTH
 export interface AuthAppState {
@@ -19,6 +20,10 @@ export const selectAuthStatus = createSelector(
   selectAuth,
   (state: AuthState) => state.isAuthenticated
 );
+export const selectAuthToken = createSelector(
+  selectAuth,
+  (state: AuthState) => state.token
+);
 export const selectAdminStatus = createSelector(
   selectAuth,
   (state: AuthState) => state.user?.roles?.includes(Role.Admin)
@@ -32,30 +37,66 @@ export const isLoading = createSelector(selectAuth, (state: AuthState) => {
 });
 
 // TOURNAMENTS
-export interface TournamentsState {
-  tournaments: ReducerTournamentsState;
+export interface TournamentAppState {
+  tournaments: TournamentsState;
 }
-export const selectAllTournaments = (state: TournamentsState) =>
-  state.tournaments.all;
-export const selectAvailableTournaments = (state: TournamentsState) =>
-  state.tournaments.available;
-export const selectEnrolledTournaments = (state: TournamentsState) =>
-  state.tournaments.enrolled;
-export const selectSelectedTournament = (state: TournamentsState) =>
-  state.tournaments.selected;
+export const selectTournaments = (state: TournamentAppState) =>
+  state.tournaments;
+export const selectAllTournaments = createSelector(
+  selectTournaments,
+  (state: TournamentsState) => state.all
+);
+export const selectAvailableTournaments = createSelector(
+  selectTournaments,
+  (state: TournamentsState) => state.available
+);
+export const selectEnrolledTournaments = createSelector(
+  selectTournaments,
+  (state: TournamentsState) => state.enrolled
+);
+export const selectSelectedTournaments = createSelector(
+  selectTournaments,
+  (state: TournamentsState) => state.selected
+);
 
 // DRAFTS
-export interface DraftState {
-  draft: ReducerDraftState;
+export interface DraftAppState {
+  drafts: DraftState;
 }
-export const selectOngoingDrafts = (state: DraftState) => state.draft.ongoing;
-export const selectCurrentDraft = (state: DraftState) => state.draft.current;
-export const selectSelectedDraft = (state: DraftState) => state.draft.selected;
+export const selectDrafts = (state: DraftAppState) => state.drafts;
+export const selectOngoingDraft = createSelector(
+  selectDrafts,
+  (state: DraftState) => state.ongoing
+);
+export const selectCurrentDraft = createSelector(
+  selectDrafts,
+  (state: DraftState) => state.current
+);
+export const selectSelectedDraft = createSelector(
+  selectDrafts,
+  (state: DraftState) => state.selected
+);
 
 // MATCHES
-export interface MatchState {
-  match: ReducerMatchState;
+export interface MatchAppState {
+  match: MatchState;
 }
-export const selectCurrentMatch = (state: MatchState) => state.match.current;
-export const selectCurrentMatchId = (state: MatchState) =>
-  state.match.current!.game.id;
+export const selectMatch = (state: MatchAppState) => state.match;
+export const selectCurrentMatch = createSelector(
+  selectMatch,
+  (state: MatchState) => state.current
+);
+export const selectCurrentMatchId = createSelector(
+  selectMatch,
+  (state: MatchState) => state.current!.game.id
+);
+
+// ENROLLMENTS
+export interface EnrollmentAppState {
+  enrollment: EnrollmentState;
+}
+export const selectEnrollment = (state: EnrollmentAppState) => state.enrollment;
+export const selectCurrentEnrollment = createSelector(
+  selectEnrollment,
+  (state: EnrollmentState) => state.current
+);
