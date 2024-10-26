@@ -1,21 +1,21 @@
-import { createReducer, on } from "@ngrx/store";
+import { createReducer, on } from '@ngrx/store';
 
-import { Match } from "@vault/shared";
+import { Match } from '@vault/shared';
 import * as MatchActions from '../actions/match.actions';
 
-export interface ReducerMatchState {
+export interface MatchState {
   current: Match | null;
   errorMessage: string | null;
 }
 
-export const initialState: ReducerMatchState = {
+export const initialState: MatchState = {
   current: null,
   errorMessage: null,
 };
 
 export const matchReducer = createReducer(
   initialState,
-  on(MatchActions.initCurrentSuccess, (state, { currentMatch: current }) => ({
+  on(MatchActions.initCurrentSuccess, (state, { current }) => ({
     ...state,
     current,
     errorMessage: null,
@@ -29,5 +29,5 @@ export const matchReducer = createReducer(
     ...state,
     current,
     errorMessage: null,
-  })),
+  }))
 );

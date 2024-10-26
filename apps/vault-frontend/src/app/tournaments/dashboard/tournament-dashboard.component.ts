@@ -13,7 +13,6 @@ import {
   selectSelectedTournament,
   TournamentAppState,
 } from '../../store';
-import { selectTournament } from '../../store/actions/tournaments.actions';
 import { initCurrent } from '../../store/actions/match.actions';
 
 @Component({

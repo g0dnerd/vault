@@ -3,14 +3,14 @@ import { createReducer, on } from '@ngrx/store';
 import { Draft } from '@vault/shared';
 import * as DraftActions from '../actions/draft.actions';
 
-export interface ReducerDraftState {
+export interface DraftState {
   ongoing: Draft[];
   current: Draft | null;
   selected: Draft | null;
   errorMessage: string | null;
 }
 
-export const initialState: ReducerDraftState = {
+export const initialState: DraftState = {
   ongoing: [],
   current: null,
   selected: null,
@@ -47,6 +47,5 @@ export const draftReducer = createReducer(
     ...state,
     selected: null,
     errorMessage,
-  })),
+  }))
 );
-

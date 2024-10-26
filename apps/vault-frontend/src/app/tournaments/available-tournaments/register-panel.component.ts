@@ -49,11 +49,10 @@ export class RegisterPanelComponent implements OnInit {
     this.alertService.clear();
 
     if (this.form.invalid || !this.userId || !this.tournamentId) {
-      console.error(`Invalid registration form.`);
+      // TODO: Give this a proper feedback message
+      this.alertService.error(`Invalid registration form.`);
       return;
     }
-
-    console.log('Calling registration event emitter');
 
     this.loading = true;
     this.registerTournament.emit({

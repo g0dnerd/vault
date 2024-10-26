@@ -1,18 +1,27 @@
-import { HttpRequest, HttpEvent, HttpHandlerFn } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpRequest, HttpHandlerFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { take } from 'rxjs';
 
-export function jwtInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> {
-  const accessToken = localStorage.getItem('token');
+import { AuthAppState, selectAuthToken } from '../store';
 
-  req = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${accessToken?.replace(/"/g, '')}`,
-      Content: 'application/json',
-    },
+// Intercepts any outgoing HTTP request and inserts the JWT token
+// into the `Authorization` header
+export function jwtInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
+  const authStore$ = inject(Store<AuthAppState>);
+  const accessToken = authStore$.select(selectAuthToken).pipe(take(1));
+
+  accessToken.subscribe((token) => {
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          // NOTE: without the RegEx, the quotation marks (") kept getting inserted
+          // into the header, I'm not sure why. I don't love this, but it works.
+          Authorization: `Bearer ${token?.replace(/"/g, '')}`,
+          Content: 'application/json',
+        },
+      });
+    }
   });
-
   return next(req);
 }

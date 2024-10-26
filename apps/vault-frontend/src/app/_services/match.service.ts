@@ -26,7 +26,7 @@ export class MatchService {
     return this.http.get<Match>(`${this.apiUrl}/${matchId}`);
   }
 
-  /// Reports a result to the API and returns the API response.
+  // Reports a result to the API and returns the API response.
   reportResult(result: Result): Observable<Match> {
     return this.http.post<Match>(this.resultApiUrl, result);
   }

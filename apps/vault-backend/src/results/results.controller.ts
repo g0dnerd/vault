@@ -14,14 +14,19 @@ import {
 import { ResultsService } from './results.service';
 import { CreateResultDto } from './dto/create-result.dto';
 import { UpdateResultDto } from './dto/update-result.dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ResultEntity } from './entities/result.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('results')
 @ApiTags('results')
 export class ResultsController {
-  constructor(private readonly resultsService: ResultsService) { }
+  constructor(private readonly resultsService: ResultsService) {}
 
   @Post()
   @ApiBearerAuth()
@@ -48,9 +53,15 @@ export class ResultsController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: ResultEntity })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateResultDto: UpdateResultDto) {
-    return this.resultsService.update(id, updateResultDto);
+  update(
+    @Request() req,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateResultDto: UpdateResultDto
+  ) {
+    return this.resultsService.update(req.user.id, id, updateResultDto);
   }
 
   @Delete(':id')

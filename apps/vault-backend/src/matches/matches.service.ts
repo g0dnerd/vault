@@ -64,8 +64,6 @@ export class MatchesService {
         },
       },
     });
-
-    // The opponent is the other player in the game
     const opponent =
       draftPlayer.id === game.player1Id ? game.player2 : game.player1;
 

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Tournament } from '@vault/shared';
-import { selectSelectedTournament, TournamentsState } from '../store';
+import { selectSelectedTournament, TournamentAppState } from '../store';
 import { selectTournament } from '../store/actions/tournaments.actions';
 import { AdminDraftListComponent } from './draft/admin-draft-list.component';
 
@@ -19,7 +19,7 @@ import { AdminDraftListComponent } from './draft/admin-draft-list.component';
 export class AdminTournamentDashboardComponent implements OnInit {
   tournament$: Observable<Tournament | null> = of(null);
 
-  constructor(private readonly store$: Store<TournamentsState>) { }
+  constructor(private readonly store$: Store<TournamentAppState>) {}
 
   @Input({ transform: numberAttribute }) id = 0;
 

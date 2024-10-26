@@ -2,19 +2,19 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
 
+import { DraftStandings } from '@vault/shared';
 import * as DraftActions from '../actions/draft.actions';
 import { DraftService } from '../../_services';
-import { DraftScorecard, DraftStandings } from '@vault/shared';
 
-export const initOngoingEffect = createEffect(
-  (
-    actions$ = inject(Actions),
-    draftService = inject(DraftService)
-  ) => {
+// Gets the currently ongoing draft from `draftService` and stores
+// it in state on success.
+// Dispatches an `initOngoingFailure` on API error response
+export const initOngoing = createEffect(
+  (actions$ = inject(Actions), draftService = inject(DraftService)) => {
     return actions$.pipe(
       ofType(DraftActions.initOngoing),
-      mergeMap(({ id: payload }) => {
-        return draftService.getOngoingDrafts(payload).pipe(
+      mergeMap(({ id }) => {
+        return draftService.getOngoingDrafts(id).pipe(
           map((allDrafts) => {
             return DraftActions.initOngoingSuccess({
               allDrafts,
@@ -70,7 +70,9 @@ export const selectDraftEffect = createEffect(
             return DraftActions.selectDraftSuccess({ draft });
           }),
           catchError((error) => {
-            return of(DraftActions.selectDraftFailure({ errorMessage: error.message }));
+            return of(
+              DraftActions.selectDraftFailure({ errorMessage: error.message })
+            );
           })
         );
       })
@@ -91,11 +93,18 @@ export const makeDraftStandingsEffect = createEffect(
         return draftService.makeStandings(draftId, round).pipe(
           map((scorecards) => {
             // Sort the returned scorecards by tiebreakers in descending order.
-            scorecards.sort((a, b) =>
-              b.score - a.score || b.omw - a.omw || b.pgw - a.pgw || b.ogw - a.ogw);
+            scorecards.sort(
+              (a, b) =>
+                b.score - a.score ||
+                b.omw - a.omw ||
+                b.pgw - a.pgw ||
+                b.ogw - a.ogw
+            );
 
             // Map sorted scorecard array to a Map<place: number, DraftScorecard>
-            const standingsTable = new Map(scorecards.map((v, i) => [i, v] as const));
+            const standingsTable = new Map(
+              scorecards.map((v, i) => [i, v] as const)
+            );
             const standings: DraftStandings = {
               draftId,
               round,
@@ -104,7 +113,11 @@ export const makeDraftStandingsEffect = createEffect(
             return DraftActions.makeDraftStandingsSuccess({ standings });
           }),
           catchError((error) => {
-            return of(DraftActions.makeDraftStandingsFailure({ errorMessage: error.message }));
+            return of(
+              DraftActions.makeDraftStandingsFailure({
+                errorMessage: error.message,
+              })
+            );
           })
         );
       })

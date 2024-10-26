@@ -1,18 +1,23 @@
 import { HttpRequest, HttpEvent, HttpHandlerFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, throwError, catchError } from 'rxjs';
+
+import { AuthAppState } from '../store';
+import { logout } from '../store/actions/auth.actions';
 
 export function errorInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
   const router = inject(Router);
+  const authStore$ = inject(Store<AuthAppState>);
+
   return next(req).pipe(
     catchError((err) => {
       if ([401, 403].includes(err.status)) {
-        localStorage.removeItem('token');
+        authStore$.dispatch(logout());
         router.navigateByUrl('/account/login');
       }
 

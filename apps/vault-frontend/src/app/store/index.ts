@@ -1,4 +1,3 @@
-import { Role } from '@vault/shared';
 import { createSelector } from '@ngrx/store';
 import { AuthState } from './reducers/auth.reducer';
 import { TournamentsState } from './reducers/tournaments.reducer';
@@ -6,11 +5,16 @@ import { DraftState } from './reducers/draft.reducer';
 import { MatchState } from './reducers/match.reducer';
 import { EnrollmentState } from './reducers/enrollment.reducer';
 
+import { Role } from '@vault/shared';
+import { AuthState } from './reducers/auth.reducer';
+import { TournamentState } from './reducers/tournaments.reducer';
+import { DraftState } from './reducers/draft.reducer';
+import { MatchState } from './reducers/match.reducer';
+
 // AUTH
 export interface AuthAppState {
   auth: AuthState;
 }
-
 export const selectAuth = (state: AuthAppState) => state.auth;
 export const selectAuthUser = createSelector(
   selectAuth,
@@ -32,31 +36,30 @@ export const selectErrorMessage = createSelector(
   selectAuth,
   (state: AuthState) => state.errorMessage
 );
-export const isLoading = createSelector(selectAuth, (state: AuthState) => {
-  return state.isAuthenticated == null;
-});
 
 // TOURNAMENTS
-export interface TournamentAppState {
-  tournaments: TournamentsState;
+export interface TournamentAppState 
+  tournaments: TournamentState;
+
 }
 export const selectTournaments = (state: TournamentAppState) =>
   state.tournaments;
 export const selectAllTournaments = createSelector(
   selectTournaments,
-  (state: TournamentsState) => state.all
+
+  (state: TournamentState) => state.all
 );
 export const selectAvailableTournaments = createSelector(
   selectTournaments,
-  (state: TournamentsState) => state.available
+  (state: TournamentState) => state.available
 );
 export const selectEnrolledTournaments = createSelector(
   selectTournaments,
-  (state: TournamentsState) => state.enrolled
+  (state: TournamentState) => state.enrolled
 );
-export const selectSelectedTournaments = createSelector(
+export const selectSelectedTournament = createSelector(
   selectTournaments,
-  (state: TournamentsState) => state.selected
+  (state: TournamentState) => state.selected
 );
 
 // DRAFTS

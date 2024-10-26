@@ -1,12 +1,15 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 
-import { AlertService, EnrollmentsService, TournamentService } from '../../_services';
+import { EnrollmentsService, TournamentService } from '../../_services';
 import * as TournamentsActions from '../actions/tournaments.actions';
 
-export const initAllEffect = createEffect(
+// Gets all tournaments from the tournamentService
+// and stores them in state.
+// Dispatches an initAllFailure action on error reponse
+// from the API.
+export const initAll = createEffect(
   (
     actions$ = inject(Actions),
     tournamentService = inject(TournamentService)
@@ -34,7 +37,11 @@ export const initAllEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const initAvailableEffect = createEffect(
+// Gets all available tournaments for the current user
+// from the tournamentService and stores them in state.
+// Dispatches an initAvailableFailure action
+// on error reponse from the API.
+export const initAvailable = createEffect(
   (
     actions$ = inject(Actions),
     tournamentService = inject(TournamentService)
@@ -62,7 +69,11 @@ export const initAvailableEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const initEnrolledEffect = createEffect(
+// Gets all enrolled tournaments for the current user
+// from the tournamentService and stores them in state.
+// Dispatches an initEnrolledFailure action
+// on error reponse from the API.
+export const initEnrolled = createEffect(
   (
     actions$ = inject(Actions),
     tournamentService = inject(TournamentService)
@@ -90,7 +101,11 @@ export const initEnrolledEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const registerEffect = createEffect(
+// Registers the user with `userId` for the tournament
+// with `tournamentId`. Returns the tournament object
+// on success and a registerFailure on error response
+// from the API.
+export const register = createEffect(
   (
     actions$ = inject(Actions),
     enrollmentService = inject(EnrollmentsService)
@@ -100,6 +115,9 @@ export const registerEffect = createEffect(
       mergeMap(({ tournamentId, userId }) => {
         return enrollmentService.enrollUser(tournamentId, userId).pipe(
           map((res) => {
+            // If the response did not contain a tournament,
+            // the user could not be enrolled, return an error.
+            // TODO: make this a proper error response
             if (!res.tournament)
               return TournamentsActions.registerFailure({
                 errorMessage: 'Enrollment error',
@@ -110,7 +128,9 @@ export const registerEffect = createEffect(
           }),
           catchError((error) => {
             return of(
-              TournamentsActions.registerFailure({ errorMessage: error.message })
+              TournamentsActions.registerFailure({
+                errorMessage: error.message,
+              })
             );
           })
         );
@@ -120,21 +140,13 @@ export const registerEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const registerSuccessEffect = createEffect(
-  (actions$ = inject(Actions), router = inject(Router), alertService = inject(AlertService)) => {
-    return actions$.pipe(
-      ofType(TournamentsActions.registerSuccess),
-      tap(({ tournament }) => {
-        alertService.success(`You have successfully registered for ${tournament.name},`, true);
-        router.navigate(['/tournaments']);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
-
+// Selects a tournament by ID for a detail page view
+// and stores it into state.
 export const selectTournamentEffect = createEffect(
-  (actions$ = inject(Actions), tournamentService = inject(TournamentService)) => {
+  (
+    actions$ = inject(Actions),
+    tournamentService = inject(TournamentService)
+  ) => {
     return actions$.pipe(
       ofType(TournamentsActions.selectTournament),
       mergeMap(({ id: payload }) => {
@@ -143,7 +155,11 @@ export const selectTournamentEffect = createEffect(
             return TournamentsActions.selectTournamentSuccess({ tournament });
           }),
           catchError((error) => {
-            return of(TournamentsActions.selectTournamentFailure({ errorMessage: error.message }));
+            return of(
+              TournamentsActions.selectTournamentFailure({
+                errorMessage: error.message,
+              })
+            );
           })
         );
       })
@@ -151,4 +167,3 @@ export const selectTournamentEffect = createEffect(
   },
   { functional: true, dispatch: true }
 );
-

@@ -6,18 +6,22 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { first, firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
+import { Match } from '@vault/shared';
 import {
-  MatchState,
+  MatchAppState,
   selectCurrentMatch,
   selectCurrentMatchId,
 } from '../../store';
-import { initCurrent, reportResult } from '../../store/actions/match.actions';
+import {
+  confirmResult,
+  initCurrent,
+  reportResult,
+} from '../../store/actions/match.actions';
 import { AlertService } from '../../_services';
-import { Match } from '@vault/shared';
 
 @Component({
   selector: 'app-match-panel',
@@ -33,11 +37,14 @@ export class MatchPanelComponent implements OnInit {
   currentMatch$: Observable<Match | null> = of(null);
   currentMatchId$: Observable<number> = of(0);
 
+  @Input({ transform: numberAttribute }) tournamentId = 0;
+
   constructor(
     private formBuilder: FormBuilder,
-    private readonly matchStore$: Store<MatchState>,
+    private readonly matchStore$: Store<MatchAppState>,
     private readonly alertService: AlertService
   ) {
+    // Initialize result reporting form
     this.form = this.formBuilder.group({
       player1Wins: [
         0,
@@ -48,16 +55,22 @@ export class MatchPanelComponent implements OnInit {
         [Validators.required, Validators.min(0), Validators.max(2)],
       ],
     });
-  }
 
-  @Input({ transform: numberAttribute }) tournamentId = 0;
 
-  async ngOnInit() {
+    // Dispatch action to initialize current match to match store
+    this.matchStore$.dispatch(initCurrent({ tournamentId: this.tournamentId }));
+    // and subscribe to the result
     this.currentMatch$ = this.matchStore$.select(selectCurrentMatch);
     this.currentMatchId$ = this.matchStore$
       .select(selectCurrentMatchId)
       .pipe(first((id) => id != null));
 
+    // Subscribe to current match ID
+    // TODO: pull this from the existing observable instead
+    this.currentMatchId$ = this.matchStore$.select(selectCurrentMatchId);
+  }
+
+  async ngOnInit() {
     this.form.setValue({
       player1Wins: 0,
       player2Wins: 0,
@@ -69,10 +82,13 @@ export class MatchPanelComponent implements OnInit {
     return this.form.controls;
   }
 
+  // Handles reporting form submission
   async onSubmit() {
     this.alertService.clear();
 
     if (this.form.invalid) return;
+
+    const matchId = await firstValueFrom(this.currentMatchId$);
 
     const result =
       this.f['player1Wins'].value === this.f['player2Wins'].value
@@ -82,7 +98,6 @@ export class MatchPanelComponent implements OnInit {
         : 1;
 
     // TODO: Handle error responses
-    const matchId = await firstValueFrom(this.currentMatchId$);
     this.matchStore$.dispatch(
       reportResult({
         result: {
@@ -94,14 +109,19 @@ export class MatchPanelComponent implements OnInit {
       })
     );
     this.loading = false;
-
-    this.currentMatch$.subscribe((game) => {
-      console.log(JSON.stringify(game));
-    });
   }
 
-  onConfirm() {
-    // TODO: Result confirmation service
-    console.log('foo');
+  // Handles result confirmation
+  async onConfirm() {
+    this.alertService.clear();
+
+    if (this.form.invalid) return;
+
+    const matchId = await firstValueFrom(this.currentMatchId$);
+
+    // TODO: Handle error responses
+    this.matchStore$.dispatch(confirmResult({ matchId }));
+
+    this.loading = false;
   }
 }
