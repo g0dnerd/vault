@@ -6,7 +6,6 @@ import { Observable, of } from 'rxjs';
 
 import { Draft } from '@vault/shared';
 import { DraftAppState, selectCurrentDraft } from '../../store';
-import { initCurrent } from '../../store/actions/draft.actions';
 
 @Component({
   selector: 'app-draft-panel',
@@ -21,8 +20,6 @@ export class DraftPanelComponent implements OnInit {
   constructor(private readonly draftStore$: Store<DraftAppState>) {}
 
   ngOnInit() {
-    // Dispatch a call to initialize the current draft to the draft store
-    this.draftStore$.dispatch(initCurrent());
     // Get the currentDraft slice of the draft state
     this.currentDraft$ = this.draftStore$.select(selectCurrentDraft);
   }

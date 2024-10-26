@@ -5,7 +5,7 @@ import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 
 import { Draft } from '@vault/shared';
-import { DraftAppState, selectOngoingDrafts } from '../../store';
+import { DraftAppState, selectOngoingDraft } from '../../store';
 import { initOngoing } from '../../store/actions/draft.actions';
 import { AdminDraftCardComponent } from './admin-draft-card.component';
 
@@ -25,6 +25,6 @@ export class AdminDraftListComponent implements OnInit {
 
   ngOnInit(): void {
     this.draftsStore$.dispatch(initOngoing({ id: this.id }));
-    this.drafts$ = this.draftsStore$.select(selectOngoingDrafts);
+    this.drafts$ = this.draftsStore$.select(selectOngoingDraft);
   }
 }

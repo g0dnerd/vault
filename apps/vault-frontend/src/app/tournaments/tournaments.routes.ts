@@ -24,7 +24,7 @@ export const TOURNAMENT_ROUTES: Routes = [
       provideEffects(tournamentEffects),
       provideState('tournaments', tournamentsReducer),
       provideEffects(draftEffects),
-      provideState('draft', draftReducer),
+      provideState('drafts', draftReducer),
       provideEffects(matchEffects),
       provideState('match', matchReducer),
     ],

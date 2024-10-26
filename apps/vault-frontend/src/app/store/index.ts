@@ -1,15 +1,11 @@
 import { createSelector } from '@ngrx/store';
-import { AuthState } from './reducers/auth.reducer';
-import { TournamentsState } from './reducers/tournaments.reducer';
-import { DraftState } from './reducers/draft.reducer';
-import { MatchState } from './reducers/match.reducer';
-import { EnrollmentState } from './reducers/enrollment.reducer';
 
 import { Role } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { TournamentState } from './reducers/tournaments.reducer';
 import { DraftState } from './reducers/draft.reducer';
 import { MatchState } from './reducers/match.reducer';
+import { EnrollmentState } from './reducers/enrollment.reducer';
 
 // AUTH
 export interface AuthAppState {
@@ -38,15 +34,13 @@ export const selectErrorMessage = createSelector(
 );
 
 // TOURNAMENTS
-export interface TournamentAppState 
+export interface TournamentAppState {
   tournaments: TournamentState;
-
 }
 export const selectTournaments = (state: TournamentAppState) =>
   state.tournaments;
 export const selectAllTournaments = createSelector(
   selectTournaments,
-
   (state: TournamentState) => state.all
 );
 export const selectAvailableTournaments = createSelector(
