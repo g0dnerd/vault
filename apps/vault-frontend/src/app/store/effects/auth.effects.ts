@@ -33,7 +33,8 @@ export const authSuccess = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(AuthActions.authSuccess),
-      tap(({ returnUrl }) => {
+      tap(({ authBlob, returnUrl }) => {
+        localStorage.setItem('token', authBlob.token);
         if (returnUrl) {
           router.navigate([returnUrl || '/']);
         }

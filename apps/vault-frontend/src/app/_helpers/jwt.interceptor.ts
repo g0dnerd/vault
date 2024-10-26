@@ -9,9 +9,10 @@ import { AuthAppState, selectAuthToken } from '../store';
 // into the `Authorization` header
 export function jwtInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
   const authStore$ = inject(Store<AuthAppState>);
-  const accessToken = authStore$.select(selectAuthToken).pipe(take(1));
+  let accessToken = authStore$.select(selectAuthToken).pipe(take(1));
 
   accessToken.subscribe((token) => {
+    if (!token) token = localStorage['token'];
     if (token) {
       req = req.clone({
         setHeaders: {
