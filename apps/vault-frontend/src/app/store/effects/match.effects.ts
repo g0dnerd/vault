@@ -72,7 +72,7 @@ export const confirmResult = createEffect(
       mergeMap(({ matchId }) => {
         return matchService.confirmResult(matchId).pipe(
           map((game) => {
-            return MatchActions.confirmResultSuccess({
+            return MatchActions.reportResultSuccess({
               game,
             });
           }),
