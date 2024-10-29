@@ -38,34 +38,6 @@ export const initializeMatches = createEffect(
   { functional: true, dispatch: true }
 );
 
-// Reports `result` to the matchService and stores the updated game including
-// result in state on success.
-// Dispatches an `initCurrentFailure` action on error.
-export const reportResultEffect = createEffect(
-  (actions$ = inject(Actions), matchService = inject(MatchService)) => {
-    return actions$.pipe(
-      ofType(MatchActions.reportResult),
-      mergeMap(({ matchId, result }) => {
-        return matchService.reportResult(matchId, result).pipe(
-          map((game) => {
-            return MatchActions.updateMatch({
-              update: { id: game.id, changes: game },
-            });
-          }),
-          catchError((error) => {
-            return of(
-              MatchActions.matchStoreFailure({
-                errorMessage: error.message,
-              })
-            );
-          })
-        );
-      })
-    );
-  },
-  { functional: true, dispatch: true }
-);
-
 // Confirms the result for the match with the given `matchId` and stores
 // the updated game including result in state on success.
 // Dispatches an `initCurrentFailure` action on error.

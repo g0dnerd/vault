@@ -1,6 +1,3 @@
-// WebSocketGateway that acts as a websocket server
-// for broadcasting match updates
-
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -12,10 +9,11 @@ import { Server, Socket } from 'socket.io';
 
 import { UpdateMatchDto } from './dto/update-match.dto';
 
+// WebSocketGateway that acts as a websocket server
+// for broadcasting match updates
 // TODO: Specifiy CORS origins
 @WebSocketGateway({
-  namespace: '/matches',
-  cors: { origin: ['192.168.2.65', '192.168.2.65:4200', 'http://localhost'] },
+  cors: { origin: '*' },
 })
 export class MatchGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;

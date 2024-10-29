@@ -104,11 +104,6 @@ export const deleteMatchesByPredicate = createAction(
 );
 export const clearMatches = createAction(MatchActionTypes.CLEAR_MATCHES);
 
-// Reports a result and stores the updated game in state
-export const reportResult = createAction(
-  MatchActionTypes.REPORT_RESULT,
-  props<{ matchId: number; result: Result }>()
-);
 // Confirms a result and stores the updated game in state
 export const confirmResult = createAction(
   MatchActionTypes.CONFIRM_RESULT,

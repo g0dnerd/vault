@@ -6,7 +6,6 @@ import { Observable, of } from 'rxjs';
 
 import { Draft } from '@vault/shared';
 import { DraftAppState, selectCurrentDraft } from '../../store';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-draft-panel',
