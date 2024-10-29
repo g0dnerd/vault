@@ -1,9 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  provideRouter,
-  withComponentInputBinding,
-  // withEnabledBlockingInitialNavigation,
-} from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import {
   provideHttpClient,
   withFetch,
@@ -12,8 +8,8 @@ import {
 import { provideEffects } from '@ngrx/effects';
 import { provideState, provideStore } from '@ngrx/store';
 
-import { appRoutes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { appRoutes } from './app/app.routes';
 import {
   AuthGuard,
   errorInterceptor,
@@ -30,11 +26,7 @@ bootstrapApplication(AppComponent, {
     provideStore(),
     provideState({ name: 'auth', reducer: authReducer }),
     provideEffects(authEffects),
-    provideRouter(
-      appRoutes,
-      // withEnabledBlockingInitialNavigation(),
-      withComponentInputBinding()
-    ),
+    provideRouter(appRoutes, withComponentInputBinding()),
     provideHttpClient(
       withFetch(),
       withInterceptors([jwtInterceptor, errorInterceptor])
