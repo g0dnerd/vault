@@ -1,11 +1,55 @@
-import { createSelector } from '@ngrx/store';
+import {
+  ActionReducerMap,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
 
-import { Role } from '@vault/shared';
+import { Match, Role } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { TournamentState } from './reducers/tournaments.reducer';
 import { DraftState } from './reducers/draft.reducer';
-import { MatchState } from './reducers/match.reducer';
 import { EnrollmentState } from './reducers/enrollment.reducer';
+
+import * as fromMatch from './reducers/match.reducer';
+
+export interface State {
+  matches: fromMatch.MatchState;
+}
+
+export const reducers: ActionReducerMap<State> = {
+  matches: fromMatch.matchReducer,
+};
+
+// MATCHES
+export const selectMatchState =
+  createFeatureSelector<fromMatch.MatchState>('matches');
+export const selectMatchIds = createSelector(
+  selectMatchState,
+  fromMatch.selectMatchIds
+);
+export const selectMatchEntities = createSelector(
+  selectMatchState,
+  fromMatch.selectMatchEntities
+);
+export const selectAllMatches = createSelector(
+  selectMatchState,
+  fromMatch.selectAllMatches
+);
+export const selectMatchTotal = createSelector(
+  selectMatchState,
+  fromMatch.selectMatchTotal
+);
+export const selectMatchById = (matchId: number) =>
+  createSelector(
+    selectMatchState,
+    (matchState) => matchState.entities[matchId]
+  );
+export const selectMatchByQuery = (query: (game: Match) => boolean) =>
+  createSelector(selectMatchState, (state) => {
+    return Object.values(state.entities).find(
+      (game): game is Match => !!game && query(game)
+    );
+  });
 
 // AUTH
 export interface AuthAppState {
@@ -15,6 +59,9 @@ export const selectAuth = (state: AuthAppState) => state.auth;
 export const selectAuthUser = createSelector(
   selectAuth,
   (state: AuthState) => state.user
+);
+export const selectUserId = createSelector(selectAuthUser, (user) =>
+  user ? user.id : null
 );
 export const selectAuthStatus = createSelector(
   selectAuth,
@@ -72,25 +119,6 @@ export const selectCurrentDraft = createSelector(
 export const selectSelectedDraft = createSelector(
   selectDrafts,
   (state: DraftState) => state.selected
-);
-
-// MATCHES
-export interface MatchAppState {
-  match: MatchState;
-}
-export const selectMatch = (state: MatchAppState) => state.match;
-export const selectCurrentMatch = createSelector(
-  selectMatch,
-  (state: MatchState) => state.current
-);
-export const selectCurrentMatchId = createSelector(
-  selectMatch,
-  (state: MatchState) => state.current!.game.id
-);
-// TODO: more granual selection
-export const selectOngoingMatches = createSelector(
-  selectMatch,
-  (state: MatchState) => state.ongoing
 );
 
 // ENROLLMENTS

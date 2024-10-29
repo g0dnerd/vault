@@ -1,56 +1,34 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
 
 import * as MatchActions from '../actions/match.actions';
-import { MatchService } from '../../_services';
+import { AlertService, MatchService } from '../../_services';
 
-// Gets the current match for the currently authenticated user
-// for the given `tournamentId` and stores it in state on success.
-// Dispatches an `initCurrentFailure` action on failure.
-export const initCurrent = createEffect(
-  (actions$ = inject(Actions), matchService = inject(MatchService)) => {
+export const gameStoreFailure = createEffect(
+  (actions$ = inject(Actions), alertService = inject(AlertService)) => {
     return actions$.pipe(
-      ofType(MatchActions.initCurrent),
-      mergeMap(({ tournamentId }) => {
-        return matchService.getCurrentUserCurrentMatch(tournamentId).pipe(
-          map((currentMatch) => {
-            return MatchActions.initCurrentSuccess({
-              current: currentMatch,
-            });
-          }),
-          catchError((error) => {
-            return of(
-              MatchActions.initCurrentFailure({
-                errorMessage: error.message,
-              })
-            );
-          })
-        );
+      ofType(MatchActions.matchStoreFailure),
+      tap(({ errorMessage }) => {
+        alertService.error(errorMessage, true);
       })
     );
   },
-  { functional: true, dispatch: true }
+  { functional: true, dispatch: false }
 );
 
-// Gets all ongoing matches in the given draft
-// and stores them in state on success.
-// Dispatches an `initForDraftFailure` on API error response.
-export const initForDraft = createEffect(
+export const initializeMatches = createEffect(
   (actions$ = inject(Actions), matchService = inject(MatchService)) => {
     return actions$.pipe(
-      ofType(MatchActions.initForDraft),
+      ofType(MatchActions.initializeMatches),
       mergeMap(({ draftId }) => {
         return matchService.getMatchesForDraft(draftId).pipe(
-          map((ongoing) => {
-            return MatchActions.initForDraftSuccess({ ongoing });
+          map((matches) => {
+            return MatchActions.loadMatches({ matches });
           }),
           catchError((error) => {
-            // TODO: Consolidate error responses
             return of(
-              MatchActions.initForDraftFailure({
-                errorMessage: error.message,
-              })
+              MatchActions.matchStoreFailure({ errorMessage: error.message })
             );
           })
         );
@@ -67,16 +45,16 @@ export const reportResultEffect = createEffect(
   (actions$ = inject(Actions), matchService = inject(MatchService)) => {
     return actions$.pipe(
       ofType(MatchActions.reportResult),
-      mergeMap(({ result }) => {
-        return matchService.reportResult(result).pipe(
+      mergeMap(({ matchId, result }) => {
+        return matchService.reportResult(matchId, result).pipe(
           map((game) => {
-            return MatchActions.reportResultSuccess({
-              current: game,
+            return MatchActions.updateMatch({
+              update: { id: game.id, changes: game },
             });
           }),
           catchError((error) => {
             return of(
-              MatchActions.initCurrentFailure({
+              MatchActions.matchStoreFailure({
                 errorMessage: error.message,
               })
             );
@@ -99,13 +77,13 @@ export const confirmResult = createEffect(
       mergeMap(({ matchId }) => {
         return matchService.confirmResult(matchId).pipe(
           map((game) => {
-            return MatchActions.reportResultSuccess({
-              current: game,
+            return MatchActions.updateMatch({
+              update: { id: game.id, changes: game },
             });
           }),
           catchError((error) => {
             return of(
-              MatchActions.initCurrentFailure({
+              MatchActions.matchStoreFailure({
                 errorMessage: error.message,
               })
             );
