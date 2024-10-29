@@ -11,10 +11,11 @@ import { CubesModule } from '../cubes/cubes.module';
 import { RoundsModule } from '../rounds/rounds.module';
 import { ScorecardsModule } from '../scorecards/scorecards.module';
 import { DraftScorecardsModule } from '../draft-scorecards/draft-scorecards.module';
-import { ResultsModule } from '../results/results.module';
 import { PhasesModule } from '../phases/phases.module';
 import { DraftPlayersModule } from '../draft-players/draft-players.module';
 import { DraftsModule } from '../drafts/drafts.module';
+import { MatchesService } from '../matches/matches.service';
+import { MatchGateway } from '../matches/matches.gateway';
 
 @Module({
   imports: [
@@ -28,12 +29,11 @@ import { DraftsModule } from '../drafts/drafts.module';
     RoundsModule,
     ScorecardsModule,
     DraftScorecardsModule,
-    ResultsModule,
     PhasesModule,
     DraftPlayersModule,
     DraftsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MatchGateway, MatchesService],
 })
 export class AppModule {}

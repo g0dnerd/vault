@@ -9,18 +9,18 @@ import {
   ParseIntPipe,
   NotFoundException,
   UseGuards,
-  Request,
 } from '@nestjs/common';
-import { MatchesService } from './matches.service';
-import { CreateMatchDto } from './dto/create-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
 import { MatchEntity } from './entities/match.entity';
+import { MatchesService } from './matches.service';
+import { CreateMatchDto } from './dto/create-match.dto';
+import { UpdateMatchDto } from './dto/update-match.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('matches')
@@ -48,22 +48,6 @@ export class MatchesController {
     return this.matchesService.findForDraft(draftId);
   }
 
-  @Get('current/:tournamentId')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: MatchEntity })
-  /// Gets the currently active match for the current user,
-  /// where id is a tournament ID.
-  findCurrentUserCurrentMatch(
-    @Request() req,
-    @Param('tournamentId', ParseIntPipe) tournamentId: number
-  ) {
-    return this.matchesService.findCurrentMatchByUserId(
-      req.user.id,
-      tournamentId
-    );
-  }
-
   @Get(':id/current/:tournamentId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -86,7 +70,7 @@ export class MatchesController {
   }
 
   @Patch(':id')
-  @ApiOkResponse({ type: MatchEntity })
+  @ApiCreatedResponse({ type: MatchEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMatchDto: UpdateMatchDto
