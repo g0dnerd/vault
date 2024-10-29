@@ -10,9 +10,10 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 import { Match } from '@vault/shared';
+import { matchSumValidator } from '../../_helpers/match-form.validator';
 import {
   MatchWebSocketService,
   AlertService,
@@ -20,7 +21,6 @@ import {
 } from '../../_services';
 import { State, selectMatchById } from '../../store';
 import { confirmResult, updateMatch } from '../../store/actions/match.actions';
-import { matchSumValidator } from '../../_helpers/match-form.validator';
 
 @Component({
   selector: 'app-match-panel',
@@ -37,7 +37,11 @@ export class MatchPanelComponent implements OnInit {
   private matchStore$ = inject(Store<State>);
   private matchWebSocketService = inject(MatchWebSocketService);
   private route = inject(ActivatedRoute);
+
+  // Get the current match ID from the route resolver
   private matchId = this.route.snapshot.data['game'].id;
+
+  // Subscribe to that match in NGRX
   currentMatch$: Observable<Match | undefined> = this.matchStore$.select(
     selectMatchById(this.matchId)
   );
@@ -73,8 +77,10 @@ export class MatchPanelComponent implements OnInit {
           Validators.max(2),
         ]),
       },
+      // Ensure total number of games reported is not greater than 3
       { validators: matchSumValidator }
     );
+
     // Initial form values
     this.form.setValue({
       player1Wins: 0,
@@ -95,6 +101,8 @@ export class MatchPanelComponent implements OnInit {
     if (this.form.invalid) return;
     this.loading = true;
 
+    // Set the `result` field, where
+    // -1: p1 wins, 0: draw, 1: p2 wins
     const result =
       this.f['player1Wins'].value === this.f['player2Wins'].value
         ? 0
@@ -102,14 +110,16 @@ export class MatchPanelComponent implements OnInit {
         ? -1
         : 1;
 
+    // Report the result to the service, which will then propagate it
+    // via the WebSocket gateway
     // TODO: Handle error responses
-    this.matchService
-      .reportResult(this.matchId, {
+    await firstValueFrom(
+      this.matchService.reportResult(this.matchId, {
         player1Wins: this.f['player1Wins'].value,
         player2Wins: this.f['player2Wins'].value,
         result,
       })
-      .subscribe();
+    );
 
     this.loading = false;
   }
