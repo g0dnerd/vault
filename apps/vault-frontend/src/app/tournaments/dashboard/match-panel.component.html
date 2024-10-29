@@ -3,12 +3,11 @@
   <div class="card-body match-details">
     <h5 class="card-text">
       My Opponent at Table
-      <span id="my-table">{{
-        (currentMatch$ | ngrxPush)?.game?.tableNumber
-      }}</span
+      <span id="my-table">{{ (currentMatch$ | ngrxPush)?.tableNumber }}</span
       >:
+      <!--TODO: Make this actually output the opponent name-->
       <span id="my-opponent">{{
-        (currentMatch$ | ngrxPush)?.opponent?.enrollment?.user?.username
+        (currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username
       }}</span>
     </h5>
     @defer {
@@ -56,50 +55,36 @@
       </button>
     </form>
     <ng-template #confirmResult>
-      <p *ngIf="(currentMatch$ | ngrxPush)?.result?.result === 0; else noDraw">
-        It's a {{ (currentMatch$ | ngrxPush)?.result?.player1Wins }}-{{
-          (currentMatch$ | ngrxPush)?.result?.player2Wins
+      <p *ngIf="(currentMatch$ | ngrxPush)?.result === 0; else noDraw">
+        It's a {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
+          (currentMatch$ | ngrxPush)?.player2Wins
         }}
         draw
         <span
-          *ngIf="(currentMatch$ | ngrxPush)?.result?.confirmed; else resultOpen"
+          *ngIf="(currentMatch$ | ngrxPush)?.resultConfirmed; else resultOpen"
           >(Result confirmed)</span
         >
       </p>
       <ng-template #noDraw>
-        <p
-          *ngIf="(currentMatch$ | ngrxPush)?.result?.result === -1; else p2Win"
-        >
-          {{
-            (currentMatch$ | ngrxPush)?.game?.player1?.enrollment?.user
-              ?.username
-          }}
+        <p *ngIf="(currentMatch$ | ngrxPush)?.result === -1; else p2Win">
+          {{ (currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username }}
           wins
-          {{ (currentMatch$ | ngrxPush)?.result?.player1Wins }}-{{
-            (currentMatch$ | ngrxPush)?.result?.player2Wins
+          {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
+            (currentMatch$ | ngrxPush)?.player2Wins
           }}
           <span
-            *ngIf="
-              (currentMatch$ | ngrxPush)?.result?.confirmed;
-              else resultOpen
-            "
+            *ngIf="(currentMatch$ | ngrxPush)?.resultConfirmed; else resultOpen"
             >(Result confirmed)</span
           >
         </p>
         <ng-template #p2Win>
-          {{
-            (currentMatch$ | ngrxPush)?.game?.player2?.enrollment?.user
-              ?.username
-          }}
+          {{ (currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username }}
           wins
-          {{ (currentMatch$ | ngrxPush)?.result?.player2Wins }}-{{
-            (currentMatch$ | ngrxPush)?.result?.player1Wins
+          {{ (currentMatch$ | ngrxPush)?.player2Wins }}-{{
+            (currentMatch$ | ngrxPush)?.player1Wins
           }}
           <span
-            *ngIf="
-              (currentMatch$ | ngrxPush)?.result?.confirmed;
-              else resultOpen
-            "
+            *ngIf="(currentMatch$ | ngrxPush)?.resultConfirmed; else resultOpen"
             >(Result confirmed)</span
           >
         </ng-template>
@@ -108,9 +93,8 @@
         @defer {
         <button
           *ngIf="
-            (currentMatch$ | ngrxPush)?.result?.reportedBy?.enrollment
-              ?.userId ==
-              (currentMatch$ | ngrxPush)?.opponent?.enrollment?.userId;
+            (currentMatch$ | ngrxPush)?.reportedBy?.enrollment?.userId ==
+              (currentMatch$ | ngrxPush)?.player2?.enrollment?.userId;
             else awaitingConfirmation
           "
           [disabled]="loading"

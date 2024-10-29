@@ -7,12 +7,12 @@ import { Observable, of } from 'rxjs';
 import { Draft, Match } from '@vault/shared';
 import {
   DraftAppState,
-  MatchAppState,
-  selectOngoingMatches,
+  State,
+  selectAllMatches,
   selectSelectedDraft,
 } from '../../store';
 import { selectDraft } from '../../store/actions/draft.actions';
-import { initForDraft } from '../../store/actions/match.actions';
+import { initializeMatches } from '../../store/actions/match.actions';
 
 @Component({
   selector: 'app-admin-draft-card',
@@ -28,14 +28,15 @@ export class AdminDraftCardComponent implements OnInit {
   @Input({ transform: numberAttribute }) id = 0;
 
   constructor(
-    private readonly draftStore$: Store<DraftAppState>,
-    private readonly matchStore$: Store<MatchAppState>
+    private readonly store$: Store<State>,
+    private readonly draftStore$: Store<DraftAppState>
   ) {}
 
   ngOnInit() {
     this.draftStore$.dispatch(selectDraft({ id: this.id }));
-    this.matchStore$.dispatch(initForDraft({ draftId: this.id }));
     this.draft$ = this.draftStore$.select(selectSelectedDraft);
-    this.matches$ = this.matchStore$.select(selectOngoingMatches);
+
+    this.store$.dispatch(initializeMatches({ draftId: this.id }));
+    this.matches$ = this.store$.select(selectAllMatches);
   }
 }

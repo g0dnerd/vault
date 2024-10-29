@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 
 import { Draft } from '@vault/shared';
 import { DraftAppState, selectCurrentDraft } from '../../store';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-draft-panel',
@@ -20,7 +21,6 @@ export class DraftPanelComponent implements OnInit {
   constructor(private readonly draftStore$: Store<DraftAppState>) {}
 
   ngOnInit() {
-    // Get the currentDraft slice of the draft state
     this.currentDraft$ = this.draftStore$.select(selectCurrentDraft);
   }
 }

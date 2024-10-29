@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Draft } from '@prisma/client';
 import { DraftPlayerEntity } from '../../draft-players/entities/draft-player.entity';
+import { PhaseEntity } from '../../phases/entities/phase.entity';
+import { CubeEntity } from '../../cubes/entities/cube.entity';
 
 export class DraftEntity implements Draft {
   @ApiProperty()
@@ -9,24 +11,30 @@ export class DraftEntity implements Draft {
   @ApiProperty()
   phaseId: number;
 
+  @ApiProperty({ type: () => PhaseEntity })
+  phase: PhaseEntity;
+
   @ApiProperty()
   cubeId: number;
 
-  @ApiProperty({ default: 0 })
-  tableFirst: number;
+  @ApiProperty({ type: () => CubeEntity })
+  cube: CubeEntity;
 
-  @ApiProperty({ default: 0 })
-  tableLast: number;
+  @ApiProperty({ required: false, nullable: false })
+  tableFirst: number | null;
 
-  @ApiProperty({ default: false })
+  @ApiProperty({ required: false, nullable: false })
+  tableLast: number | null;
+
+  @ApiProperty()
   started: boolean;
 
-  @ApiProperty({ default: false })
+  @ApiProperty()
   finished: boolean;
 
-  @ApiProperty({ default: false })
+  @ApiProperty()
   seated: boolean;
 
-  @ApiProperty({ default: [DraftPlayerEntity] })
+  @ApiProperty({ type: () => DraftPlayerEntity, isArray: true, default: [] })
   players: DraftPlayerEntity[];
 }

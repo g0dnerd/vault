@@ -15,6 +15,7 @@ import * as matchEffects from '../store/effects/match.effects';
 import { tournamentsReducer } from '../store/reducers/tournaments.reducer';
 import { draftReducer } from '../store/reducers/draft.reducer';
 import { matchReducer } from '../store/reducers/match.reducer';
+import { CurrentDraftResolver } from '../_helpers/current-draft.resolver';
 
 export const TOURNAMENT_ROUTES: Routes = [
   {
@@ -26,7 +27,7 @@ export const TOURNAMENT_ROUTES: Routes = [
       provideEffects(draftEffects),
       provideState('drafts', draftReducer),
       provideEffects(matchEffects),
-      provideState('match', matchReducer),
+      provideState('matches', matchReducer),
     ],
     canActivate: [AuthGuard],
     data: { requiredRole: Role.Player },
@@ -53,5 +54,6 @@ export const TOURNAMENT_ROUTES: Routes = [
     path: ':id',
     component: TournamentDashboardComponent,
     canActivate: [AuthGuard],
+    resolve: { game: CurrentDraftResolver },
   },
 ];

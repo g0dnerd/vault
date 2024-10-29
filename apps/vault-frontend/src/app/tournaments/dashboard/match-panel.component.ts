@@ -1,4 +1,11 @@
-import { Component, Input, numberAttribute, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  numberAttribute,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { KeyValuePipe, NgClass, NgIf } from '@angular/common';
 import {
   FormBuilder,
@@ -6,18 +13,18 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { first, firstValueFrom, Observable, of } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
+import { Store } from '@ngrx/store';
 
-import { MatchWithResult } from '@vault/shared';
+import { Match } from '@vault/shared';
+import { MatchWebSocketService, AlertService } from '../../_services';
+import { State, selectMatchById } from '../../store';
 import {
-  MatchAppState,
-  selectCurrentMatch,
-  selectCurrentMatchId,
-} from '../../store';
-import { confirmResult, reportResult } from '../../store/actions/match.actions';
-import { AlertService } from '../../_services';
+  confirmResult,
+  reportResult,
+  updateMatch,
+} from '../../store/actions/match.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-match-panel',
@@ -26,20 +33,33 @@ import { AlertService } from '../../_services';
   templateUrl: './match-panel.component.html',
   styleUrl: './match-panel.component.css',
 })
-export class MatchPanelComponent implements OnInit {
+export class MatchPanelComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   loading = false;
   submitted = false;
-  currentMatch$: Observable<MatchWithResult | null> = of(null);
-  currentMatchId$: Observable<number> = of(0);
+
+  private matchStore$ = inject(Store<State>);
+  private matchWebSocketService = inject(MatchWebSocketService);
+  currentMatch$: Observable<Match | undefined> = this.matchStore$.select(
+    selectMatchById(1)
+  );
 
   @Input({ transform: numberAttribute }) tournamentId = 0;
 
   constructor(
     private formBuilder: FormBuilder,
-    private readonly matchStore$: Store<MatchAppState>,
     private readonly alertService: AlertService
   ) {
+    // Listen to the WebSocket service
+    this.matchWebSocketService
+      .listenForMatchUpdates()
+      .subscribe((game: Match) => {
+        console.log('Received matchUpdated event from socket');
+        this.matchStore$.dispatch(
+          updateMatch({ update: { id: game.id, changes: game } })
+        );
+      });
+
     // Initialize result reporting form
     this.form = this.formBuilder.group({
       player1Wins: [
@@ -53,29 +73,34 @@ export class MatchPanelComponent implements OnInit {
     });
   }
 
-  async ngOnInit() {
-    this.currentMatch$ = this.matchStore$.select(selectCurrentMatch);
-    this.currentMatchId$ = this.matchStore$
-      .select(selectCurrentMatchId)
-      .pipe(first((id) => id != null));
+  ngOnInit() {
+    // Initialize the WebSocket connection
+    this.matchWebSocketService.connectSocket('test');
+
+    // Initial form values
     this.form.setValue({
       player1Wins: 0,
       player2Wins: 0,
     });
-
     this.loading = false;
   }
+
+  ngOnDestroy() {
+    this.matchWebSocketService.disconnectSocket();
+  }
+
   get f() {
     return this.form.controls;
   }
 
   // Handles reporting form submission
-  async onSubmit() {
+  onSubmit() {
     this.alertService.clear();
 
     if (this.form.invalid) return;
 
-    const matchId = await firstValueFrom(this.currentMatchId$);
+    // TODO: implement this
+    const matchId = 1;
 
     const result =
       this.f['player1Wins'].value === this.f['player2Wins'].value
@@ -87,24 +112,26 @@ export class MatchPanelComponent implements OnInit {
     // TODO: Handle error responses
     this.matchStore$.dispatch(
       reportResult({
+        matchId,
         result: {
           player1Wins: this.f['player1Wins'].value,
           player2Wins: this.f['player2Wins'].value,
-          matchId,
           result,
         },
       })
     );
+
     this.loading = false;
   }
 
   // Handles result confirmation
-  async onConfirm() {
+  onConfirm() {
     this.alertService.clear();
 
     if (this.form.invalid) return;
 
-    const matchId = await firstValueFrom(this.currentMatchId$);
+    // TODO: implement this
+    const matchId = 1;
 
     // TODO: Handle error responses
     this.matchStore$.dispatch(confirmResult({ matchId }));

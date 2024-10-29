@@ -12,9 +12,9 @@
     <h5 class="card-subtitle mb-2">Matches:</h5>
     <ul class="admin-draft-panel match-list">
       <li *ngFor="let game of matches$ | ngrxPush; index as i">
-        {{ game.player1.enrollment.user?.username }}
+        {{ game.player1?.enrollment?.user?.username }}
         vs
-        {{ game.player2.enrollment.user?.username }}
+        {{ game.player2?.enrollment?.user?.username }}
       </li>
     </ul>
   </div>
