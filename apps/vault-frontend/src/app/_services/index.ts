@@ -1,3 +1,4 @@
+export * from './match-websocket.service';
 export * from './account.service';
 export * from './alert.service';
 export * from './enrollment.service';

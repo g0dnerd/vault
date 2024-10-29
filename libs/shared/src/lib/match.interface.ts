@@ -1,26 +1,17 @@
 import { Player } from './player.interface';
-import { Result } from './result.interface';
-
-export interface MatchWithResult {
-  game: {
-    id: number;
-    roundId: number;
-    player1Id: number;
-    player2Id: number;
-    tableNumber: number;
-    player1: Player;
-    player2: Player;
-  };
-  opponent?: Player;
-  result: Result;
-}
 
 export interface Match {
   id: number;
   roundId: number;
   player1Id: number;
+  player1: Player | null;
   player2Id: number;
+  player2: Player | null;
   tableNumber: number;
-  player1: Player;
-  player2: Player;
+  player1Wins: number | null;
+  player2Wins: number | null;
+  result: number | null;
+  reportedById: number | null;
+  reportedBy: Player | null;
+  resultConfirmed: boolean;
 }
