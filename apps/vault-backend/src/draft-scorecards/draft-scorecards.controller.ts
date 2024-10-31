@@ -35,12 +35,20 @@ export class DraftScorecardsController {
     return this.draftScorecardsService.findAll();
   }
 
+  @Get('draft/:draftId/round/:roundIdx')
+  @ApiOkResponse({ type: DraftScorecardEntity, isArray: true })
+  findAllInRound(@Param('draftId', ParseIntPipe) draftId: number) {
+    return this.draftScorecardsService.findAllInDraft(draftId);
+  }
+
   @Get(':id')
   @ApiOkResponse({ type: DraftScorecardEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const draftScorecard = await this.draftScorecardsService.findOne(id);
     if (!draftScorecard) {
-      throw new NotFoundException(`DraftScorecard with ID ${id} does not exist.`);
+      throw new NotFoundException(
+        `DraftScorecard with ID ${id} does not exist.`
+      );
     }
     return draftScorecard;
   }

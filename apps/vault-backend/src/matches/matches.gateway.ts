@@ -19,23 +19,23 @@ export class MatchGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
   handleConnection(client: Socket) {
-    console.error(`Client connected: ${client.id}`);
+    console.log(`Client connected: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    console.error(`Client disconnected: ${client.id}`);
+    console.log(`Client disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('updateMatch')
   handleMatchUpdate(game: UpdateMatchDto) {
     // Broadcast the updated match to all connected clients
-    console.error(`Received match update: ${JSON.stringify(game)}`);
+    console.log(`Received match update: ${JSON.stringify(game)}`);
     this.sendMatchUpdate(game);
   }
 
   // Method to trigger match updates from other parts of the application
   sendMatchUpdate(game: UpdateMatchDto) {
-    console.error('Emitting match update');
+    console.log('Emitting match update');
     this.server.emit('matchUpdated', game);
   }
 }

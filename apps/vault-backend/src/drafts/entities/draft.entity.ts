@@ -1,8 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Draft } from '@prisma/client';
-import { DraftPlayerEntity } from '../../draft-players/entities/draft-player.entity';
-import { PhaseEntity } from '../../phases/entities/phase.entity';
-import { CubeEntity } from '../../cubes/entities/cube.entity';
 
 export class DraftEntity implements Draft {
   @ApiProperty()
@@ -11,20 +8,14 @@ export class DraftEntity implements Draft {
   @ApiProperty()
   phaseId: number;
 
-  @ApiProperty({ type: () => PhaseEntity })
-  phase: PhaseEntity;
-
   @ApiProperty()
   cubeId: number;
 
-  @ApiProperty({ type: () => CubeEntity })
-  cube: CubeEntity;
+  @ApiProperty()
+  tableFirst: number;
 
-  @ApiProperty({ required: false, nullable: false })
-  tableFirst: number | null;
-
-  @ApiProperty({ required: false, nullable: false })
-  tableLast: number | null;
+  @ApiProperty()
+  tableLast: number;
 
   @ApiProperty()
   started: boolean;
@@ -34,7 +25,4 @@ export class DraftEntity implements Draft {
 
   @ApiProperty()
   seated: boolean;
-
-  @ApiProperty({ type: () => DraftPlayerEntity, isArray: true, default: [] })
-  players: DraftPlayerEntity[];
 }

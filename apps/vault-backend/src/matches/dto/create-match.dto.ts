@@ -57,11 +57,11 @@ export class CreateMatchDto {
 
   @IsOptional()
   @IsBoolean()
-  @ApiProperty({ required: false, default: false })
+  @ApiProperty({ required: false })
   resultConfirmed?: boolean;
 
   @IsOptional()
   @IsNumber()
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false })
   reportedById?: number;
 }

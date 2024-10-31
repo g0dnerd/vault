@@ -3,7 +3,6 @@ import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { MatchGateway } from './matches.gateway';
-import { MatchEntity } from './entities/match.entity';
 
 @Injectable()
 export class MatchesService {
@@ -17,7 +16,30 @@ export class MatchesService {
   }
 
   findAll() {
-    return this.prisma.match.findMany();
+    return this.prisma.match.findMany({
+      include: {
+        player1: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
+          },
+        },
+        player2: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async findForDraft(draftId: number) {

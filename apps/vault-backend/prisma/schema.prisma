@@ -70,7 +70,7 @@ model Match {
   result          Int? // -1 = Player 1 wins, 0 = draw, 1 = Player 2 wins
   reportedBy      DraftPlayer? @relation(fields: [reportedById], references: [id])
   reportedById    Int?
-  resultConfirmed Boolean      @default(false)
+  resultConfirmed Boolean?
 
   @@unique(fields: [roundId, player1Id, player2Id], name: "roundPairing")
 }

@@ -22,11 +22,17 @@ export class CreateCubeDto {
   cardNumber: number;
 
   @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  @ApiProperty({ required: false })
+  creatorId?: number;
+
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @ApiProperty({ required: false, nullable: true })
-  description: string | null;
+  @ApiProperty({ required: false })
+  description?: string;
 
   @IsUrl()
   @IsNotEmpty()

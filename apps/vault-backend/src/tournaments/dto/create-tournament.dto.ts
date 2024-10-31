@@ -7,6 +7,8 @@ import {
   IsOptional,
   IsString,
   MinLength,
+  IsPositive,
+  IsInt,
 } from 'class-validator';
 
 export class CreateTournamentDto {
@@ -22,11 +24,14 @@ export class CreateTournamentDto {
   public: boolean;
 
   @IsString()
+  @IsNotEmpty()
   @IsOptional()
-  @ApiProperty({ required: false, default: '' })
-  description: string;
+  @ApiProperty({ required: false, nullable: true })
+  description?: string;
 
   @IsNumber()
+  @IsPositive()
+  @IsInt()
   @IsNotEmpty()
   @ApiProperty()
   playerCapacity: number;

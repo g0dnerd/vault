@@ -11,12 +11,12 @@ export class RoundEntity implements Round {
   @ApiProperty()
   roundIndex: number;
 
-  @ApiProperty({ required: false, default: false })
+  @ApiProperty()
   paired: boolean;
 
-  @ApiProperty({ required: false, default: false })
+  @ApiProperty()
   started: boolean;
 
-  @ApiProperty({ required: false, default: false })
+  @ApiProperty()
   finished: boolean;
 }

@@ -1,6 +1,5 @@
 import { Tournament } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { EnrollmentEntity } from '../../enrollments/entities/enrollment.entity';
 
 export class TournamentEntity implements Tournament {
   @ApiProperty()
@@ -9,7 +8,7 @@ export class TournamentEntity implements Tournament {
   @ApiProperty()
   name: string;
 
-  @ApiProperty({ required: false, default: false })
+  @ApiProperty()
   public: boolean;
 
   @ApiProperty()
@@ -17,7 +16,4 @@ export class TournamentEntity implements Tournament {
 
   @ApiProperty({ required: false, nullable: true })
   description: string | null;
-
-  @ApiProperty({ required: false, nullable: true })
-  enrollments: EnrollmentEntity[] | null;
 }

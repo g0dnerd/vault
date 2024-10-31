@@ -1,6 +1,5 @@
-import { DraftPlayer } from "@prisma/client";
-import { ApiProperty } from "@nestjs/swagger";
-import { EnrollmentEntity } from "../../enrollments/entities/enrollment.entity";
+import { DraftPlayer } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class DraftPlayerEntity implements DraftPlayer {
   @ApiProperty()
@@ -11,7 +10,4 @@ export class DraftPlayerEntity implements DraftPlayer {
 
   @ApiProperty()
   enrollmentId: number;
-
-  @ApiProperty()
-  enrollment: EnrollmentEntity;
 }

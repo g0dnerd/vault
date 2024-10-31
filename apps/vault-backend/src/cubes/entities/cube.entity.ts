@@ -20,5 +20,3 @@ export class CubeEntity implements Cube {
   @ApiProperty()
   url: string;
 }
-
-

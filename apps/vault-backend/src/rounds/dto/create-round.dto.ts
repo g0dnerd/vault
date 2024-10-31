@@ -1,13 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNumber,
-  IsPositive,
-  IsOptional,
-  IsBoolean,
-} from 'class-validator';
+import { IsNumber, IsPositive, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateRoundDto {
   @IsNumber()
+  @IsPositive()
   @ApiProperty()
   draftId: number;
 

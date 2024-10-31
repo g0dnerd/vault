@@ -1,13 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsPositive,
-  IsNumber,
-  IsBoolean,
-  IsOptional
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsPositive, IsNumber, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreatePhaseDto {
   @IsNumber()
+  @IsPositive()
   @ApiProperty()
   tournamentId: number;
 
@@ -19,16 +15,16 @@ export class CreatePhaseDto {
   @IsNumber()
   @IsPositive()
   @IsOptional()
-  @ApiProperty({ default: 3 })
+  @ApiProperty({ required: false, default: 3 })
   roundAmount: number;
 
   @IsBoolean()
   @IsOptional()
-  @ApiProperty({ default: false })
+  @ApiProperty({ required: false, default: false })
   started: boolean;
 
   @IsBoolean()
   @IsOptional()
-  @ApiProperty({ default: false })
+  @ApiProperty({ required: false, default: false })
   finished: boolean;
 }

@@ -27,6 +27,6 @@ export class ScorecardsService {
   }
 
   remove(id: number) {
-    return this.prisma.scorecard.delete({ where: { enrollmentId: id } })
+    return this.prisma.scorecard.delete({ where: { enrollmentId: id } });
   }
-} 
+}

@@ -8,24 +8,24 @@ export class DraftScorecardEntity implements DraftScorecard {
   @ApiProperty()
   playerId: number;
 
-  @ApiProperty({ required: false, default: 0 })
+  @ApiProperty()
   score: number;
 
-  @ApiProperty({ required: false, default: 0 })
+  @ApiProperty()
   gamesPlayed: number;
 
-  @ApiProperty({ required: false, default: 0 })
+  @ApiProperty()
   gamesWon: number;
 
-  @ApiProperty({ required: false, default: 0 })
+  @ApiProperty()
   pmw: number;
 
-  @ApiProperty({ required: false, default: 0 })
+  @ApiProperty()
   omw: number;
 
-  @ApiProperty({ required: false, default: 0 })
+  @ApiProperty()
   pgw: number;
 
-  @ApiProperty({ required: false, default: 0 })
+  @ApiProperty()
   ogw: number;
 }
