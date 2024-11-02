@@ -12,7 +12,7 @@ import {
   State,
 } from '../store';
 import { initCurrent } from '../store/actions/draft.actions';
-import { initializeMatches } from '../store/actions/match.actions';
+import { initializeMatchesForDraft } from '../store/actions/match.actions';
 import { Match } from '@vault/shared';
 
 @Injectable({
@@ -35,7 +35,9 @@ export class CurrentDraftResolver implements Resolve<Match> {
       take(1), // Take the first non-null draft
       tap((draft) => {
         // Dispatch initializeMatches action with the draftId
-        this.matchStore.dispatch(initializeMatches({ draftId: draft!.id }));
+        this.matchStore.dispatch(
+          initializeMatchesForDraft({ draftId: draft!.id })
+        );
       }),
       // After initializing matches, select the user ID
       switchMap(() =>
@@ -48,8 +50,8 @@ export class CurrentDraftResolver implements Resolve<Match> {
               .select(
                 selectMatchByQuery(
                   (game) =>
-                    game.player1?.enrollment.userId === userId ||
-                    game.player2?.enrollment.userId === userId
+                    game.player1?.enrollment?.userId === userId ||
+                    game.player2?.enrollment?.userId === userId
                 )
               )
               .pipe(

@@ -58,32 +58,3 @@ export const initializeMatchesForDraft = createEffect(
   },
   { functional: true, dispatch: true }
 );
-
-// Confirms the result for the match with the given `matchId` and stores
-// the updated game including result in state on success.
-// Dispatches an `initCurrentFailure` action on error.
-// TODO: Either differentiate or remove these error types
-export const confirmResult = createEffect(
-  (actions$ = inject(Actions), matchService = inject(MatchService)) => {
-    return actions$.pipe(
-      ofType(MatchActions.confirmResult),
-      mergeMap(({ matchId }) => {
-        return matchService.confirmResult(matchId).pipe(
-          map((game) => {
-            return MatchActions.updateMatch({
-              update: { id: game.id, changes: game },
-            });
-          }),
-          catchError((error) => {
-            return of(
-              MatchActions.matchStoreFailure({
-                errorMessage: error.message,
-              })
-            );
-          })
-        );
-      })
-    );
-  },
-  { functional: true, dispatch: true }
-);

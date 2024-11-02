@@ -82,15 +82,17 @@ export const selectDraftEffect = createEffect(
 );
 
 // Makes a request to draftService.makeStandings to generate a standings
-// table specific to a draft and round. This is then returned as an object
+// table specific for the latest round of the given draft. This is then returned as an object
 // of the DraftStandings interface, containing draftId, round and the standings
 // as a Map<number, DraftScorecard>.
+// TODO: I don't like this - when a user refreshes or logs out, their client-side standings
+// history is lost. Maybe DraftScorecards need to be foreign-keyed to rounds instead.
 export const makeDraftStandingsEffect = createEffect(
   (actions$ = inject(Actions), draftService = inject(DraftService)) => {
     return actions$.pipe(
       ofType(DraftActions.makeDraftStandings),
       switchMap(({ draftId, round }) => {
-        return draftService.makeStandings(draftId, round).pipe(
+        return draftService.getScorecardsForDraft(draftId).pipe(
           map((scorecards) => {
             // Sort the returned scorecards by tiebreakers in descending order.
             scorecards.sort(

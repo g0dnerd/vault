@@ -28,7 +28,7 @@ export class CreateTournamentComponent implements OnInit {
     private readonly alertService: AlertService,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -62,7 +62,6 @@ export class CreateTournamentComponent implements OnInit {
 
     this.loading = true;
 
-    // TODO: Refactor this to use tournament actions
     this.tournamentService
       .createTournament({
         name: this.f['name'].value,
