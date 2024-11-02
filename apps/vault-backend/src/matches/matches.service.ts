@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { MatchGateway } from './matches.gateway';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class MatchesService {
@@ -150,9 +151,64 @@ export class MatchesService {
   }
 
   async update(id: number, updateMatchDto: UpdateMatchDto) {
+    return this.prisma.match.update({ where: { id }, data: updateMatchDto });
+  }
+
+  async reportResult(
+    userId: number,
+    matchId: number,
+    updateMatchDto: UpdateMatchDto
+  ) {
+    // Destructure the updateMatchDto and check if the reporting user
+    // is authorized to change this match
+    const g = await this.prisma.match.findUnique({ where: { id: matchId } });
+    if (userId != g.player1Id && userId != g.player2Id) {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+      // If the user is not a player in the game, they need to be
+      // an admin to be authorized to update the match
+      if (!user.roles.includes(Role.ADMIN)) {
+        throw new UnauthorizedException(
+          'User is not authorized to update this match'
+        );
+      } else {
+        // If the user is an admin, the result is automatically confirmed as well
+        updateMatchDto = { ...updateMatchDto, resultConfirmed: true };
+      }
+    }
     const game = await this.prisma.match.update({
-      where: { id },
+      where: { id: matchId },
       data: updateMatchDto,
+    });
+
+    this.matchGateway.handleMatchUpdate(game);
+    return game;
+  }
+
+  async confirmResult(
+    userId: number,
+    matchId: number,
+    _updateMatchDto: UpdateMatchDto
+  ) {
+    // Destructure the updateMatchDto and check if the reporting user
+    // is authorized to change this match
+    const g = await this.prisma.match.findUnique({ where: { id: matchId } });
+    if (userId != g.reportedById) {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+      // If the user is not a player in the game, they need to be
+      // an admin to be authorized to update the match
+      if (!user.roles.includes(Role.ADMIN)) {
+        throw new UnauthorizedException(
+          'User is not authorized to update this match'
+        );
+      }
+    }
+    const game = await this.prisma.match.update({
+      where: { id: matchId },
+      data: { resultConfirmed: true },
     });
 
     this.matchGateway.handleMatchUpdate(game);
