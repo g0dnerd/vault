@@ -21,12 +21,13 @@ export class UserEntity implements User {
   @ApiProperty()
   email: string;
 
-  @ApiProperty()
+  @Exclude()
   createdAt: Date;
 
-  @ApiProperty()
+  @Exclude()
   updatedAt: Date;
 
   @Exclude()
   password: string;
 }
+
