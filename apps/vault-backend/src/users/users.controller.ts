@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
   NotFoundException,
   UseGuards,
-  Request,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -18,6 +18,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request } from 'express';
 
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -49,7 +50,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: Boolean })
-  async isAdmin(@Request() req) {
+  async isAdmin(@Req() req: Request) {
     const user = new UserEntity(req.user);
     return user.roles.includes(Role.ADMIN);
   }
@@ -58,7 +59,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
-  getProfile(@Request() req) {
+  getProfile(@Req() req: Request) {
     // Create a UserEntity without password
     const user = new UserEntity(req.user);
     delete user.password;

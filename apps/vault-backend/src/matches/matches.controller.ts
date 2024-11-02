@@ -9,7 +9,9 @@ import {
   ParseIntPipe,
   NotFoundException,
   UseGuards,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -29,12 +31,16 @@ export class MatchesController {
   constructor(private readonly matchesService: MatchesService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiCreatedResponse({ type: MatchEntity })
   create(@Body() createMatchDto: CreateMatchDto) {
     return this.matchesService.create(createMatchDto);
   }
 
   @Get()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: MatchEntity, isArray: true })
   findAll() {
     return this.matchesService.findAll();
@@ -60,6 +66,8 @@ export class MatchesController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: MatchEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const match = await this.matchesService.findOne(id);
@@ -69,8 +77,40 @@ export class MatchesController {
     return match;
   }
 
+  // TODO: Ensure that only this request is only possible for
+  // privileged users at certain times
+  @Patch('/report/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: MatchEntity })
+  reportResult(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateMatchDto: UpdateMatchDto
+  ) {
+    return this.matchesService.reportResult(req.user['id'], id, updateMatchDto);
+  }
+
+  @Patch('/confirm/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: MatchEntity })
+  confirmResult(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateMatchDto: UpdateMatchDto
+  ) {
+    return this.matchesService.confirmResult(
+      req.user['id'],
+      id,
+      updateMatchDto
+    );
+  }
+
   @Patch(':id')
-  @ApiCreatedResponse({ type: MatchEntity })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: MatchEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMatchDto: UpdateMatchDto
@@ -79,6 +119,8 @@ export class MatchesController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: MatchEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.matchesService.remove(id);
