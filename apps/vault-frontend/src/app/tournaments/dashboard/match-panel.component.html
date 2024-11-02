@@ -5,62 +5,20 @@
       My Opponent at Table
       <span id="my-table">{{ (currentMatch$ | ngrxPush)?.tableNumber }}</span
       >:
-      <!--TODO: Make this actually output the opponent name-->
-      <span id="my-opponent">{{
-        (currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username
-      }}</span>
+      <span id="my-opponent">{{ opponentName$ | ngrxPush }}</span>
     </h5>
+
     @defer {
-    <form
-      *ngIf="!(currentMatch$ | ngrxPush)?.result; else confirmResult"
-      [formGroup]="form"
-      (ngSubmit)="onSubmit()"
-      class="report-result"
-      id="report-result-form"
-    >
-      <div class="mb-3">
-        <label class="form-label">Player 1 wins</label>
-        <input
-          type="number"
-          min="0"
-          max="2"
-          formControlName="player1Wins"
-          class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['player1Wins'].errors }"
-        />
-        <div
-          *ngIf="submitted && f['player1Wins'].errors"
-          class="invalid-feedback"
-        >
-          <div *ngIf="f['player1Wins'].errors['required']">
-            Player 1 wins are required
-          </div>
-        </div>
-        <label class="form-label">Player 2 wins</label>
-        <input
-          type="number"
-          min="0"
-          max="2"
-          formControlName="player2Wins"
-          class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['player2Wins'].errors }"
-        />
-        <div
-          *ngIf="form.hasError('sumExceeded')"
-          class="cross-validation-error-message alert alert-danger"
-        >
-          Total games in match cannot exceed 3
-        </div>
-      </div>
-      <button [disabled]="loading" class="btn btn-primary">
-        <span
-          *ngIf="loading"
-          class="spinner-border spinner-border-sm me-1"
-        ></span>
-        Report result
-      </button>
-    </form>
-    <ng-template #confirmResult>
+    <app-report-result-form
+      *ngIf="!(currentMatch$ | ngrxPush)?.result; else resultKnown"
+      [id]="(currentMatch$ | ngrxPush)?.id"
+      [p1name]="(currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username"
+      [p2name]="(currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username"
+      [userId]="(user$ | ngrxPush)?.id"
+    />
+    }
+
+    <ng-template #resultKnown>
       <p *ngIf="(currentMatch$ | ngrxPush)?.result === 0; else noDraw">
         It's a {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
           (currentMatch$ | ngrxPush)?.player2Wins
@@ -99,8 +57,7 @@
         @defer {
         <button
           *ngIf="
-            (currentMatch$ | ngrxPush)?.reportedBy?.enrollment?.userId ==
-              (currentMatch$ | ngrxPush)?.player2?.enrollment?.userId;
+            (currentMatch$ | ngrxPush)?.reportedById != (user$ | ngrxPush)?.id;
             else awaitingConfirmation
           "
           [disabled]="loading"
@@ -119,6 +76,5 @@
         }
       </ng-template>
     </ng-template>
-    }
   </div>
 </div>

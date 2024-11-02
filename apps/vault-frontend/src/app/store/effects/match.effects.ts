@@ -17,10 +17,31 @@ export const gameStoreFailure = createEffect(
   { functional: true, dispatch: false }
 );
 
-export const initializeMatches = createEffect(
+export const initializeAllMatches = createEffect(
   (actions$ = inject(Actions), matchService = inject(MatchService)) => {
     return actions$.pipe(
-      ofType(MatchActions.initializeMatches),
+      ofType(MatchActions.initializeAllMatches),
+      mergeMap(() => {
+        return matchService.getAllMatches().pipe(
+          map((matches) => {
+            return MatchActions.loadMatches({ matches });
+          }),
+          catchError((error) => {
+            return of(
+              MatchActions.matchStoreFailure({ errorMessage: error.message })
+            );
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
+export const initializeMatchesForDraft = createEffect(
+  (actions$ = inject(Actions), matchService = inject(MatchService)) => {
+    return actions$.pipe(
+      ofType(MatchActions.initializeMatchesForDraft),
       mergeMap(({ draftId }) => {
         return matchService.getMatchesForDraft(draftId).pipe(
           map((matches) => {

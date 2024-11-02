@@ -16,6 +16,7 @@ import { tournamentsReducer } from '../store/reducers/tournaments.reducer';
 import { draftReducer } from '../store/reducers/draft.reducer';
 import { matchReducer } from '../store/reducers/match.reducer';
 import { CurrentDraftResolver } from '../_helpers/current-draft.resolver';
+import { AdminDashboardResolver } from '../_helpers/admin-dashboard.resolver';
 
 export const TOURNAMENT_ROUTES: Routes = [
   {
@@ -49,6 +50,7 @@ export const TOURNAMENT_ROUTES: Routes = [
     component: AdminTournamentDashboardComponent,
     canActivate: [AuthGuard],
     data: { requiredRole: Role.Admin },
+    resolve: { games: AdminDashboardResolver },
   },
   {
     path: ':id',

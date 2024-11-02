@@ -7,7 +7,8 @@ const TYPE = '[Match/API]';
 
 export enum MatchActionTypes {
   MATCH_STORE_FAILURE = `${TYPE} Error`,
-  INITIALIZE_MATCHES = `${TYPE} Initialize matches`,
+  INITIALIZE_ALL_MATCHES = `${TYPE} Initialize all matches`,
+  INITIALIZE_MATCHES_FOR_DRAFT = `${TYPE} Initialize matches for draft`,
   SET_CURRENT_MATCH_SELECTED = `${TYPE} Set current match selected`,
   SELECT_MATCH = `${TYPE} Select match`,
   LOAD_MATCHES = `${TYPE} Load matches`,
@@ -34,8 +35,11 @@ export const matchStoreFailure = createAction(
   MatchActionTypes.MATCH_STORE_FAILURE,
   props<{ errorMessage: string }>()
 );
-export const initializeMatches = createAction(
-  MatchActionTypes.INITIALIZE_MATCHES,
+export const initializeAllMatches = createAction(
+  MatchActionTypes.INITIALIZE_ALL_MATCHES
+);
+export const initializeMatchesForDraft = createAction(
+  MatchActionTypes.INITIALIZE_MATCHES_FOR_DRAFT,
   props<{ draftId: number }>()
 );
 export const setCurrentMatchSelected = createAction(

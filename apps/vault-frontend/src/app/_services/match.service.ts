@@ -10,7 +10,6 @@ import { environment } from '../../environments/environment';
 })
 export class MatchService {
   private apiUrl = `${environment.apiUrl}${API_ROUTES.MATCHES}`;
-  private resultApiUrl = `${environment.apiUrl}${API_ROUTES.RESULTS}`;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -22,26 +21,29 @@ export class MatchService {
     return this.http.get<Match[]>(`${this.apiUrl}/draft/${draftId}`);
   }
 
-  getCurrentMatchForUser(
-    userId: number,
-    tournamentId: number
-  ): Observable<Match> {
-    return this.http.get<Match>(`${this.apiUrl}/current/${tournamentId}`);
-  }
-
   getById(matchId: number): Observable<Match> {
     return this.http.get<Match>(`${this.apiUrl}/${matchId}`);
   }
 
   // Reports a result to the API and returns the API response.
-  reportResult(matchId: number, result: Result): Observable<Match> {
-    return this.http.patch<Match>(`${this.apiUrl}/${matchId}`, result);
+  reportResult(
+    userId: number,
+    matchId: number,
+    result: Result
+  ): Observable<Match> {
+    result = {
+      ...result,
+      reportedById: userId,
+    };
+    return this.http.patch<Match>(`${this.apiUrl}/report/${matchId}`, result);
   }
 
   // POSTs a request to confirm the match for `matchId`
+  // TODO: Refactor this into a separate method in the backend
+  // to enable permission checking
   confirmResult(matchId: number): Observable<Match> {
-    return this.http.patch<Match>(`${this.resultApiUrl}/${matchId}`, {
-      confirmed: true,
+    return this.http.patch<Match>(`${this.apiUrl}/${matchId}`, {
+      resultConfirmed: true,
     });
   }
 }
