@@ -10,5 +10,3 @@ export class AuthEntity {
   @ApiProperty()
   user: UserEntity;
 }
-
-export type RequestWithUser = Request & { user: UserEntity };
