@@ -12,7 +12,7 @@ import { PrismaClient } from '@prisma/client';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: ['192.168.2.65', 'http://localhost'],
+      origin: ['192.168.2.65', 'http://localhost', 'http://localhost:4200'],
       preflightContinue: false,
       maxAge: 3600,
     },
