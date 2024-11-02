@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UserEntity } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -53,9 +54,11 @@ export class AuthService {
   }
 
   async status(userId: number): Promise<AuthEntity> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
+    const user = new UserEntity(
+      await this.prisma.user.findUnique({
+        where: { id: userId },
+      })
+    );
     return {
       user: user,
       token: this.jwtService.sign({ userId: user.id }),
