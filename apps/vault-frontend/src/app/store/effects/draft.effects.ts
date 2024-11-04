@@ -38,8 +38,8 @@ export const initCurrentEffect = createEffect(
   (actions$ = inject(Actions), draftService = inject(DraftService)) => {
     return actions$.pipe(
       ofType(DraftActions.initCurrent),
-      mergeMap(() => {
-        return draftService.getCurrentDraft().pipe(
+      mergeMap(({ tournamentId }) => {
+        return draftService.getCurrentDraft(tournamentId).pipe(
           map((currentDraft) => {
             return DraftActions.initCurrentSuccess({ currentDraft });
           }),

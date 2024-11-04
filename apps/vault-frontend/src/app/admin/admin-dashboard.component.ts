@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component } from '@angular/core';
 
 import { CreateTournamentComponent } from './create-tournament.component';
 import { AdminTournamentListComponent } from '../admin/admin-tournament-list.component';
-import { State } from '../store';
-import { initializeAllMatches } from '../store/actions/match.actions';
 
 @Component({
   standalone: true,
@@ -12,10 +9,4 @@ import { initializeAllMatches } from '../store/actions/match.actions';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
 })
-export class AdminDashboardComponent implements OnInit {
-  constructor(private readonly matchStore$: Store<State>) {}
-
-  ngOnInit() {
-    this.matchStore$.dispatch(initializeAllMatches());
-  }
-}
+export class AdminDashboardComponent {}

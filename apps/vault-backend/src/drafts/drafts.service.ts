@@ -64,9 +64,9 @@ export class DraftsService {
     });
   }
 
-  async getCurrentDraft(userId: number) {
+  async getCurrentDraft(userId: number, tournamentId: number) {
     const enrollments = await this.prisma.enrollment.findMany({
-      where: { userId: userId },
+      where: { userId, tournamentId },
     });
     const draftPlayer = await this.prisma.draftPlayer.findFirstOrThrow({
       where: {

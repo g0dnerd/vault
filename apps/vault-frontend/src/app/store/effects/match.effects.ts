@@ -22,7 +22,7 @@ export const initializeAllMatches = createEffect(
     return actions$.pipe(
       ofType(MatchActions.initializeAllMatches),
       mergeMap(() => {
-        return matchService.getAllMatches().pipe(
+        return matchService.getAllOngoingMatches().pipe(
           map((matches) => {
             return MatchActions.loadMatches({ matches });
           }),

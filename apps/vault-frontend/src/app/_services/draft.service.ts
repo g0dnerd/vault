@@ -22,8 +22,8 @@ export class DraftService {
     return this.http.get<Draft[]>(`${this.apiUrl}/${tournamentId}/ongoing`);
   }
 
-  getCurrentDraft(): Observable<Draft> {
-    return this.http.get<Draft>(`${this.apiUrl}/current`);
+  getCurrentDraft(tournamentId: number): Observable<Draft> {
+    return this.http.get<Draft>(`${this.apiUrl}/current/${tournamentId}`);
   }
 
   getScorecardsForDraft(draftId: number): Observable<DraftScorecard[]> {

@@ -1,31 +1,45 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
 
-import { EnrollmentsService, TournamentService } from '../../_services';
+import {
+  AlertService,
+  EnrollmentsService,
+  TournamentService,
+} from '../../_services';
+import { State } from '..';
 import * as TournamentsActions from '../actions/tournaments.actions';
+
+export const gameStoreFailure = createEffect(
+  (actions$ = inject(Actions), alertService = inject(AlertService)) => {
+    return actions$.pipe(
+      ofType(TournamentsActions.tournamentStoreFailure),
+      tap(({ errorMessage }) => {
+        alertService.error(errorMessage, true);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
 
 // Gets all tournaments from the tournamentService
 // and stores them in state.
-// Dispatches an initAllFailure action on error reponse
-// from the API.
-export const initAll = createEffect(
+export const initAllTournaments = createEffect(
   (
     actions$ = inject(Actions),
     tournamentService = inject(TournamentService)
   ) => {
     return actions$.pipe(
-      ofType(TournamentsActions.initAll),
+      ofType(TournamentsActions.initializeAllTournaments),
       mergeMap(() => {
         return tournamentService.getAllTournaments().pipe(
-          map((allTournaments) => {
-            return TournamentsActions.initAllSuccess({
-              allTournaments,
-            });
+          map((tournaments) => {
+            return TournamentsActions.loadTournaments({ tournaments });
           }),
           catchError((error) => {
             return of(
-              TournamentsActions.initAllFailure({
+              TournamentsActions.tournamentStoreFailure({
                 errorMessage: error.message,
               })
             );
@@ -47,17 +61,16 @@ export const initAvailable = createEffect(
     tournamentService = inject(TournamentService)
   ) => {
     return actions$.pipe(
-      ofType(TournamentsActions.initAvailable),
+      ofType(TournamentsActions.initializeAvailableTournaments),
       mergeMap(() => {
         return tournamentService.getAvailableTournaments().pipe(
           map((availableTournaments) => {
-            return TournamentsActions.initAvailableSuccess({
-              availableTournaments,
-            });
+            const ids = availableTournaments.map((t) => t.id);
+            return TournamentsActions.setAvailableTournaments({ ids });
           }),
           catchError((error) => {
             return of(
-              TournamentsActions.initAvailableFailure({
+              TournamentsActions.tournamentStoreFailure({
                 errorMessage: error.message,
               })
             );
@@ -71,25 +84,22 @@ export const initAvailable = createEffect(
 
 // Gets all enrolled tournaments for the current user
 // from the tournamentService and stores them in state.
-// Dispatches an initEnrolledFailure action
-// on error reponse from the API.
 export const initEnrolled = createEffect(
   (
     actions$ = inject(Actions),
     tournamentService = inject(TournamentService)
   ) => {
     return actions$.pipe(
-      ofType(TournamentsActions.initEnrolled),
+      ofType(TournamentsActions.initializeEnrolledTournaments),
       mergeMap(() => {
         return tournamentService.getUserTournaments().pipe(
           map((enrolledTournaments) => {
-            return TournamentsActions.initEnrolledSuccess({
-              enrolledTournaments,
-            });
+            const ids = enrolledTournaments.map((t) => t.id);
+            return TournamentsActions.setEnrolledTournaments({ ids });
           }),
           catchError((error) => {
             return of(
-              TournamentsActions.initEnrolledFailure({
+              TournamentsActions.tournamentStoreFailure({
                 errorMessage: error.message,
               })
             );
@@ -108,7 +118,8 @@ export const initEnrolled = createEffect(
 export const register = createEffect(
   (
     actions$ = inject(Actions),
-    enrollmentService = inject(EnrollmentsService)
+    enrollmentService = inject(EnrollmentsService),
+    store$ = inject(Store<State>)
   ) => {
     return actions$.pipe(
       ofType(TournamentsActions.register),
@@ -116,47 +127,18 @@ export const register = createEffect(
         return enrollmentService.enrollUser(tournamentId, userId).pipe(
           map((res) => {
             // If the response did not contain a tournament,
-            // the user could not be enrolled, return an error.
-            // TODO: make this a proper error response
-            if (!res.tournament)
-              return TournamentsActions.registerFailure({
-                errorMessage: 'Enrollment error',
+            // the user could not be enrolled. Return an error.
+            if (!res.tournament) {
+              return TournamentsActions.tournamentStoreFailure({
+                errorMessage: 'Failed to register for tournament',
               });
-            return TournamentsActions.registerSuccess({
-              tournament: res.tournament,
-            });
+            }
+            store$.dispatch(TournamentsActions.initializeEnrolledTournaments());
+            return TournamentsActions.initializeAvailableTournaments();
           }),
           catchError((error) => {
             return of(
-              TournamentsActions.registerFailure({
-                errorMessage: error.message,
-              })
-            );
-          })
-        );
-      })
-    );
-  },
-  { functional: true, dispatch: true }
-);
-
-// Selects a tournament by ID for a detail page view
-// and stores it into state.
-export const selectTournamentEffect = createEffect(
-  (
-    actions$ = inject(Actions),
-    tournamentService = inject(TournamentService)
-  ) => {
-    return actions$.pipe(
-      ofType(TournamentsActions.selectTournament),
-      mergeMap(({ id: payload }) => {
-        return tournamentService.getById(payload).pipe(
-          map((tournament) => {
-            return TournamentsActions.selectTournamentSuccess({ tournament });
-          }),
-          catchError((error) => {
-            return of(
-              TournamentsActions.selectTournamentFailure({
+              TournamentsActions.tournamentStoreFailure({
                 errorMessage: error.message,
               })
             );

@@ -1,27 +1,31 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { Tournament } from '@vault/shared';
 import { TournamentDetailCardComponent } from './tournament-detail-card.component';
-import { selectEnrolledTournaments, TournamentAppState } from '../../store';
-import { initEnrolled } from '../../store/actions/tournaments.actions';
+import { selectEnrolledTournaments, State } from '../../store';
+import {
+  initializeAllTournaments,
+  initializeEnrolledTournaments,
+} from '../../store/actions/tournaments.actions';
 
 @Component({
   templateUrl: 'my-tournaments.component.html',
   standalone: true,
-  imports: [RouterLink, TournamentDetailCardComponent, CommonModule, PushPipe],
+  imports: [NgFor, NgIf, RouterLink, TournamentDetailCardComponent, PushPipe],
 })
 export class MyTournamentsComponent implements OnInit {
-  enrolledTournaments$: Observable<Tournament[]> = of([]);
+  private readonly store$ = inject(Store<State>);
+  readonly enrolledTournaments$: Observable<Tournament[]> = this.store$.select(
+    selectEnrolledTournaments
+  );
 
-  constructor(private readonly store$: Store<TournamentAppState>) {}
-
-  ngOnInit(): void {
-    this.store$.dispatch(initEnrolled());
-    this.enrolledTournaments$ = this.store$.select(selectEnrolledTournaments);
+  ngOnInit() {
+    this.store$.dispatch(initializeAllTournaments());
+    this.store$.dispatch(initializeEnrolledTournaments());
   }
 }

@@ -1,7 +1,14 @@
 export interface Tournament {
-  id?: number;
+  id: number;
   name: string;
   public: boolean;
   playerCapacity: number;
-  description?: string | null;
+  description: string | null;
+}
+
+export interface CreateTournamentDto {
+  name: string;
+  public: boolean;
+  playerCapacity: number;
+  description: string | null;
 }

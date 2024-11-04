@@ -6,4 +6,5 @@ export interface Result {
   resultConfirmed?: boolean;
   result?: number;
   reportedBy?: Player;
+  reportedById?: number;
 }

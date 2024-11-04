@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
 import { Tournament } from '@vault/shared';
-import { selectAllTournaments, TournamentAppState } from '../store';
-import { initAll } from '../store/actions/tournaments.actions';
+import { selectAllTournaments, State } from '../store';
+import { initializeAllTournaments } from '../store/actions/tournaments.actions';
 import { TournamentAdminCardComponent } from './tournament-admin-card.component';
 
 @Component({
@@ -19,10 +19,10 @@ import { TournamentAdminCardComponent } from './tournament-admin-card.component'
 export class AdminTournamentListComponent implements OnInit {
   allTournaments$: Observable<Tournament[]> = of([]);
 
-  constructor(private readonly tournamentsStore$: Store<TournamentAppState>) {}
+  constructor(private readonly tournamentsStore$: Store<State>) {}
 
   ngOnInit(): void {
-    this.tournamentsStore$.dispatch(initAll());
+    this.tournamentsStore$.dispatch(initializeAllTournaments());
     this.allTournaments$ = this.tournamentsStore$.select(selectAllTournaments);
   }
 }

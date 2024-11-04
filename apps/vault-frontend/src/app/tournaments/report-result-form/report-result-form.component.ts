@@ -1,5 +1,6 @@
 import { Component, Input, numberAttribute, OnInit } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import {
   FormBuilder,
   FormControl,
@@ -15,12 +16,12 @@ import { matchSumValidator } from '../../_helpers/match-form.validator';
 @Component({
   selector: 'app-report-result-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgIf],
+  imports: [MatButtonToggleModule, ReactiveFormsModule, NgClass, NgIf, NgFor],
   templateUrl: './report-result-form.component.html',
   styleUrl: './report-result-form.component.css',
 })
 export class ReportResultFormComponent implements OnInit {
-  form!: FormGroup;
+  form: FormGroup;
   loading = false;
   submitted = false;
 
@@ -32,9 +33,7 @@ export class ReportResultFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private readonly matchService: MatchService
-  ) {}
-
-  ngOnInit() {
+  ) {
     // Initialize result reporting form
     this.form = this.formBuilder.group(
       {
@@ -52,7 +51,9 @@ export class ReportResultFormComponent implements OnInit {
       // Ensure total number of games reported is not greater than 3
       { validators: matchSumValidator }
     );
+  }
 
+  ngOnInit() {
     // Initial form values
     this.form.setValue({
       player1Wins: 0,
@@ -67,6 +68,8 @@ export class ReportResultFormComponent implements OnInit {
   async onSubmit() {
     this.submitted = true;
     // this.alertService.clear();
+
+    console.log(this.f['player1Wins'].value, this.f['player2Wins'].value);
 
     if (this.form.invalid) return;
     this.loading = true;

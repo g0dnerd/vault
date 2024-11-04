@@ -15,7 +15,12 @@
         {{ game.player1?.enrollment?.user?.username }}
         vs
         {{ game.player2?.enrollment?.user?.username }}
-        <div *ngIf="game.player1Wins && game.player2Wins; else pending">
+        <div
+          *ngIf="
+            game.player1Wins != null && game.player2Wins != null;
+            else pending
+          "
+        >
           -
           {{ game.player1Wins }}
           :
@@ -23,66 +28,13 @@
         </div>
         <ng-template #pending> (Result pending) </ng-template>
         @defer {
-        <form
-          *ngIf="!game.result; else confirmResult"
-          [formGroup]="getFormGroupForGame(i)"
-          (ngSubmit)="onSubmit()"
-          class="report-result admin"
-        >
-          <div class="mb-3">
-            <label class="form-label">
-              {{ game.player1?.enrollment?.user?.username }} wins
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="2"
-              formControlName="player1Wins"
-              class="form-control"
-              [ngClass]="{
-                'is-invalid':
-                  submitted && getGameControl(i, 'player1Wins')?.errors
-              }"
-            />
-            <div
-              *ngIf="submitted && getGameControl(i, 'player1Wins')?.errors"
-              class="invalid-feedback"
-            >
-              <div
-                *ngIf="getGameControl(i, 'player1Wins')?.errors?.['required']"
-              >
-                Player 1 wins are required
-              </div>
-            </div>
-            <label class="form-label">
-              {{ game.player2?.enrollment?.user?.username }} wins
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="2"
-              formControlName="player2Wins"
-              class="form-control"
-              [ngClass]="{
-                'is-invalid':
-                  submitted && getGameControl(i, 'player2Wins')?.errors
-              }"
-            />
-            <div
-              *ngIf="form.hasError('sumExceeded')"
-              class="cross-validation-error-message alert alert-danger"
-            >
-              Total games in match cannot exceed 3
-            </div>
-          </div>
-          <button [disabled]="loading" class="btn btn-primary">
-            <span
-              *ngIf="loading"
-              class="spinner-border spinner-border-sm me-1"
-            ></span>
-            Report result
-          </button>
-        </form>
+        <app-report-result-form
+          *ngIf="!game.result || !game.resultConfirmed; else confirmResult"
+          [id]="game?.id"
+          [p1name]="game?.player1?.enrollment?.user?.username"
+          [p2name]="game?.player2?.enrollment?.user?.username"
+          [userId]="(user$ | ngrxPush)?.id"
+        />
         <ng-template #confirmResult>
           <p>Test</p>
         </ng-template>

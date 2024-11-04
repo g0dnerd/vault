@@ -16,6 +16,44 @@ export class MatchesService {
     return this.prisma.match.create({ data: createMatchDto });
   }
 
+  findOngoing() {
+    return this.prisma.match.findMany({
+      where: {
+        round: {
+          draft: {
+            started: true,
+            finished: false,
+          },
+        },
+      },
+      include: {
+        round: {
+          select: { draftId: true },
+        },
+        player1: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
+          },
+        },
+        player2: {
+          select: {
+            enrollment: {
+              select: {
+                userId: true,
+                user: { select: { username: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   findAll() {
     return this.prisma.match.findMany({
       include: {
@@ -55,6 +93,9 @@ export class MatchesService {
         },
       },
       include: {
+        round: {
+          select: { draftId: true },
+        },
         player1: {
           select: {
             enrollment: {

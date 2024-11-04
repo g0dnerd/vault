@@ -1,5 +1,5 @@
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 
@@ -23,8 +23,10 @@ import { initAuth } from './store/actions/auth.actions';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  constructor(private readonly store$: Store<AuthAppState>) {
-    this.store$.dispatch(initAuth());
+export class AppComponent implements OnInit {
+  constructor(private readonly authStore$: Store<AuthAppState>) {}
+
+  ngOnInit() {
+    this.authStore$.dispatch(initAuth());
   }
 }

@@ -1,4 +1,5 @@
 import { Player } from './player.interface';
+import { Round } from './round.interface';
 
 export interface Match {
   id: number;
@@ -14,4 +15,5 @@ export interface Match {
   reportedById: number | null;
   reportedBy: Player | null;
   resultConfirmed: boolean;
+  round: Round | null;
 }
