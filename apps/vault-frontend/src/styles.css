@@ -428,9 +428,17 @@ button:not(
   color: white;
 }
 
+.form-input.player-wins {
+  display: flex;
+}
+
 /* Upload */
 #report-result-form select + button {
   margin: 10px 0;
+}
+#report-result-form label {
+  min-width: fit-content;
+  margin-right: 2rem;
 }
 
 img {
