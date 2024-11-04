@@ -1,7 +1,7 @@
 import { EntityMap, EntityMapOne, Predicate, Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 
-import { Match, Result } from '@vault/shared';
+import { Match } from '@vault/shared';
 
 const TYPE = '[Match/API]';
 

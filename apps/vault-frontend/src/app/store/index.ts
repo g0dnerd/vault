@@ -4,20 +4,22 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Match, Role } from '@vault/shared';
+import { Match, Role, Tournament } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
-import { TournamentState } from './reducers/tournaments.reducer';
 import { DraftState } from './reducers/draft.reducer';
 import { EnrollmentState } from './reducers/enrollment.reducer';
 
 import * as fromMatch from './reducers/match.reducer';
+import * as fromTournament from './reducers/tournaments.reducer';
 
 export interface State {
   matches: fromMatch.MatchState;
+  tournaments: fromTournament.TournamentState;
 }
 
 export const reducers: ActionReducerMap<State> = {
   matches: fromMatch.matchReducer,
+  tournaments: fromTournament.tournamentReducer,
 };
 
 // MATCHES
@@ -50,6 +52,74 @@ export const selectMatchByQuery = (query: (game: Match) => boolean) =>
       (game): game is Match => !!game && query(game)
     );
   });
+export const selectMatchesByQuery = (query: (game: Match) => boolean) =>
+  createSelector(selectMatchState, (state) => {
+    return Object.values(state.entities).filter(
+      (game): game is Match => !!game && query(game)
+    );
+  });
+
+// TOURNAMENTS
+export const selectTournamentState =
+  createFeatureSelector<fromTournament.TournamentState>('tournaments');
+export const selectTournamentIds = createSelector(
+  selectTournamentState,
+  fromTournament.selectTournamentIds
+);
+export const selectTournamentEntities = createSelector(
+  selectTournamentState,
+  fromTournament.selectTournamentEntities
+);
+export const selectAllTournaments = createSelector(
+  selectTournamentState,
+  fromTournament.selectAllTournaments
+);
+export const selectTournamentTotal = createSelector(
+  selectTournamentState,
+  fromTournament.selectTournamentTotal
+);
+export const selectTournamentById = (tournamentId: number) =>
+  createSelector(
+    selectTournamentState,
+    (tournamentState) => tournamentState.entities[tournamentId]
+  );
+export const selectTournamentByQuery = (
+  query: (tournament: Tournament) => boolean
+) =>
+  createSelector(selectTournamentState, (state) => {
+    return Object.values(state.entities).find(
+      (tournament): tournament is Tournament =>
+        !!tournament && query(tournament)
+    );
+  });
+export const selectAvailableIds = createSelector(
+  selectTournamentState,
+  fromTournament.getAvailableIds
+);
+export const selectAvailableTournaments = createSelector(
+  selectTournamentEntities,
+  selectAvailableIds,
+  (tournaments, ids) =>
+    ids
+      .map((id) => tournaments[id])
+      .filter(
+        (tournament): tournament is Tournament => tournament !== undefined
+      )
+);
+export const selectEnrolledIds = createSelector(
+  selectTournamentState,
+  fromTournament.getEnrolledIds
+);
+export const selectEnrolledTournaments = createSelector(
+  selectTournamentEntities,
+  selectEnrolledIds,
+  (tournaments, ids) =>
+    ids
+      .map((id) => tournaments[id])
+      .filter(
+        (tournament): tournament is Tournament => tournament !== undefined
+      )
+);
 
 // AUTH
 export interface AuthAppState {
@@ -78,29 +148,6 @@ export const selectAdminStatus = createSelector(
 export const selectErrorMessage = createSelector(
   selectAuth,
   (state: AuthState) => state.errorMessage
-);
-
-// TOURNAMENTS
-export interface TournamentAppState {
-  tournaments: TournamentState;
-}
-export const selectTournaments = (state: TournamentAppState) =>
-  state.tournaments;
-export const selectAllTournaments = createSelector(
-  selectTournaments,
-  (state: TournamentState) => state.all
-);
-export const selectAvailableTournaments = createSelector(
-  selectTournaments,
-  (state: TournamentState) => state.available
-);
-export const selectEnrolledTournaments = createSelector(
-  selectTournaments,
-  (state: TournamentState) => state.enrolled
-);
-export const selectSelectedTournament = createSelector(
-  selectTournaments,
-  (state: TournamentState) => state.selected
 );
 
 // DRAFTS

@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { NgFor } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PushPipe } from '@ngrx/component';
 
 import { Enrollment, Tournament, User } from '@vault/shared';
 import { RegisterPanelComponent } from './register-panel.component';
 import {
   AuthAppState,
-  selectAvailableTournaments,
   selectAuthUser,
-  TournamentAppState,
+  selectAvailableTournaments,
+  State,
 } from '../../store';
 import {
-  initAvailable,
+  initializeAllTournaments,
+  initializeAvailableTournaments,
   register,
 } from '../../store/actions/tournaments.actions';
-import { NgFor } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -24,26 +25,26 @@ import { NgFor } from '@angular/common';
   styleUrl: 'available-tournaments.component.css',
 })
 export class AvailableTournamentsComponent implements OnInit {
-  availableTournaments$: Observable<Tournament[]> = of([]);
-  user$: Observable<User | null> = of(null);
+  private readonly store$ = inject(Store<State>);
+  private readonly authStore$ = inject(Store<AuthAppState>);
 
-  constructor(
-    private readonly tournamentStore$: Store<TournamentAppState>,
-    private readonly authStore$: Store<AuthAppState>
-  ) {}
+  readonly user$: Observable<User | null> =
+    this.authStore$.select(selectAuthUser);
+  readonly availableTournaments$: Observable<Tournament[]> = this.store$.select(
+    selectAvailableTournaments
+  );
+
+  constructor() {}
 
   ngOnInit() {
-    this.tournamentStore$.dispatch(initAvailable());
-    this.availableTournaments$ = this.tournamentStore$.select(
-      selectAvailableTournaments
-    );
-    this.user$ = this.authStore$.select(selectAuthUser);
+    this.store$.dispatch(initializeAllTournaments());
+    this.store$.dispatch(initializeAvailableTournaments());
   }
 
   // Handler for the event emitter in `RegisterPanelComponent`,
   // dispatches registration to `tournamentStore$`
   registerTournament(registrationData: Enrollment) {
     const { userId, tournamentId } = registrationData;
-    this.tournamentStore$.dispatch(register({ tournamentId, userId }));
+    this.store$.dispatch(register({ tournamentId, userId }));
   }
 }

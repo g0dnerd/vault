@@ -1,89 +1,100 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 
 import { Tournament } from '@vault/shared';
 import * as TournamentActions from '../actions/tournaments.actions';
 
-export interface TournamentState {
-  all: Tournament[];
-  available: Tournament[];
-  enrolled: Tournament[];
-  selected: Tournament | null;
-  errorMessage: string | null;
+export interface TournamentState extends EntityState<Tournament> {
+  selectedTournamentId: number | null;
+  availableIds: number[];
+  enrolledIds: number[];
 }
 
-export const initialState: TournamentState = {
-  all: [],
-  available: [],
-  enrolled: [],
-  selected: null,
-  errorMessage: null,
-};
+export function selectTournamentId(a: Tournament): number {
+  return a.id;
+}
 
-export const tournamentsReducer = createReducer(
+export const tournamentAdapter: EntityAdapter<Tournament> =
+  createEntityAdapter<Tournament>({
+    selectId: selectTournamentId,
+    sortComparer: false,
+  });
+
+export const initialState: TournamentState = tournamentAdapter.getInitialState({
+  selectedTournamentId: null,
+  availableIds: [],
+  enrolledIds: [],
+});
+
+export const tournamentReducer = createReducer(
   initialState,
-  on(TournamentActions.initAllSuccess, (state, { allTournaments: all }) => ({
+  on(TournamentActions.setAvailableTournaments, (state, { ids }) => ({
     ...state,
-    all,
-    errorMessage: null,
+    availableIds: ids,
   })),
-  on(TournamentActions.initAllFailure, (state, { errorMessage }) => ({
+  on(TournamentActions.setEnrolledTournaments, (state, { ids }) => ({
     ...state,
-    all: [],
-    errorMessage,
+    enrolledIds: ids,
   })),
-  on(
-    TournamentActions.initAvailableSuccess,
-    (state, { availableTournaments: available }) => ({
-      ...state,
-      available,
-      errorMessage: null,
-    })
-  ),
-  on(TournamentActions.initAvailableFailure, (state, { errorMessage }) => ({
-    ...state,
-    available: [],
-    errorMessage,
-  })),
-  on(
-    TournamentActions.initEnrolledSuccess,
-    (state, { enrolledTournaments: enrolled }) => ({
-      ...state,
-      enrolled,
-      errorMessage: null,
-    })
-  ),
-  on(TournamentActions.initEnrolledFailure, (state, { errorMessage }) => ({
-    ...state,
-    enrolled: [],
-    errorMessage,
-  })),
-  on(TournamentActions.registerSuccess, (state, { tournament }) => {
-    let newAvailable = [...state.available];
-    const index = newAvailable.indexOf(tournament);
-    if (index !== -1) {
-      newAvailable.splice(index, 1);
-    }
-    return {
-      ...state,
-      available: newAvailable,
-      enrolled: [...state.enrolled, tournament],
-      errorMessage: null,
-    };
+  on(TournamentActions.addTournament, (state, { tournament }) => {
+    return tournamentAdapter.addOne(tournament, state);
   }),
-  on(TournamentActions.registerFailure, (state, { errorMessage }) => ({
-    ...state,
-    errorMessage,
-  })),
-  on(
-    TournamentActions.selectTournamentSuccess,
-    (state, { tournament: selected }) => ({
+  on(TournamentActions.setTournament, (state, { tournament }) => {
+    return tournamentAdapter.setOne(tournament, state);
+  }),
+  on(TournamentActions.upsertTournament, (state, { tournament }) => {
+    return tournamentAdapter.upsertOne(tournament, state);
+  }),
+  on(TournamentActions.addTournaments, (state, { tournaments }) => {
+    return tournamentAdapter.addMany(tournaments, state);
+  }),
+  on(TournamentActions.upsertTournaments, (state, { tournaments }) => {
+    return tournamentAdapter.upsertMany(tournaments, state);
+  }),
+  on(TournamentActions.updateTournament, (state, { update }) => {
+    return tournamentAdapter.updateOne(update, state);
+  }),
+  on(TournamentActions.updateTournaments, (state, { updates }) => {
+    return tournamentAdapter.updateMany(updates, state);
+  }),
+  on(TournamentActions.mapTournament, (state, { entityMap }) => {
+    return tournamentAdapter.mapOne(entityMap, state);
+  }),
+  on(TournamentActions.mapTournaments, (state, { entityMap }) => {
+    return tournamentAdapter.map(entityMap, state);
+  }),
+  on(TournamentActions.deleteTournament, (state, { id }) => {
+    return tournamentAdapter.removeOne(id, state);
+  }),
+  on(TournamentActions.deleteTournaments, (state, { ids }) => {
+    return tournamentAdapter.removeMany(ids, state);
+  }),
+  on(TournamentActions.deleteTournamentsByPredicate, (state, { predicate }) => {
+    return tournamentAdapter.removeMany(predicate, state);
+  }),
+  on(TournamentActions.loadTournaments, (state, { tournaments }) => {
+    return tournamentAdapter.setAll(tournaments, state);
+  }),
+  on(TournamentActions.setTournaments, (state, { tournaments }) => {
+    return tournamentAdapter.setMany(tournaments, state);
+  }),
+  on(TournamentActions.clearTournaments, (state) => {
+    return tournamentAdapter.removeAll({
       ...state,
-      selected,
-    })
-  ),
-  on(TournamentActions.selectTournamentFailure, (state, { errorMessage }) => ({
-    ...state,
-    selected: null,
-    errorMessage,
-  }))
+      selectedMatchId: null,
+      availableIds: [],
+      enrolledIds: [],
+    });
+  })
 );
+
+export const getAvailableIds = (state: TournamentState) => state.availableIds;
+export const getEnrolledIds = (state: TournamentState) => state.enrolledIds;
+
+const { selectIds, selectEntities, selectAll, selectTotal } =
+  tournamentAdapter.getSelectors();
+
+export const selectTournamentIds = selectIds;
+export const selectTournamentEntities = selectEntities;
+export const selectAllTournaments = selectAll;
+export const selectTournamentTotal = selectTotal;

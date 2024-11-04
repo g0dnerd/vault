@@ -1,91 +1,122 @@
+import { Predicate } from '@angular/core';
+import { Update, EntityMapOne, EntityMap } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 
 import { Tournament } from '@vault/shared';
 
-const TYPE = '[Tournaments]';
+const TYPE = '[Tournaments/API]';
 
-export enum TournamentsActionTypes {
-  INIT_ALL = `${TYPE} Initialize all tournaments`,
-  INIT_ALL_SUCCESS = `${TYPE} Initialize all tournaments success`,
-  INIT_ALL_FAILURE = `${TYPE} Initialize all tournaments failure`,
-  INIT_AVAILABLE = `${TYPE} Initialize available tournaments`,
-  INIT_AVAILABLE_SUCCESS = `${TYPE} Initialize available tournaments success`,
-  INIT_AVAILABLE_FAILURE = `${TYPE} Initialize available tournaments failure`,
-  INIT_ENROLLED = `${TYPE} Initialize enrolled tournaments`,
-  INIT_ENROLLED_SUCCESS = `${TYPE} Initialize enrolled tournaments success`,
-  INIT_ENROLLED_FAILURE = `${TYPE} Initialize enrolled tournaments failure`,
-  REGISTER = `${TYPE} Register`,
-  REGISTER_SUCCESS = `${TYPE} Register Success`,
-  REGISTER_FAILURE = `${TYPE} Register Failure`,
+export enum TournamentActionTypes {
+  TOURNAMENT_STORE_FAILURE = `${TYPE} Error`,
+  INITIALIZE_ALL_TOURNAMENTS = `${TYPE} Initialize all tournaments`,
+  INITIALIZE_AVAILABLE_TOURNAMENTS = `${TYPE} Initialize available tournaments`,
+  INITIALIZE_ENROLLED_TOURNAMENTS = `${TYPE} Initialize enrolled tournaments`,
+  SET_AVAILABLE_TOURNAMENTS = `${TYPE} Set available tournaments`,
+  SET_ENROLLED_TOURNAMENTS = `${TYPE} Set enrolled tournaments`,
   SELECT_TOURNAMENT = `${TYPE} Select tournament`,
-  SELECT_TOURNAMENT_SUCCESS = `${TYPE} Select tournament success`,
-  SELECT_TOURNAMENT_FAILURE = `${TYPE} Select tournament failure`,
+  LOAD_TOURNAMENTS = `${TYPE} Load tournaments`,
+  SET_TOURNAMENTS = `${TYPE} Set tournaments`,
+  ADD_TOURNAMENT = `${TYPE} Add tournament`,
+  SET_TOURNAMENT = `${TYPE} Set tournament`,
+  UPSERT_TOURNAMENT = `${TYPE} Upsert tournament`,
+  ADD_TOURNAMENTS = `${TYPE} Add tournaments`,
+  UPSERT_TOURNAMENTS = `${TYPE} Upsert tournaments`,
+  UPDATE_TOURNAMENT = `${TYPE} Update tournament`,
+  UPDATE_TOURNAMENTS = `${TYPE} Update tournaments`,
+  MAP_TOURNAMENT = `${TYPE} Map tournament`,
+  MAP_TOURNAMENTS = `${TYPE} Map tournaments`,
+  DELETE_TOURNAMENT = `${TYPE} Delete tournament`,
+  DELETE_TOURNAMENTS = `${TYPE} Delete tournaments`,
+  DELETE_TOURNAMENTS_BY_PREDICATE = `${TYPE} Delete tournaments by predicate`,
+  CLEAR_TOURNAMENTS = `${TYPE} Clear tournaments`,
+  REGISTER = `${TYPE} Register for tournament`,
 }
 
-export const initAll = createAction(TournamentsActionTypes.INIT_ALL);
-
-export const initAllSuccess = createAction(
-  TournamentsActionTypes.INIT_ALL_SUCCESS,
-  props<{ allTournaments: Tournament[] }>()
-);
-
-export const initAllFailure = createAction(
-  TournamentsActionTypes.INIT_ALL_FAILURE,
+export const tournamentStoreFailure = createAction(
+  TournamentActionTypes.TOURNAMENT_STORE_FAILURE,
   props<{ errorMessage: string }>()
 );
-
-export const initAvailable = createAction(
-  TournamentsActionTypes.INIT_AVAILABLE
+export const setAvailableTournaments = createAction(
+  TournamentActionTypes.SET_AVAILABLE_TOURNAMENTS,
+  props<{ ids: number[] }>()
 );
-
-export const initAvailableSuccess = createAction(
-  TournamentsActionTypes.INIT_AVAILABLE_SUCCESS,
-  props<{ availableTournaments: Tournament[] }>()
+export const setEnrolledTournaments = createAction(
+  TournamentActionTypes.SET_ENROLLED_TOURNAMENTS,
+  props<{ ids: number[] }>()
 );
-
-export const initAvailableFailure = createAction(
-  TournamentsActionTypes.INIT_AVAILABLE_FAILURE,
-  props<{ errorMessage: string }>()
+export const initializeAllTournaments = createAction(
+  TournamentActionTypes.INITIALIZE_ALL_TOURNAMENTS
 );
-
-export const initEnrolled = createAction(TournamentsActionTypes.INIT_ENROLLED);
-
-export const initEnrolledSuccess = createAction(
-  TournamentsActionTypes.INIT_ENROLLED_SUCCESS,
-  props<{ enrolledTournaments: Tournament[] }>()
+export const initializeAvailableTournaments = createAction(
+  TournamentActionTypes.INITIALIZE_AVAILABLE_TOURNAMENTS
 );
-
-export const initEnrolledFailure = createAction(
-  TournamentsActionTypes.INIT_ENROLLED_FAILURE,
-  props<{ errorMessage: string }>()
+export const initializeEnrolledTournaments = createAction(
+  TournamentActionTypes.INITIALIZE_ENROLLED_TOURNAMENTS
 );
-
-export const register = createAction(
-  TournamentsActionTypes.REGISTER,
-  props<{ tournamentId: number; userId: number }>()
+export const selectTournament = createAction(
+  TournamentActionTypes.SELECT_TOURNAMENT,
+  props<{ tournamentId: number }>()
 );
-
-export const registerSuccess = createAction(
-  TournamentsActionTypes.REGISTER_SUCCESS,
+export const loadTournaments = createAction(
+  TournamentActionTypes.LOAD_TOURNAMENTS,
+  props<{ tournaments: Tournament[] }>()
+);
+export const setTournaments = createAction(
+  TournamentActionTypes.SET_TOURNAMENTS,
+  props<{ tournaments: Tournament[] }>()
+);
+export const addTournament = createAction(
+  TournamentActionTypes.ADD_TOURNAMENT,
   props<{ tournament: Tournament }>()
 );
-
-export const registerFailure = createAction(
-  TournamentsActionTypes.REGISTER_FAILURE,
-  props<{ errorMessage: string }>()
+export const setTournament = createAction(
+  TournamentActionTypes.SET_TOURNAMENT,
+  props<{ tournament: Tournament }>()
 );
-
-export const selectTournament = createAction(
-  TournamentsActionTypes.SELECT_TOURNAMENT,
+export const upsertTournament = createAction(
+  TournamentActionTypes.UPSERT_TOURNAMENT,
+  props<{ tournament: Tournament }>()
+);
+export const addTournaments = createAction(
+  TournamentActionTypes.ADD_TOURNAMENTS,
+  props<{ tournaments: Tournament[] }>()
+);
+export const upsertTournaments = createAction(
+  TournamentActionTypes.UPSERT_TOURNAMENTS,
+  props<{ tournaments: Tournament[] }>()
+);
+export const updateTournament = createAction(
+  TournamentActionTypes.UPDATE_TOURNAMENT,
+  props<{ update: Update<Tournament> }>()
+);
+export const updateTournaments = createAction(
+  TournamentActionTypes.UPDATE_TOURNAMENTS,
+  props<{ updates: Update<Tournament>[] }>()
+);
+export const mapTournament = createAction(
+  TournamentActionTypes.MAP_TOURNAMENT,
+  props<{ entityMap: EntityMapOne<Tournament> }>()
+);
+export const mapTournaments = createAction(
+  TournamentActionTypes.MAP_TOURNAMENTS,
+  props<{ entityMap: EntityMap<Tournament> }>()
+);
+export const deleteTournament = createAction(
+  TournamentActionTypes.DELETE_TOURNAMENT,
   props<{ id: number }>()
 );
-
-export const selectTournamentSuccess = createAction(
-  TournamentsActionTypes.SELECT_TOURNAMENT_SUCCESS,
-  props<{ tournament: Tournament }>()
+export const deleteTournaments = createAction(
+  TournamentActionTypes.DELETE_TOURNAMENTS,
+  props<{ ids: number[] }>()
 );
-
-export const selectTournamentFailure = createAction(
-  TournamentsActionTypes.SELECT_TOURNAMENT_FAILURE,
-  props<{ errorMessage: string }>()
+export const deleteTournamentsByPredicate = createAction(
+  TournamentActionTypes.DELETE_TOURNAMENTS_BY_PREDICATE,
+  props<{ predicate: Predicate<Tournament> }>()
+);
+export const clearTournaments = createAction(
+  TournamentActionTypes.CLEAR_TOURNAMENTS
+);
+export const register = createAction(
+  TournamentActionTypes.REGISTER,
+  props<{ tournamentId: number; userId: number }>()
 );

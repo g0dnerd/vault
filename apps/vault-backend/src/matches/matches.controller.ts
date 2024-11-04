@@ -46,6 +46,14 @@ export class MatchesController {
     return this.matchesService.findAll();
   }
 
+  @Get('ongoing')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: MatchEntity, isArray: true })
+  findOngoing() {
+    return this.matchesService.findOngoing();
+  }
+
   @Get('draft/:draftId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

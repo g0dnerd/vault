@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, Observable, switchMap, take, tap } from 'rxjs';
 
@@ -25,11 +25,14 @@ export class CurrentDraftResolver implements Resolve<Match> {
     private readonly matchStore: Store<State>
   ) {}
 
-  resolve(): Observable<Match> {
+  resolve(route: ActivatedRouteSnapshot): Observable<Match> {
+    const tournamentId = route.params['id'];
+
     // Dispatch initCurrent action to initialize the current draft
-    this.draftStore$.dispatch(initCurrent());
+    this.draftStore$.dispatch(initCurrent({ tournamentId }));
 
     // First, wait for a non-null current draft
+    // TODO: this is stupid and doesn't work, what if there is no active draft?
     return this.draftStore$.select(selectCurrentDraft).pipe(
       filter((draft) => draft !== null), // Ensure draft is not null
       take(1), // Take the first non-null draft

@@ -8,8 +8,7 @@ import { PushPipe } from '@ngrx/component';
 import { Draft, Tournament } from '@vault/shared';
 import { MatchPanelComponent } from './match-panel.component';
 import { DraftPanelComponent } from './draft-panel.component';
-import { selectSelectedTournament, TournamentAppState } from '../../store';
-import { selectTournament } from '../../store/actions/tournaments.actions';
+import { selectTournamentById, State } from '../../store';
 
 @Component({
   selector: 'app-tournament-dashboard',
@@ -25,15 +24,14 @@ import { selectTournament } from '../../store/actions/tournaments.actions';
   styleUrl: './tournament-dashboard.component.css',
 })
 export class TournamentDashboardComponent implements OnInit {
-  tournament$: Observable<Tournament | null> = of(null);
+  tournament$: Observable<Tournament | undefined> = of(undefined);
   currentDraft$: Observable<Draft | null> = of(null);
 
-  constructor(private readonly tournamentStore$: Store<TournamentAppState>) {}
+  constructor(private readonly store$: Store<State>) {}
 
   @Input({ transform: numberAttribute }) id = 0;
 
   ngOnInit() {
-    this.tournamentStore$.dispatch(selectTournament({ id: this.id }));
-    this.tournament$ = this.tournamentStore$.select(selectSelectedTournament);
+    this.tournament$ = this.store$.select(selectTournamentById(this.id));
   }
 }

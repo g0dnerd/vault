@@ -44,13 +44,16 @@ export class DraftsController {
     return this.draftsService.findAll();
   }
 
-  @Get('current')
+  @Get('current/:tournamentId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: DraftEntity })
-  async getCurrentDraft(@Req() req: Request) {
+  async getCurrentDraft(
+    @Req() req: Request,
+    @Param('tournamentId', ParseIntPipe) tournamentId: number
+  ) {
     const currentDraft = await this.draftsService
-      .getCurrentDraft(req.user['id'])
+      .getCurrentDraft(req.user['id'], tournamentId)
       .catch(() => {
         throw new NotFoundException('No draft found for current user');
       });
@@ -65,14 +68,6 @@ export class DraftsController {
     @Param('tournamentId', ParseIntPipe) tournamentId: number
   ) {
     return this.draftsService.getOngoingDraftsForTournament(tournamentId);
-  }
-
-  @Get(':userId/current')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: DraftEntity })
-  getCurrentDraftForUser(@Param('userId', ParseIntPipe) userId: number) {
-    return this.draftsService.getCurrentDraft(userId);
   }
 
   @Get(':id')

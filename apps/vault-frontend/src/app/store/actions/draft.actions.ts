@@ -35,7 +35,8 @@ export const initOngoingFailure = createAction(
 );
 
 export const initCurrent = createAction(
-  DraftActionTypes.INIT_CURRENT
+  DraftActionTypes.INIT_CURRENT,
+  props<{ tournamentId: number }>()
 );
 
 export const initCurrentSuccess = createAction(

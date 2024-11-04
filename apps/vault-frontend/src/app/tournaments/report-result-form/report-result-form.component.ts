@@ -1,5 +1,6 @@
 import { Component, Input, numberAttribute, OnInit } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import {
   FormBuilder,
   FormControl,
@@ -15,7 +16,7 @@ import { matchSumValidator } from '../../_helpers/match-form.validator';
 @Component({
   selector: 'app-report-result-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgIf],
+  imports: [MatButtonToggleModule, ReactiveFormsModule, NgClass, NgIf, NgFor],
   templateUrl: './report-result-form.component.html',
   styleUrl: './report-result-form.component.css',
 })
@@ -23,6 +24,8 @@ export class ReportResultFormComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;
+
+  options = [0, 1, 2];
 
   @Input({ transform: numberAttribute }) id = 0;
   @Input() p1name: string | undefined = '';

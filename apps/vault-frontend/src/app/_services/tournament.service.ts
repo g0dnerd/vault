@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { API_ROUTES, Tournament } from '@vault/shared';
+import { API_ROUTES, CreateTournamentDto, Tournament } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class TournamentService {
 
   constructor(private http: HttpClient) {}
 
-  createTournament(tournament: Tournament): Observable<Tournament> {
+  createTournament(tournament: CreateTournamentDto): Observable<Tournament> {
     return this.http.post<Tournament>(this.apiUrl, tournament);
   }
 
