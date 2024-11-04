@@ -8,7 +8,6 @@
       <span id="my-opponent">{{ opponentName$ | ngrxPush }}</span>
     </h5>
 
-    @defer {
     <app-report-result-form
       *ngIf="!(currentMatch$ | ngrxPush)?.result; else resultKnown"
       [id]="(currentMatch$ | ngrxPush)?.id"
@@ -16,7 +15,6 @@
       [p2name]="(currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username"
       [userId]="(user$ | ngrxPush)?.id"
     />
-    }
 
     <ng-template #resultKnown>
       <p *ngIf="(currentMatch$ | ngrxPush)?.result === 0; else noDraw">
@@ -54,7 +52,6 @@
         </ng-template>
       </ng-template>
       <ng-template #resultOpen>
-        @defer {
         <button
           *ngIf="
             (currentMatch$ | ngrxPush)?.reportedById != (user$ | ngrxPush)?.id;
@@ -73,7 +70,6 @@
         <ng-template #awaitingConfirmation>
           <span>(Awaiting confirmation)</span>
         </ng-template>
-        }
       </ng-template>
     </ng-template>
   </div>

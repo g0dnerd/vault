@@ -2,9 +2,7 @@
   <h4>Tournament Dashboard</h4>
   <h1 class="event-name">{{ (tournament$ | ngrxPush)?.name }}</h1>
   <ul class="player-info-list">
-    @defer {
     <app-draft-panel></app-draft-panel>
     <app-match-panel></app-match-panel>
-    }
   </ul>
 </div>

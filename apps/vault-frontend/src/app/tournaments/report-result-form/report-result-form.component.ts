@@ -21,11 +21,9 @@ import { matchSumValidator } from '../../_helpers/match-form.validator';
   styleUrl: './report-result-form.component.css',
 })
 export class ReportResultFormComponent implements OnInit {
-  form!: FormGroup;
+  form: FormGroup;
   loading = false;
   submitted = false;
-
-  options = [0, 1, 2];
 
   @Input({ transform: numberAttribute }) id = 0;
   @Input() p1name: string | undefined = '';
@@ -35,9 +33,7 @@ export class ReportResultFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private readonly matchService: MatchService
-  ) {}
-
-  ngOnInit() {
+  ) {
     // Initialize result reporting form
     this.form = this.formBuilder.group(
       {
@@ -55,7 +51,9 @@ export class ReportResultFormComponent implements OnInit {
       // Ensure total number of games reported is not greater than 3
       { validators: matchSumValidator }
     );
+  }
 
+  ngOnInit() {
     // Initial form values
     this.form.setValue({
       player1Wins: 0,
@@ -70,6 +68,8 @@ export class ReportResultFormComponent implements OnInit {
   async onSubmit() {
     this.submitted = true;
     // this.alertService.clear();
+
+    console.log(this.f['player1Wins'].value, this.f['player2Wins'].value);
 
     if (this.form.invalid) return;
     this.loading = true;

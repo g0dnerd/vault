@@ -1,16 +1,15 @@
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  class="report-result"
-  id="report-result-form"
->
+<form [formGroup]="form" *ngIf="form" (ngSubmit)="onSubmit()">
   <div class="mb-3">
     <div class="form-input player-wins">
       <label class="form-label">{{ p1name }} wins</label>
-      <mat-button-toggle-group formControlName="player1Wins" exclusive>
-        <mat-button-toggle value="1">0</mat-button-toggle>
-        <mat-button-toggle value="2">1</mat-button-toggle>
-        <mat-button-toggle value="3">2</mat-button-toggle>
+      <mat-button-toggle-group
+        formControlName="player1Wins"
+        aria-label="Player 1 Wins"
+        exclusive
+      >
+        <mat-button-toggle [value]="0">0</mat-button-toggle>
+        <mat-button-toggle [value]="1">1</mat-button-toggle>
+        <mat-button-toggle [value]="2">2</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
     <div *ngIf="submitted && f['player1Wins'].errors" class="invalid-feedback">
@@ -20,14 +19,15 @@
     </div>
     <div class="form-input player-wins">
       <label class="form-label">{{ p2name }} wins</label>
-      <input
-        type="number"
-        min="0"
-        max="2"
+      <mat-button-toggle-group
         formControlName="player2Wins"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && f['player2Wins'].errors }"
-      />
+        aria-label="Player 2 Wins"
+        exclusive
+      >
+        <mat-button-toggle [value]="0">0</mat-button-toggle>
+        <mat-button-toggle [value]="1">1</mat-button-toggle>
+        <mat-button-toggle [value]="2">2</mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
     <div
       *ngIf="form.hasError('sumExceeded')"
