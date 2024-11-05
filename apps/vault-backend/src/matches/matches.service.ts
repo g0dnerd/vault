@@ -234,13 +234,23 @@ export class MatchesService {
   ) {
     // Destructure the updateMatchDto and check if the reporting user
     // is authorized to change this match
-    const g = await this.prisma.match.findUnique({ where: { id: matchId } });
-    if (userId != g.reportedById) {
+    const g = await this.prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        player1: { select: { enrollment: { select: { userId: true } } } },
+        player2: { select: { enrollment: { select: { userId: true } } } },
+      },
+    });
+
+    // If the user is not a player in the game, they need to be
+    // an admin to be authorized to update the match
+    if (
+      userId != g.player1.enrollment.userId &&
+      userId != g.player2.enrollment.userId
+    ) {
       const user = await this.prisma.user.findUnique({
         where: { id: userId },
       });
-      // If the user is not a player in the game, they need to be
-      // an admin to be authorized to update the match
       if (!user.roles.includes(Role.ADMIN)) {
         throw new UnauthorizedException(
           'User is not authorized to update this match'
