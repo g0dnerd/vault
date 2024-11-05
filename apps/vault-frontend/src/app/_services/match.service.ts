@@ -38,11 +38,9 @@ export class MatchService {
     return this.http.patch<Match>(`${this.apiUrl}/report/${matchId}`, result);
   }
 
-  // POSTs a request to confirm the match for `matchId`
-  // TODO: Refactor this into a separate method in the backend
-  // to enable permission checking
+  // PATCH request to confirm the match for `matchId`
   confirmResult(matchId: number): Observable<Match> {
-    return this.http.patch<Match>(`${this.apiUrl}/${matchId}`, {
+    return this.http.patch<Match>(`${this.apiUrl}/confirm/${matchId}`, {
       resultConfirmed: true,
     });
   }
