@@ -1,10 +1,22 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  numberAttribute,
+  OnInit,
+} from '@angular/core';
 import { KeyValuePipe, NgClass, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { combineLatest, firstValueFrom, map, Observable } from 'rxjs';
+import {
+  combineLatest,
+  filter,
+  firstValueFrom,
+  map,
+  Observable,
+  of,
+} from 'rxjs';
 
 import { Match, User } from '@vault/shared';
 import {
@@ -16,9 +28,12 @@ import {
   AuthAppState,
   State,
   selectAuthUser,
-  selectMatchById,
+  selectMatchByQuery,
 } from '../../store';
-import { updateMatch } from '../../store/actions/match.actions';
+import {
+  initializeMatchesForDraft,
+  updateMatch,
+} from '../../store/actions/match.actions';
 import { ReportResultFormComponent } from '../report-result-form/report-result-form.component';
 
 @Component({
@@ -35,35 +50,19 @@ import { ReportResultFormComponent } from '../report-result-form/report-result-f
   templateUrl: './match-panel.component.html',
   styleUrl: './match-panel.component.css',
 })
-export class MatchPanelComponent {
+export class MatchPanelComponent implements OnInit {
+  @Input({ required: true, transform: numberAttribute }) id = 0;
+
   private authStore$ = inject(Store<AuthAppState>);
   private matchStore$ = inject(Store<State>);
   private matchWebSocketService = inject(MatchWebSocketService);
-  private route = inject(ActivatedRoute);
+
   loading = false;
 
-  // Get the current match ID from the route resolver
-  private matchId = this.route.snapshot.data['game'].id;
-
-  // Subscribe to that match in NGRX
-  currentMatch$: Observable<Match | undefined> = this.matchStore$.select(
-    selectMatchById(this.matchId)
-  );
+  currentMatch$: Observable<Match | undefined> = of(undefined);
   user$: Observable<User | null> = this.authStore$.select(selectAuthUser);
-
   // Observable for the opponent's name
-  opponentName$: Observable<string | undefined> = combineLatest([
-    this.currentMatch$,
-    this.user$,
-  ]).pipe(
-    map(([game, user]) => {
-      const p1 = game?.player1?.enrollment?.user.username;
-      const p2 = game?.player2?.enrollment?.user.username;
-
-      // Determine the opponent's name
-      return user?.username === p1 ? p2 : p1;
-    })
-  );
+  opponentName$: Observable<string | undefined> = of(undefined);
 
   constructor(
     private readonly alertService: AlertService,
@@ -80,12 +79,45 @@ export class MatchPanelComponent {
       });
   }
 
+  ngOnInit() {
+    this.matchStore$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
+    this.user$.subscribe((user) => {
+      if (user) {
+        this.currentMatch$ = this.matchStore$
+          .select(
+            selectMatchByQuery(
+              (game) =>
+                game.round?.draftId == this.id &&
+                (game.player1?.enrollment?.userId == user.id ||
+                  game.player2?.enrollment?.userId == user.id)
+            )
+          )
+          .pipe(filter((game): game is Match => game != undefined));
+      }
+    });
+    this.opponentName$ = combineLatest([this.currentMatch$, this.user$]).pipe(
+      map(([game, user]) => {
+        const p1 = game?.player1?.enrollment?.user.username;
+        const p2 = game?.player2?.enrollment?.user.username;
+
+        // Determine the opponent's name
+        return user?.username === p1 ? p2 : p1;
+      })
+    );
+  }
+
   // Handles result confirmation
   async onConfirm() {
     this.alertService.clear();
 
     const game = await firstValueFrom(this.currentMatch$);
-
-    await firstValueFrom(this.matchService.confirmResult(game!.id));
+    if (!game) {
+      this.alertService.error(
+        'Error while trying to confirm result (no game data)',
+        true
+      );
+      return;
+    }
+    await firstValueFrom(this.matchService.confirmResult(game.id));
   }
 }

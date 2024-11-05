@@ -1,76 +1,85 @@
-<div class="card">
-  <h4 class="card-header">My current match</h4>
-  <div class="card-body match-details">
-    <h5 class="card-text">
-      My Opponent at Table
-      <span id="my-table">{{ (currentMatch$ | ngrxPush)?.tableNumber }}</span
-      >:
-      <span id="my-opponent">{{ opponentName$ | ngrxPush }}</span>
-    </h5>
+<h5 class="card-title">My current match</h5>
+<p class="card-text">
+  My Opponent at Table
+  <span id="my-table">{{ (currentMatch$ | ngrxPush)?.tableNumber }}</span
+  >:
+  <span id="my-opponent">{{ opponentName$ | ngrxPush }}</span>
+</p>
 
-    <app-report-result-form
-      *ngIf="!(currentMatch$ | ngrxPush)?.result; else resultKnown"
-      [id]="(currentMatch$ | ngrxPush)?.id"
-      [p1name]="(currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username"
-      [p2name]="(currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username"
-      [userId]="(user$ | ngrxPush)?.id"
-    />
+@defer {
+<div class="match-result-forms">
+  <app-report-result-form
+    *ngIf="!(currentMatch$ | ngrxPush)?.result; else resultKnown"
+    [id]="(currentMatch$ | ngrxPush)?.id"
+    [p1name]="(currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username"
+    [p2name]="(currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username"
+    [userId]="(user$ | ngrxPush)?.id"
+  />
 
-    <ng-template #resultKnown>
-      <p *ngIf="(currentMatch$ | ngrxPush)?.result === 0; else noDraw">
-        It's a {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
+  <ng-template #resultKnown>
+    <p *ngIf="(currentMatch$ | ngrxPush)?.result === 0; else noDraw">
+      It's a {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
+        (currentMatch$ | ngrxPush)?.player2Wins
+      }}
+      draw
+      <span
+        *ngIf="
+          (currentMatch$ | ngrxPush)?.resultConfirmed;
+          else confirmationOpen
+        "
+        >(Result confirmed)</span
+      >
+    </p>
+    <ng-template #noDraw>
+      <p *ngIf="(currentMatch$ | ngrxPush)?.result === -1; else p2Win">
+        {{ (currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username }}
+        wins
+        {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
           (currentMatch$ | ngrxPush)?.player2Wins
         }}
-        draw
         <span
-          *ngIf="(currentMatch$ | ngrxPush)?.resultConfirmed; else resultOpen"
+          *ngIf="
+            (currentMatch$ | ngrxPush)?.resultConfirmed;
+            else confirmationOpen
+          "
           >(Result confirmed)</span
         >
       </p>
-      <ng-template #noDraw>
-        <p *ngIf="(currentMatch$ | ngrxPush)?.result === -1; else p2Win">
-          {{ (currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username }}
-          wins
-          {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
-            (currentMatch$ | ngrxPush)?.player2Wins
-          }}
-          <span
-            *ngIf="(currentMatch$ | ngrxPush)?.resultConfirmed; else resultOpen"
-            >(Result confirmed)</span
-          >
-        </p>
-        <ng-template #p2Win>
-          {{ (currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username }}
-          wins
-          {{ (currentMatch$ | ngrxPush)?.player2Wins }}-{{
-            (currentMatch$ | ngrxPush)?.player1Wins
-          }}
-          <span
-            *ngIf="(currentMatch$ | ngrxPush)?.resultConfirmed; else resultOpen"
-            >(Result confirmed)</span
-          >
-        </ng-template>
-      </ng-template>
-      <ng-template #resultOpen>
-        <button
+      <ng-template #p2Win>
+        {{ (currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username }}
+        wins
+        {{ (currentMatch$ | ngrxPush)?.player2Wins }}-{{
+          (currentMatch$ | ngrxPush)?.player1Wins
+        }}
+        <span
           *ngIf="
-            (currentMatch$ | ngrxPush)?.reportedById != (user$ | ngrxPush)?.id;
-            else awaitingConfirmation
+            (currentMatch$ | ngrxPush)?.resultConfirmed;
+            else confirmationOpen
           "
-          [disabled]="loading"
-          (click)="onConfirm()"
-          class="btn btn-primary"
+          >(Result confirmed)</span
         >
-          <span
-            *ngIf="loading"
-            class="spinner-border spinner-border-sm me-1"
-          ></span>
-          Confirm result
-        </button>
-        <ng-template #awaitingConfirmation>
-          <span>(Awaiting confirmation)</span>
-        </ng-template>
       </ng-template>
     </ng-template>
-  </div>
+    <ng-template #confirmationOpen>
+      <button
+        *ngIf="
+          (currentMatch$ | ngrxPush)?.reportedById != (user$ | ngrxPush)?.id;
+          else awaitingConfirmation
+        "
+        [disabled]="loading"
+        (click)="onConfirm()"
+        class="btn btn-primary"
+      >
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm me-1"
+        ></span>
+        Confirm result
+      </button>
+      <ng-template #awaitingConfirmation>
+        <span>(Awaiting confirmation)</span>
+      </ng-template>
+    </ng-template>
+  </ng-template>
 </div>
+}

@@ -5,33 +5,32 @@ import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
-import { Draft, Tournament } from '@vault/shared';
-import { MatchPanelComponent } from './match-panel.component';
+import { Tournament } from '@vault/shared';
 import { DraftPanelComponent } from './draft-panel.component';
-import { selectTournamentById, State } from '../../store';
+import { DraftAppState, selectTournamentById, State } from '../../store';
+import { initCurrent } from '../../store/actions/draft.actions';
+import { initializeAllTournaments } from '../../store/actions/tournaments.actions';
 
 @Component({
   selector: 'app-tournament-dashboard',
   standalone: true,
-  imports: [
-    NgIf,
-    RouterLink,
-    MatchPanelComponent,
-    DraftPanelComponent,
-    PushPipe,
-  ],
+  imports: [NgIf, RouterLink, DraftPanelComponent, PushPipe],
   templateUrl: './tournament-dashboard.component.html',
   styleUrl: './tournament-dashboard.component.css',
 })
 export class TournamentDashboardComponent implements OnInit {
   tournament$: Observable<Tournament | undefined> = of(undefined);
-  currentDraft$: Observable<Draft | null> = of(null);
 
-  constructor(private readonly store$: Store<State>) {}
+  constructor(
+    private readonly store$: Store<State>,
+    private readonly draftStore$: Store<DraftAppState>
+  ) {}
 
   @Input({ transform: numberAttribute }) id = 0;
 
   ngOnInit() {
+    this.store$.dispatch(initializeAllTournaments());
+    this.draftStore$.dispatch(initCurrent({ tournamentId: this.id }));
     this.tournament$ = this.store$.select(selectTournamentById(this.id));
   }
 }
