@@ -114,7 +114,7 @@ body.vault-app {
 .home-nav-button,
 #tc-terms-form input[type='submit'],
 .vault-app ul li.pool-info h5 + a,
-button:not(.navbar-toggler, .btn-close) {
+button:not(.navbar-toggler, .btn-close, .mat-button-toggle-button) {
   font-weight: 500;
   border: var(--border);
   border-color: var(--main-color);
@@ -472,6 +472,9 @@ img {
 }
 .vault-app.darkmode h1 {
   border-bottom: 1px solid white;
+}
+.vault-app.darkmode ul.admin-match-list li {
+  border-bottom: 5px solid #ddd;
 }
 .vault-app.darkmode ul.event-info {
   padding: 5px 10px 10px;

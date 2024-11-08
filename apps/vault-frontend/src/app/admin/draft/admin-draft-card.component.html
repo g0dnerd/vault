@@ -10,12 +10,15 @@
       </li>
     </ul>
     <h5 class="card-subtitle mb-2">Matches:</h5>
-    <ul class="admin-draft-panel match-list">
-      <li *ngFor="let game of matches$ | ngrxPush; index as i">
+    <ul class="admin-match-list">
+      <li
+        *ngFor="let game of matches$ | ngrxPush; index as i"
+        class="admin-match-embed"
+      >
         {{ game.player1?.enrollment?.user?.username }}
         vs
         {{ game.player2?.enrollment?.user?.username }}
-        <div
+        <span
           *ngIf="
             game.player1Wins != null && game.player2Wins != null;
             else pending
@@ -25,7 +28,7 @@
           {{ game.player1Wins }}
           :
           {{ game.player2Wins }}
-        </div>
+        </span>
         <ng-template #pending> (Result pending) </ng-template>
         @defer {
         <app-report-result-form
@@ -35,9 +38,7 @@
           [p2name]="game?.player2?.enrollment?.user?.username"
           [userId]="(user$ | ngrxPush)?.id"
         />
-        <ng-template #confirmResult>
-          <p>Test</p>
-        </ng-template>
+        <ng-template #confirmResult> </ng-template>
         }
       </li>
     </ul>
