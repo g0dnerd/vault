@@ -207,6 +207,8 @@ export class MatchesService {
       const user = await this.prisma.user.findUnique({
         where: { id: userId },
       });
+      console.log(`dto: ${JSON.stringify(updateMatchDto)}`);
+      console.log(JSON.stringify(user));
       // If the user is not a player in the game, they need to be
       // an admin to be authorized to update the match
       if (!user.roles.includes(Role.ADMIN)) {
@@ -215,7 +217,11 @@ export class MatchesService {
         );
       } else {
         // If the user is an admin, the result is automatically confirmed as well
-        updateMatchDto = { ...updateMatchDto, resultConfirmed: true };
+        updateMatchDto = {
+          ...updateMatchDto,
+          reportedById: null,
+          resultConfirmed: true,
+        };
       }
     }
     const game = await this.prisma.match.update({
