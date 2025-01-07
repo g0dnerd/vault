@@ -7,6 +7,7 @@ export * from './lib/event.interface';
 export * from './lib/match.interface';
 export * from './lib/player.interface';
 export * from './lib/result.interface';
+export * from './lib/round.interface';
 export * from './lib/standings.interface';
 export * from './lib/tournaments.interface';
 export * from './lib/user.interface';
