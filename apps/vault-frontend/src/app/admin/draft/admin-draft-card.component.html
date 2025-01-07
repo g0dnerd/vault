@@ -25,20 +25,19 @@
           {{ game.player1Wins }}
           :
           {{ game.player2Wins }}
+          <div *ngIf="game?.resultConfirmed === false">
+            <p>Confirm Result</p>
+          </div>
         </div>
-        <ng-template #pending> (Result pending) </ng-template>
-        @defer {
-        <app-report-result-form
-          *ngIf="!game.result || !game.resultConfirmed; else confirmResult"
-          [id]="game?.id"
-          [p1name]="game?.player1?.enrollment?.user?.username"
-          [p2name]="game?.player2?.enrollment?.user?.username"
-          [userId]="(user$ | ngrxPush)?.id"
-        />
-        <ng-template #confirmResult>
-          <p>Test</p>
+        <ng-template #pending>
+          (Result pending)
+          <app-report-result-form
+            [id]="game?.id"
+            [p1name]="game?.player1?.enrollment?.user?.username"
+            [p2name]="game?.player2?.enrollment?.user?.username"
+            [userId]="(user$ | ngrxPush)?.id"
+          />
         </ng-template>
-        }
       </li>
     </ul>
   </div>

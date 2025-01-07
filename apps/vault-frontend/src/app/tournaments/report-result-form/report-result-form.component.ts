@@ -85,8 +85,8 @@ export class ReportResultFormComponent implements OnInit {
 
     await firstValueFrom(
       this.matchService.reportResult(this.userId, this.id, {
-        player1Wins: this.f['player1Wins'].value,
-        player2Wins: this.f['player2Wins'].value,
+        player1Wins: parseInt(this.f['player1Wins'].value),
+        player2Wins: parseInt(this.f['player2Wins'].value),
         result,
       })
     );
