@@ -12,6 +12,7 @@ import {
   initializeAllTournaments,
   initializeEnrolledTournaments,
 } from '../../_store/actions/tournaments.actions';
+import { initializePlayersForUser } from '../../_store/actions/player.actions';
 
 @Component({
   templateUrl: 'my-tournaments.component.html',
@@ -27,5 +28,6 @@ export class MyTournamentsComponent implements OnInit {
   ngOnInit() {
     this.store$.dispatch(initializeAllTournaments());
     this.store$.dispatch(initializeEnrolledTournaments());
+    this.store$.dispatch(initializePlayersForUser());
   }
 }

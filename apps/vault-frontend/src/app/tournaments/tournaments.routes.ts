@@ -9,12 +9,14 @@ import { MyTournamentsComponent } from './my-tournaments';
 import { TournamentDashboardComponent } from './dashboard/tournament-dashboard.component';
 import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
 import { AdminTournamentDashboardComponent } from '../admin/admin-tournament-dashboard.component';
-import * as tournamentEffects from '../_store/effects/tournaments.effects';
 import * as draftEffects from '../_store/effects/draft.effects';
 import * as matchEffects from '../_store/effects/match.effects';
-import { tournamentReducer } from '../_store/reducers/tournaments.reducer';
+import * as playerEffects from '../_store/effects/player.effects';
+import * as tournamentEffects from '../_store/effects/tournaments.effects';
 import { draftReducer } from '../_store/reducers/draft.reducer';
 import { matchReducer } from '../_store/reducers/match.reducer';
+import { playerReducer } from '../_store/reducers/player.reducer';
+import { tournamentReducer } from '../_store/reducers/tournaments.reducer';
 
 export const TOURNAMENT_ROUTES: Routes = [
   {
@@ -27,6 +29,8 @@ export const TOURNAMENT_ROUTES: Routes = [
       provideState('drafts', draftReducer),
       provideEffects(matchEffects),
       provideState('matches', matchReducer),
+      provideEffects(playerEffects),
+      provideState('players', playerReducer),
     ],
     canActivate: [AuthGuard],
     data: { requiredRole: Role.Player },

@@ -8,6 +8,7 @@
       Cube ID: {{ (currentDraft$ | ngrxPush)?.cubeId }}
     </p>
     @defer{
+    <app-my-pool [id]="(currentDraft$ | ngrxPush)?.id" />
     <app-match-panel [id]="(currentDraft$ | ngrxPush)?.id" />
     }
   </div>

@@ -1,1 +1,16 @@
-<p>my-pool works!</p>
+<h5 class="card-title">My pool</h5>
+<p class="card-text" *ngIf="(player$ | ngrxPush)?.checkedIn; else notCheckedIn">
+  I am checked in.
+</p>
+<p
+  class="card-text"
+  *ngIf="(player$ | ngrxPush)?.checkedOut; else notCheckedOut"
+>
+  I am checked out.
+</p>
+<ng-template #notCheckedIn>
+  <p class="card-text">I am not checked in.</p>
+</ng-template>
+<ng-template #notCheckedOut>
+  <p class="card-text">I am not checked out.</p>
+</ng-template>
