@@ -45,6 +45,14 @@ export class ImagesController {
     return this.imagesService.findAll(req.user['id']);
   }
 
+  @Get('player/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: ImageEntity, isArray: true })
+  findForPlayer(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    return this.imagesService.findForPlayer(id, req.user['id']);
+  }
+
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

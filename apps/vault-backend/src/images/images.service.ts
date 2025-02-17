@@ -28,6 +28,23 @@ export class ImagesService {
     return this.prisma.image.findMany();
   }
 
+  async findForPlayer(id: number, userId: number) {
+    const player = await this.prisma.draftPlayer.findUnique({
+      where: { id },
+      include: { enrollment: { select: { userId: true } } },
+    });
+    if (player.enrollment.userId !== userId) {
+      throw new UnauthorizedException(
+        'Player is unauthorized to view these images.'
+      );
+    }
+    return this.prisma.image.findMany({
+      where: {
+        draftPlayerId: id,
+      },
+    });
+  }
+
   async findOne(id: number, userId: number) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user.roles.includes(Role.Admin)) {
