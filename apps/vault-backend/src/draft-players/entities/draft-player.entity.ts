@@ -6,6 +6,12 @@ export class DraftPlayerEntity implements DraftPlayer {
   id: number;
 
   @ApiProperty()
+  checkedIn: boolean;
+
+  @ApiProperty()
+  checkedOut: boolean;
+
+  @ApiProperty()
   draftId: number;
 
   @ApiProperty()

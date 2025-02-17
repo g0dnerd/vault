@@ -7,6 +7,7 @@ export const API_ROUTES = {
   REGISTER: '/auth/register',
   STATUS: '/auth/status',
   USER: '/users',
+  PLAYERS: '/draft-players',
   DRAFTS: '/drafts',
   DRAFT_SCORECARDS: '/draft-scorecards',
 };
