@@ -6,7 +6,7 @@ import { PushPipe } from '@ngrx/component';
 import { Observable, of } from 'rxjs';
 
 import { User } from '@vault/shared';
-import { AuthAppState, selectAdminStatus, selectAuthUser } from '../store';
+import { AuthAppState, selectAdminStatus, selectAuthUser } from '../_store';
 
 @Component({
   templateUrl: 'profile.component.html',

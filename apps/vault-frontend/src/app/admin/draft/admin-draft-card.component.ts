@@ -19,12 +19,12 @@ import {
   selectAuthUser,
   selectMatchesByQuery,
   selectSelectedDraft,
-} from '../../store';
-import { selectDraft } from '../../store/actions/draft.actions';
+} from '../../_store';
+import { selectDraft } from '../../_store/actions/draft.actions';
 import {
   initializeMatchesForDraft,
   updateMatch,
-} from '../../store/actions/match.actions';
+} from '../../_store/actions/match.actions';
 import { ReportResultFormComponent } from '../../tournaments/report-result-form/report-result-form.component';
 
 @Component({

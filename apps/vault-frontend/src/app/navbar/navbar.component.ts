@@ -9,8 +9,8 @@ import {
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { AuthAppState, selectAdminStatus, selectAuthStatus } from '../store';
-import { logout } from '../store/actions/auth.actions';
+import { AuthAppState, selectAdminStatus, selectAuthStatus } from '../_store';
+import { logout } from '../_store/actions/auth.actions';
 
 @Component({
   selector: 'app-navbar',

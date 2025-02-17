@@ -4,9 +4,9 @@ import { Store } from '@ngrx/store';
 import { filter, Observable } from 'rxjs';
 
 import { Match } from '@vault/shared';
-import { selectAllMatches, State } from '../store';
-import { initializeAllMatches } from '../store/actions/match.actions';
-import { initializeAllTournaments } from '../store/actions/tournaments.actions';
+import { selectAllMatches, State } from '../_store';
+import { initializeAllMatches } from '../_store/actions/match.actions';
+import { initializeAllTournaments } from '../_store/actions/tournaments.actions';
 
 @Injectable({
   providedIn: 'root',

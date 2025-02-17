@@ -11,12 +11,12 @@ import {
   selectAuthUser,
   selectAvailableTournaments,
   State,
-} from '../../store';
+} from '../../_store';
 import {
   initializeAllTournaments,
   initializeAvailableTournaments,
   register,
-} from '../../store/actions/tournaments.actions';
+} from '../../_store/actions/tournaments.actions';
 
 @Component({
   standalone: true,

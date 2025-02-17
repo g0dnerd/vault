@@ -9,8 +9,8 @@ import { RouterLink } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 
-import { register } from '../store/actions/auth.actions';
-import { AuthAppState, selectErrorMessage } from '../store';
+import { register } from '../_store/actions/auth.actions';
+import { AuthAppState, selectErrorMessage } from '../_store';
 import { AuthPayload } from '@vault/shared';
 import { AlertService } from '../_services';
 import { Observable, of } from 'rxjs';

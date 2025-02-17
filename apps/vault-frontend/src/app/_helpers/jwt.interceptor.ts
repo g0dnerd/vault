@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 
-import { AuthAppState, selectAuthToken } from '../store';
+import { AuthAppState, selectAuthToken } from '../_store';
 
 // Intercepts any outgoing HTTP request and inserts the JWT token
 // into the `Authorization` header

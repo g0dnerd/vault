@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
 import { Tournament } from '@vault/shared';
-import { selectAllTournaments, State } from '../store';
-import { initializeAllTournaments } from '../store/actions/tournaments.actions';
+import { selectAllTournaments, State } from '../_store';
+import { initializeAllTournaments } from '../_store/actions/tournaments.actions';
 import { TournamentAdminCardComponent } from './tournament-admin-card.component';
 
 @Component({

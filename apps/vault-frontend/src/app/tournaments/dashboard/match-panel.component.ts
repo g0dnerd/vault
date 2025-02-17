@@ -29,11 +29,11 @@ import {
   State,
   selectAuthUser,
   selectMatchByQuery,
-} from '../../store';
+} from '../../_store';
 import {
   initializeMatchesForDraft,
   updateMatch,
-} from '../../store/actions/match.actions';
+} from '../../_store/actions/match.actions';
 import { ReportResultFormComponent } from '../report-result-form/report-result-form.component';
 
 @Component({

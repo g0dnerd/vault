@@ -16,8 +16,8 @@ import {
   jwtInterceptor,
   UnAuthGuard,
 } from './app/_helpers';
-import * as authEffects from './app/store/effects/auth.effects';
-import { authReducer } from './app/store/reducers/auth.reducer';
+import * as authEffects from './app/_store/effects/auth.effects';
+import { authReducer } from './app/_store/reducers/auth.reducer';
 
 bootstrapApplication(AppComponent, {
   providers: [

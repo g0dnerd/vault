@@ -5,8 +5,8 @@ import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 
 import { Draft } from '@vault/shared';
-import { DraftAppState, selectOngoingDraft } from '../../store';
-import { initOngoing } from '../../store/actions/draft.actions';
+import { DraftAppState, selectOngoingDraft } from '../../_store';
+import { initOngoing } from '../../_store/actions/draft.actions';
 import { AdminDraftCardComponent } from './admin-draft-card.component';
 
 @Component({

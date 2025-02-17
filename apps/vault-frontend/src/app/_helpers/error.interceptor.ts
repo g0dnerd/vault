@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, throwError, catchError } from 'rxjs';
 
-import { AuthAppState } from '../store';
-import { logout } from '../store/actions/auth.actions';
+import { AuthAppState } from '../_store';
+import { logout } from '../_store/actions/auth.actions';
 
 export function errorInterceptor(
   req: HttpRequest<unknown>,

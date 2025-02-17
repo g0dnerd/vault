@@ -9,8 +9,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 
-import { login } from '../store/actions/auth.actions';
-import { AuthAppState } from '../store';
+import { login } from '../_store/actions/auth.actions';
+import { AuthAppState } from '../_store';
 
 @Component({
   templateUrl: 'login.component.html',

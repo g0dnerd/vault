@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { Draft } from '@vault/shared';
-import { DraftAppState, selectCurrentDraft } from '../../store';
+import { DraftAppState, selectCurrentDraft } from '../../_store';
 import { MatchPanelComponent } from './match-panel.component';
 
 @Component({

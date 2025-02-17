@@ -7,11 +7,11 @@ import { Observable } from 'rxjs';
 
 import { Tournament } from '@vault/shared';
 import { TournamentDetailCardComponent } from './tournament-detail-card.component';
-import { selectEnrolledTournaments, State } from '../../store';
+import { selectEnrolledTournaments, State } from '../../_store';
 import {
   initializeAllTournaments,
   initializeEnrolledTournaments,
-} from '../../store/actions/tournaments.actions';
+} from '../../_store/actions/tournaments.actions';
 
 @Component({
   templateUrl: 'my-tournaments.component.html',

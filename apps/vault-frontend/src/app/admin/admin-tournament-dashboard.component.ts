@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Tournament } from '@vault/shared';
-import { selectTournamentById, State } from '../store';
+import { selectTournamentById, State } from '../_store';
 import { AdminDraftListComponent } from './draft/admin-draft-list.component';
 
 @Component({

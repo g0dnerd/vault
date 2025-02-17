@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 
 import { AlertComponent } from './alert/alert.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { AuthAppState } from './store';
-import { initAuth } from './store/actions/auth.actions';
+import { AuthAppState } from './_store';
+import { initAuth } from './_store/actions/auth.actions';
 
 @Component({
   selector: 'app-root',

@@ -9,12 +9,12 @@ import { MyTournamentsComponent } from './my-tournaments';
 import { TournamentDashboardComponent } from './dashboard/tournament-dashboard.component';
 import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
 import { AdminTournamentDashboardComponent } from '../admin/admin-tournament-dashboard.component';
-import * as tournamentEffects from '../store/effects/tournaments.effects';
-import * as draftEffects from '../store/effects/draft.effects';
-import * as matchEffects from '../store/effects/match.effects';
-import { tournamentReducer } from '../store/reducers/tournaments.reducer';
-import { draftReducer } from '../store/reducers/draft.reducer';
-import { matchReducer } from '../store/reducers/match.reducer';
+import * as tournamentEffects from '../_store/effects/tournaments.effects';
+import * as draftEffects from '../_store/effects/draft.effects';
+import * as matchEffects from '../_store/effects/match.effects';
+import { tournamentReducer } from '../_store/reducers/tournaments.reducer';
+import { draftReducer } from '../_store/reducers/draft.reducer';
+import { matchReducer } from '../_store/reducers/match.reducer';
 
 export const TOURNAMENT_ROUTES: Routes = [
   {

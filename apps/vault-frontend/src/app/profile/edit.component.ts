@@ -13,8 +13,8 @@ import { Observable, of } from 'rxjs';
 
 import { User } from '@vault/shared';
 import { AlertService } from '../_services';
-import { AuthAppState, selectAuthUser } from '../store';
-import { updateUser } from '../store/actions/auth.actions';
+import { AuthAppState, selectAuthUser } from '../_store';
+import { updateUser } from '../_store/actions/auth.actions';
 
 @Component({
   standalone: true,

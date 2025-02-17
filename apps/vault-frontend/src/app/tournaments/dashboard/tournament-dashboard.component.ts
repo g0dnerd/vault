@@ -7,9 +7,9 @@ import { PushPipe } from '@ngrx/component';
 
 import { Tournament } from '@vault/shared';
 import { DraftPanelComponent } from './draft-panel.component';
-import { DraftAppState, selectTournamentById, State } from '../../store';
-import { initCurrent } from '../../store/actions/draft.actions';
-import { initializeAllTournaments } from '../../store/actions/tournaments.actions';
+import { DraftAppState, selectTournamentById, State } from '../../_store';
+import { initCurrent } from '../../_store/actions/draft.actions';
+import { initializeAllTournaments } from '../../_store/actions/tournaments.actions';
 
 @Component({
   selector: 'app-tournament-dashboard',
