@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsPositive } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsPositive } from 'class-validator';
 
 export class CreateDraftPlayerDto {
   @IsNumber()
@@ -11,4 +11,14 @@ export class CreateDraftPlayerDto {
   @IsPositive()
   @ApiProperty()
   enrollmentId: number;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  checkedIn?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  checkedOut?: boolean;
 }

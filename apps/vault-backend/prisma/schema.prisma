@@ -44,8 +44,6 @@ model Enrollment {
 
 model DraftPlayer {
   id              Int             @id @default(autoincrement())
-  checkedIn       Boolean         @default(false)
-  checkedOut      Boolean         @default(false)
   draft           Draft           @relation(fields: [draftId], references: [id])
   draftId         Int
   enrollment      Enrollment      @relation(fields: [enrollmentId], references: [id])
@@ -54,6 +52,8 @@ model DraftPlayer {
   player1Matches  Match[]         @relation("player1")
   player2Matches  Match[]         @relation("player2")
   reportedResults Match[]
+  checkedIn       Boolean         @default(false)
+  checkedOut      Boolean         @default(false)
 
   @@unique(fields: [draftId, enrollmentId], name: "draftEnrollment")
 }
