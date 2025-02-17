@@ -2,12 +2,10 @@ import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import expressSession from 'express-session';
-import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
 import { AppModule } from './app/app.module';
 import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-client-exception.filter';
 import { HttpExceptionFilter } from './http-exception-filter/http-exception.filter';
-import { PrismaClient } from '@prisma/client';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -28,11 +26,6 @@ async function bootstrap() {
       name: 'session',
       resave: false,
       saveUninitialized: true,
-      store: new PrismaSessionStore(new PrismaClient(), {
-        checkPeriod: 2 * 60 * 1000, // ms
-        dbRecordIdIsSessionId: true,
-        dbRecordIdFunction: undefined,
-      }),
     })
   );
 

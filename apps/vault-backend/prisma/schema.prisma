@@ -54,6 +54,7 @@ model DraftPlayer {
   reportedResults Match[]
   checkedIn       Boolean         @default(false)
   checkedOut      Boolean         @default(false)
+  Image           Image[]
 
   @@unique(fields: [draftId, enrollmentId], name: "draftEnrollment")
 }
@@ -161,6 +162,20 @@ model Session {
   sid       String   @unique
   data      String
   expiresAt DateTime
+}
+
+model Image {
+  id            Int         @id @default(autoincrement())
+  draftPlayer   DraftPlayer @relation(fields: [draftPlayerId], references: [id])
+  draftPlayerId Int
+  url           String
+  imageType     ImageType
+  timestamp     DateTime    @default(now())
+}
+
+enum ImageType {
+  CHECKIN
+  CHECKOUT
 }
 
 enum Role {

@@ -7,6 +7,7 @@ import { UsersModule } from '../users/users.module';
 import { EnrollmentsModule } from '../enrollments/enrollments.module';
 import { MatchesModule } from '../matches/matches.module';
 import { AuthModule } from '../auth/auth.module';
+import { ImagesModule } from '../images/images.module';
 import { CubesModule } from '../cubes/cubes.module';
 import { RoundsModule } from '../rounds/rounds.module';
 import { ScorecardsModule } from '../scorecards/scorecards.module';
@@ -32,6 +33,7 @@ import { MatchGateway } from '../matches/matches.gateway';
     PhasesModule,
     DraftPlayersModule,
     DraftsModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService, MatchGateway, MatchesService],
