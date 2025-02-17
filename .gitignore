@@ -4,7 +4,6 @@
 dist
 tmp
 /out-tsc
-apps/vault-frontend/public/
 
 # dependencies
 node_modules
