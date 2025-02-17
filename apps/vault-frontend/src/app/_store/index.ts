@@ -10,15 +10,18 @@ import { DraftState } from './reducers/draft.reducer';
 import { EnrollmentState } from './reducers/enrollment.reducer';
 
 import * as fromMatch from './reducers/match.reducer';
+import * as fromPlayer from './reducers/player.reducer';
 import * as fromTournament from './reducers/tournaments.reducer';
 
 export interface State {
   matches: fromMatch.MatchState;
+  players: fromPlayer.PlayerState;
   tournaments: fromTournament.TournamentState;
 }
 
 export const reducers: ActionReducerMap<State> = {
   matches: fromMatch.matchReducer,
+  players: fromPlayer.playerReducer,
   tournaments: fromTournament.tournamentReducer,
 };
 
@@ -92,13 +95,13 @@ export const selectTournamentByQuery = (
         !!tournament && query(tournament)
     );
   });
-export const selectAvailableIds = createSelector(
+export const selectAvailableTournamentIds = createSelector(
   selectTournamentState,
   fromTournament.getAvailableIds
 );
 export const selectAvailableTournaments = createSelector(
   selectTournamentEntities,
-  selectAvailableIds,
+  selectAvailableTournamentIds,
   (tournaments, ids) =>
     ids
       .map((id) => tournaments[id])
@@ -106,19 +109,62 @@ export const selectAvailableTournaments = createSelector(
         (tournament): tournament is Tournament => tournament !== undefined
       )
 );
-export const selectEnrolledIds = createSelector(
+export const selectEnrolledTournamentIds = createSelector(
   selectTournamentState,
   fromTournament.getEnrolledIds
 );
 export const selectEnrolledTournaments = createSelector(
   selectTournamentEntities,
-  selectEnrolledIds,
+  selectEnrolledTournamentIds,
   (tournaments, ids) =>
     ids
       .map((id) => tournaments[id])
       .filter(
         (tournament): tournament is Tournament => tournament !== undefined
       )
+);
+
+// PLAYERS
+export const selectPlayerState =
+  createFeatureSelector<fromPlayer.PlayerState>('players');
+export const selectPlayerIds = createSelector(
+  selectPlayerState,
+  fromPlayer.selectPlayerIds
+);
+export const selectPlayerEntities = createSelector(
+  selectPlayerState,
+  fromPlayer.selectPlayerEntities
+);
+export const selectAllPlayers = createSelector(
+  selectPlayerState,
+  fromPlayer.selectAllPlayers
+);
+export const selectPlayerTotal = createSelector(
+  selectPlayerState,
+  fromPlayer.selectPlayerTotal
+);
+export const selectPlayerById = (playerId: number) =>
+  createSelector(
+    selectPlayerState,
+    (playerState) => playerState.entities[playerId]
+  );
+export const selectPlayerByQuery = (query: (player: Player) => boolean) =>
+  createSelector(selectPlayerState, (state) => {
+    return Object.values(state.entities).find(
+      (player): player is Player => !!player && query(player)
+    );
+  });
+export const selectAvailablePlayerIds = createSelector(
+  selectPlayerState,
+  fromPlayer.getAvailableIds
+);
+export const selectAvailablePlayers = createSelector(
+  selectPlayerEntities,
+  selectAvailablePlayerIds,
+  (players, ids) =>
+    ids
+      .map((id) => players[id])
+      .filter((player): player is Player => player !== undefined)
 );
 
 // AUTH

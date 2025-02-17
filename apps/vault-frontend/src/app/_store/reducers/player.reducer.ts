@@ -6,6 +6,7 @@ import * as PlayerActions from '../actions/player.actions';
 
 export interface PlayerState extends EntityState<Player> {
   selectedPlayerId: number | null;
+  availableIds: number[];
 }
 
 export function selectPlayerId(a: Player): number {
@@ -21,10 +22,15 @@ export const playerAdapter: EntityAdapter<Player> = createEntityAdapter<Player>(
 
 export const initialState: PlayerState = playerAdapter.getInitialState({
   selectedPlayerId: null,
+  availableIds: [],
 });
 
 export const playerReducer = createReducer(
   initialState,
+  on(PlayerActions.setAvailablePlayers, (state, { ids }) => ({
+    ...state,
+    availableIds: ids,
+  })),
   on(PlayerActions.setCurrentPlayerSelected, (state, { query }) => {
     const player = Object.values(state.entities).find(
       (player): player is Player => !!player && query(player)
@@ -34,14 +40,14 @@ export const playerReducer = createReducer(
       selectedPlayerId: player ? player.id : null,
     };
   }),
-  on(PlayerActions.addPlayer, (state, { game }) => {
-    return playerAdapter.addOne(game, state);
+  on(PlayerActions.addPlayer, (state, { player }) => {
+    return playerAdapter.addOne(player, state);
   }),
-  on(PlayerActions.setPlayer, (state, { game }) => {
-    return playerAdapter.setOne(game, state);
+  on(PlayerActions.setPlayer, (state, { player }) => {
+    return playerAdapter.setOne(player, state);
   }),
-  on(PlayerActions.upsertPlayer, (state, { game }) => {
-    return playerAdapter.upsertOne(game, state);
+  on(PlayerActions.upsertPlayer, (state, { player }) => {
+    return playerAdapter.upsertOne(player, state);
   }),
   on(PlayerActions.addPlayers, (state, { players }) => {
     return playerAdapter.addMany(players, state);
@@ -80,6 +86,8 @@ export const playerReducer = createReducer(
     return playerAdapter.removeAll({ ...state, selectedPlayerId: null });
   })
 );
+
+export const getAvailableIds = (state: PlayerState) => state.availableIds;
 
 const { selectIds, selectEntities, selectAll, selectTotal } =
   playerAdapter.getSelectors();

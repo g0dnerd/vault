@@ -21,6 +21,10 @@ export class DraftPlayerService {
     return this.http.get<Player[]>(`${this.apiUrl}/tournament/${tournamentId}`);
   }
 
+  getPlayersForUser(): Observable<Player[]> {
+    return this.http.get<Player[]>(`${this.apiUrl}/user`);
+  }
+
   checkIn(player: Player, playerId: number): Observable<Player> {
     player = {
       ...player,

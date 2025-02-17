@@ -59,3 +59,24 @@ export const initializePlayersForTournament = createEffect(
   },
   { functional: true, dispatch: true }
 );
+
+export const initializePlayersForUser = createEffect(
+  (actions$ = inject(Actions), playerService = inject(DraftPlayerService)) => {
+    return actions$.pipe(
+      ofType(PlayerActions.initializePlayersForUser),
+      mergeMap(() => {
+        return playerService.getPlayersForUser().pipe(
+          map((players) => {
+            return PlayerActions.loadPlayers({ players });
+          }),
+          catchError((error) => {
+            return of(
+              PlayerActions.playerStoreFailure({ errorMessage: error.message })
+            );
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
