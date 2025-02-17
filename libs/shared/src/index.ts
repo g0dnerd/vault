@@ -10,3 +10,4 @@ export * from './lib/result.interface';
 export * from './lib/standings.interface';
 export * from './lib/tournaments.interface';
 export * from './lib/user.interface';
+export * from './lib/image.interface';

@@ -10,6 +10,7 @@ export const API_ROUTES = {
   PLAYERS: '/draft-players',
   DRAFTS: '/drafts',
   DRAFT_SCORECARDS: '/draft-scorecards',
+  IMAGES: '/images',
 };
 
 export enum Statuses {
