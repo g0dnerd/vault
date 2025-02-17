@@ -10,6 +10,10 @@
 </p>
 <ng-template #notCheckedIn>
   <p class="card-text">I am not checked in.</p>
+  <app-manage-pool
+    [draftId]="(player$ | ngrxPush)?.draftId"
+    [playerId]="(player$ | ngrxPush)?.id"
+  />
 </ng-template>
 <ng-template #notCheckedOut>
   <p class="card-text">I am not checked out.</p>

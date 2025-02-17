@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import {
   Component,
   inject,
@@ -5,22 +6,23 @@ import {
   numberAttribute,
   OnInit,
 } from '@angular/core';
+import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 import { filter, Observable, of } from 'rxjs';
+
+import { Player, User } from '@vault/shared';
+import { ManagePoolComponent } from './manage-pool.component';
 import {
   AuthAppState,
   selectAuthUser,
   selectPlayerByQuery,
   State,
 } from '../../_store';
-import { Player, User } from '@vault/shared';
-import { PushPipe } from '@ngrx/component';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-my-pool',
   standalone: true,
-  imports: [NgIf, PushPipe],
+  imports: [NgIf, PushPipe, ManagePoolComponent],
   templateUrl: './my-pool.component.html',
   styleUrl: './my-pool.component.css',
 })
