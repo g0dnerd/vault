@@ -30,4 +30,27 @@ export class DraftPlayersService {
   remove(id: number) {
     return this.prisma.draftPlayer.delete({ where: { id } });
   }
+
+  findByTournament(tournamentId: number) {
+    return this.prisma.draftPlayer.findMany({
+      where: {
+        enrollment: {
+          tournamentId,
+        },
+      },
+    });
+  }
+
+  async findByUser(userId: number) {
+    return this.prisma.draftPlayer.findMany({
+      where: {
+        enrollment: {
+          userId,
+        },
+      },
+      include: {
+        enrollment: true,
+      },
+    });
+  }
 }

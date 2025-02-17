@@ -9,7 +9,9 @@ import {
   ParseIntPipe,
   NotFoundException,
   UseGuards,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -43,6 +45,14 @@ export class DraftPlayersController {
     return this.draftPlayersService.findAll();
   }
 
+  @Get('user')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: DraftPlayerEntity, isArray: true })
+  async findForCurrentUser(@Req() req: Request) {
+    return this.draftPlayersService.findByUser(req.user['id']);
+  }
+
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -72,5 +82,13 @@ export class DraftPlayersController {
   @ApiOkResponse({ type: DraftPlayerEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.draftPlayersService.remove(id);
+  }
+
+  @Get('tournament/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: DraftPlayerEntity, isArray: true })
+  findByTournament(@Param('id', ParseIntPipe) id: number) {
+    return this.draftPlayersService.findByTournament(id);
   }
 }
