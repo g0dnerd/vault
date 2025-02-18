@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { ImageType, PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -658,6 +658,18 @@ async function main() {
     },
   });
 
+  const image1 = await prisma.image.upsert({
+    where: {
+      url: 'foo.jpg',
+    },
+    update: {},
+    create: {
+      draftPlayerId: draftPlayer1.id,
+      url: 'foo.jpg',
+      imageType: ImageType.CHECKIN,
+    },
+  });
+
   console.log({ tournament1, tournament2 });
   console.log({ phase1 });
   console.log({ cube1 });
@@ -715,6 +727,7 @@ async function main() {
     player8DraftScore,
   });
   console.log({ match1, match2, match3, match4 });
+  console.log({ image1 });
 }
 
 main()
