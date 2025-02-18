@@ -41,8 +41,8 @@ export class DraftPlayersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: DraftPlayerEntity, isArray: true })
-  findAll() {
-    return this.draftPlayersService.findAll();
+  findAll(@Req() req: Request) {
+    return this.draftPlayersService.findAll(req.user['id']);
   }
 
   @Get('user')
