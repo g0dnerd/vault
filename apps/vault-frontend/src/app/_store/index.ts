@@ -4,22 +4,25 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Match, Player, Role, Tournament } from '@vault/shared';
+import { Image, Match, Player, Role, Tournament } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
 import { EnrollmentState } from './reducers/enrollment.reducer';
 
+import * as fromImage from './reducers/image.reducer';
 import * as fromMatch from './reducers/match.reducer';
 import * as fromPlayer from './reducers/player.reducer';
 import * as fromTournament from './reducers/tournaments.reducer';
 
 export interface State {
+  images: fromImage.ImageState;
   matches: fromMatch.MatchState;
   players: fromPlayer.PlayerState;
   tournaments: fromTournament.TournamentState;
 }
 
 export const reducers: ActionReducerMap<State> = {
+  images: fromImage.imageReducer,
   matches: fromMatch.matchReducer,
   players: fromPlayer.playerReducer,
   tournaments: fromTournament.tournamentReducer,
@@ -154,17 +157,48 @@ export const selectPlayerByQuery = (query: (player: Player) => boolean) =>
       (player): player is Player => !!player && query(player)
     );
   });
-export const selectAvailablePlayerIds = createSelector(
-  selectPlayerState,
-  fromPlayer.getAvailableIds
+
+// IMAGES
+export const selectImageState =
+  createFeatureSelector<fromImage.ImageState>('images');
+export const selectImageIds = createSelector(
+  selectImageState,
+  fromImage.selectImageIds
 );
-export const selectAvailablePlayers = createSelector(
-  selectPlayerEntities,
-  selectAvailablePlayerIds,
-  (players, ids) =>
+export const selectImageEntities = createSelector(
+  selectImageState,
+  fromImage.selectImageEntities
+);
+export const selectAllImages = createSelector(
+  selectImageState,
+  fromImage.selectAllImages
+);
+export const selectImageTotal = createSelector(
+  selectImageState,
+  fromImage.selectImageTotal
+);
+export const selectImageById = (imageId: number) =>
+  createSelector(
+    selectImageState,
+    (imageState) => imageState.entities[imageId]
+  );
+export const selectImageByQuery = (query: (image: Image) => boolean) =>
+  createSelector(selectImageState, (state) => {
+    return Object.values(state.entities).find(
+      (image): image is Image => !!image && query(image)
+    );
+  });
+export const selectPlayerImageIds = createSelector(
+  selectImageState,
+  fromImage.getPlayerImageIds
+);
+export const selectPlayerImages = createSelector(
+  selectImageEntities,
+  selectPlayerImageIds,
+  (images, ids) =>
     ids
-      .map((id) => players[id])
-      .filter((player): player is Player => player !== undefined)
+      .map((id) => images[id])
+      .filter((image): image is Image => image !== undefined)
 );
 
 // AUTH

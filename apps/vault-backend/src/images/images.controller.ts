@@ -1,3 +1,5 @@
+import { Request } from 'express';
+import 'multer';
 import {
   Body,
   Controller,
@@ -10,6 +12,11 @@ import {
   Patch,
   Delete,
   Req,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,12 +24,13 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+
 import { ImagesService } from './images.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateImageDto } from './dto/create-image.dto';
 import { ImageEntity } from './entities/image.entity';
 import { UpdateImageDto } from './dto/update-image.dto';
-import { Request } from 'express';
 
 @Controller('images')
 @ApiTags('images')
@@ -43,6 +51,25 @@ export class ImagesController {
   @ApiOkResponse({ type: ImageEntity, isArray: true })
   findAll(@Req() req: Request) {
     return this.imagesService.findAll(req.user['id']);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: ImageEntity })
+  uploadImage(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000 * 1000 * 10 }),
+          new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      })
+    )
+    file: Express.Multer.File
+  ) {
+    return this.imagesService.handleUpload(file);
   }
 
   @Get('player/:id')

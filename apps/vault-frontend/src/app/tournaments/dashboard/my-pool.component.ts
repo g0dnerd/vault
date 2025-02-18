@@ -30,7 +30,7 @@ export class MyPoolComponent implements OnInit {
   @Input({ required: true, transform: numberAttribute }) id = 0;
 
   private readonly authStore$ = inject(Store<AuthAppState>);
-  private readonly playerStore$ = inject(Store<State>);
+  private readonly store$ = inject(Store<State>);
 
   readonly checkinStatus$: Observable<boolean> = of(false);
   readonly checkoutStatus$: Observable<boolean> = of(false);
@@ -42,7 +42,7 @@ export class MyPoolComponent implements OnInit {
   ngOnInit() {
     this.user$.subscribe((user) => {
       if (user) {
-        this.player$ = this.playerStore$
+        this.player$ = this.store$
           .select(
             selectPlayerByQuery(
               (player) =>
