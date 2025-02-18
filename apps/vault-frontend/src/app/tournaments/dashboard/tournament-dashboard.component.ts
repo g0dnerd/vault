@@ -9,7 +9,9 @@ import { Tournament } from '@vault/shared';
 import { DraftPanelComponent } from './draft-panel.component';
 import { DraftAppState, selectTournamentById, State } from '../../_store';
 import { initCurrent } from '../../_store/actions/draft.actions';
+import { initializeAllPlayers } from '../../_store/actions/player.actions';
 import { initializeAllTournaments } from '../../_store/actions/tournaments.actions';
+import { initializeAllImages } from '../../_store/actions/image.actions';
 
 @Component({
   selector: 'app-tournament-dashboard',
@@ -30,6 +32,8 @@ export class TournamentDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.store$.dispatch(initializeAllTournaments());
+    this.store$.dispatch(initializeAllPlayers());
+    this.store$.dispatch(initializeAllImages());
     this.draftStore$.dispatch(initCurrent({ tournamentId: this.id }));
     this.tournament$ = this.store$.select(selectTournamentById(this.id));
   }

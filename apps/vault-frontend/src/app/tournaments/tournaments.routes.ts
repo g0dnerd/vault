@@ -10,10 +10,12 @@ import { TournamentDashboardComponent } from './dashboard/tournament-dashboard.c
 import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
 import { AdminTournamentDashboardComponent } from '../admin/admin-tournament-dashboard.component';
 import * as draftEffects from '../_store/effects/draft.effects';
+import * as imageEffects from '../_store/effects/image.effects';
 import * as matchEffects from '../_store/effects/match.effects';
 import * as playerEffects from '../_store/effects/player.effects';
 import * as tournamentEffects from '../_store/effects/tournaments.effects';
 import { draftReducer } from '../_store/reducers/draft.reducer';
+import { imageReducer } from '../_store/reducers/image.reducer';
 import { matchReducer } from '../_store/reducers/match.reducer';
 import { playerReducer } from '../_store/reducers/player.reducer';
 import { tournamentReducer } from '../_store/reducers/tournaments.reducer';
@@ -28,6 +30,8 @@ export const TOURNAMENT_ROUTES: Routes = [
       provideEffects(draftEffects),
       provideState('drafts', draftReducer),
       provideEffects(matchEffects),
+      provideState('images', imageReducer),
+      provideEffects(imageEffects),
       provideState('matches', matchReducer),
       provideEffects(playerEffects),
       provideState('players', playerReducer),

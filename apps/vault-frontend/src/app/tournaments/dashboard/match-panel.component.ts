@@ -54,7 +54,7 @@ export class MatchPanelComponent implements OnInit {
   @Input({ required: true, transform: numberAttribute }) id = 0;
 
   private authStore$ = inject(Store<AuthAppState>);
-  private matchStore$ = inject(Store<State>);
+  private store$ = inject(Store<State>);
   private matchWebSocketService = inject(MatchWebSocketService);
 
   loading = false;
@@ -73,17 +73,17 @@ export class MatchPanelComponent implements OnInit {
     this.matchWebSocketService
       .listenForMatchUpdates()
       .subscribe((game: Match) => {
-        this.matchStore$.dispatch(
+        this.store$.dispatch(
           updateMatch({ update: { id: game.id, changes: game } })
         );
       });
   }
 
   ngOnInit() {
-    this.matchStore$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
+    this.store$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
     this.user$.subscribe((user) => {
       if (user) {
-        this.currentMatch$ = this.matchStore$
+        this.currentMatch$ = this.store$
           .select(
             selectMatchByQuery(
               (game) =>

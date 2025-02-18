@@ -6,7 +6,6 @@ import * as PlayerActions from '../actions/player.actions';
 
 export interface PlayerState extends EntityState<Player> {
   selectedPlayerId: number | null;
-  availableIds: number[];
 }
 
 export function selectPlayerId(a: Player): number {
@@ -22,15 +21,10 @@ export const playerAdapter: EntityAdapter<Player> = createEntityAdapter<Player>(
 
 export const initialState: PlayerState = playerAdapter.getInitialState({
   selectedPlayerId: null,
-  availableIds: [],
 });
 
 export const playerReducer = createReducer(
   initialState,
-  on(PlayerActions.setAvailablePlayers, (state, { ids }) => ({
-    ...state,
-    availableIds: ids,
-  })),
   on(PlayerActions.setCurrentPlayerSelected, (state, { query }) => {
     const player = Object.values(state.entities).find(
       (player): player is Player => !!player && query(player)
@@ -86,8 +80,6 @@ export const playerReducer = createReducer(
     return playerAdapter.removeAll({ ...state, selectedPlayerId: null });
   })
 );
-
-export const getAvailableIds = (state: PlayerState) => state.availableIds;
 
 const { selectIds, selectEntities, selectAll, selectTotal } =
   playerAdapter.getSelectors();

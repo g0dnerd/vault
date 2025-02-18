@@ -7,9 +7,6 @@ const TYPE = '[Player/API]';
 export enum PlayerActionTypes {
   PLAYER_STORE_FAILURE = `${TYPE} Error`,
   INITIALIZE_ALL_PLAYERS = `${TYPE} Initialize all players`,
-  INITIALIZE_PLAYERS_FOR_TOURNAMENT = `${TYPE} Initialize players for tournament`,
-  INITIALIZE_PLAYERS_FOR_USER = `${TYPE} Initialize players for user`,
-  SET_AVAILABLE_PLAYERS = `${TYPE} Set available players`,
   SET_CURRENT_PLAYER_SELECTED = `${TYPE} Set current player selected`,
   SELECT_PLAYER = `${TYPE} Select player`,
   LOAD_PLAYERS = `${TYPE} Load players`,
@@ -37,17 +34,6 @@ export const playerStoreFailure = createAction(
 );
 export const initializeAllPlayers = createAction(
   PlayerActionTypes.INITIALIZE_ALL_PLAYERS
-);
-export const initializePlayersForTournament = createAction(
-  PlayerActionTypes.INITIALIZE_PLAYERS_FOR_TOURNAMENT,
-  props<{ tournamentId: number }>()
-);
-export const initializePlayersForUser = createAction(
-  PlayerActionTypes.INITIALIZE_PLAYERS_FOR_USER
-);
-export const setAvailablePlayers = createAction(
-  PlayerActionTypes.SET_AVAILABLE_PLAYERS,
-  props<{ ids: number[] }>()
 );
 export const setCurrentPlayerSelected = createAction(
   PlayerActionTypes.SET_CURRENT_PLAYER_SELECTED,
