@@ -18,3 +18,10 @@ export enum Statuses {
   LOADING = 'loading',
   LOADED = 'loaded',
 }
+
+export enum ImageStatus {
+  INITIAL = 'initial',
+  UPLOADING = 'uploading',
+  SUCCESS = 'success',
+  FAIL = 'fail',
+}
