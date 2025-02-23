@@ -16,7 +16,7 @@ async function bootstrap() {
     },
   });
 
-  // app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api');
   app.use(
     expressSession({
       cookie: {
@@ -40,7 +40,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('', app, document);
+  SwaggerModule.setup('api', app, document);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(
