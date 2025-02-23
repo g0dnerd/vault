@@ -35,7 +35,6 @@ export class AuthController {
     try {
       return await this.authService.register(email, password, username);
     } catch (error) {
-      console.error(typeof error);
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -55,7 +54,7 @@ export class AuthController {
   @ApiOkResponse({ type: AuthEntity })
   status(@Req() req: Request) {
     if (!(req.headers && req.headers.authorization)) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException();
     }
     return this.authService.status(req.user['id']);
   }

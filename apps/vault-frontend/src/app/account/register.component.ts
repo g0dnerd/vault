@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { NgClass, NgIf } from '@angular/common';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,25 +7,22 @@ import {
   Validators,
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { NgClass, NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 
-import { register } from '../_store/actions/auth.actions';
-import { AuthAppState, selectErrorMessage } from '../_store';
 import { AuthPayload } from '@vault/shared';
+import { register } from '../_store/actions/auth.actions';
+import { AuthAppState } from '../_store';
 import { AlertService } from '../_services';
-import { Observable, of } from 'rxjs';
 
 @Component({
   templateUrl: 'register.component.html',
   imports: [ReactiveFormsModule, NgClass, NgIf, RouterLink],
   standalone: true,
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   form!: FormGroup;
   loading = false;
   submitted = false;
-  errorMessage$: Observable<string | null> = of(null);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,19 +34,6 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
-  }
-
-  ngOnInit() {
-    this.errorMessage$ = this.store$.select(selectErrorMessage);
-
-    // Subscribe to error messages from the registration process
-    // and pipe them into the alert service
-    this.errorMessage$.subscribe((msg) => {
-      if (msg) {
-        this.alertService.error(msg, true);
-      }
-    });
-    this.loading = false;
   }
 
   get f() {

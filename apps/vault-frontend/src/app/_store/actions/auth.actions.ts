@@ -29,12 +29,8 @@ export const authSuccess = createAction(
   props<{ authBlob: AuthInterface; returnUrl?: string }>()
 );
 
-// Stores an error message in state and resets authentication because
-// no valid authentication was found
-export const initAuthFailure = createAction(
-  AuthActionTypes.INIT_AUTH_FAILURE,
-  props<{ errorMessage: string }>()
-);
+// Resets authentication because no valid authentication was found
+export const initAuthFailure = createAction(AuthActionTypes.INIT_AUTH_FAILURE);
 
 // Tries to authenticate to the backend using loginData and
 // returns to returnUrl on success

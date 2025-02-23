@@ -16,11 +16,8 @@ export const initAuth = createEffect(
             user.token = token;
             return AuthActions.authSuccess({ authBlob: { token, user } });
           }),
-          catchError((statusCode) => {
-            const errorMessage = statusCode.message
-              ? `${AuthActions.initAuth.type}: Got error ${statusCode.message} while initiating auth stats`
-              : `${AuthActions.initAuth.type}: Got an unspecified error response from the API while initiating auth status`;
-            return of(AuthActions.initAuthFailure({ errorMessage }));
+          catchError(() => {
+            return of(AuthActions.initAuthFailure());
           })
         );
       })
