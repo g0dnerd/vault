@@ -1,17 +1,11 @@
 <div class="card">
   <h4 class="card-header">Current Draft</h4>
+  @defer{
   <div *ngIf="currentDraft$ | ngrxPush; else noDraft" class="card-body">
-    <p class="card-subtitle mb-2">
-      Has draft started? {{ (currentDraft$ | ngrxPush)?.started }}
-    </p>
-    <p class="card-subtitle mb-2">
-      Cube ID: {{ (currentDraft$ | ngrxPush)?.cubeId }}
-    </p>
-    @defer{
     <app-my-pool [id]="(currentDraft$ | ngrxPush)?.id" />
     <app-match-panel [id]="(currentDraft$ | ngrxPush)?.id" />
-    }
   </div>
+  }
   <ng-template #noDraft class="card-body">
     <p class="card-subtitle mb-2">No active draft found.</p>
   </ng-template>
