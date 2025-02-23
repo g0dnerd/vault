@@ -4,6 +4,7 @@ export interface Tournament {
   public: boolean;
   playerCapacity: number;
   description: string | null;
+  isLeague: boolean;
 }
 
 export interface CreateTournamentDto {
