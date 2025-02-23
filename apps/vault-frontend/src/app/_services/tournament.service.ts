@@ -32,4 +32,8 @@ export class TournamentService {
   getUserTournaments(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.apiUrl}/enrolled`);
   }
+
+  getUserLeagues(): Observable<Tournament[]> {
+    return this.http.get<Tournament[]>(`${this.apiUrl}/enrolled-leagues`);
+  }
 }
