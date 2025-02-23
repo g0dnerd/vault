@@ -31,12 +31,11 @@ export const authReducer = createReducer(
 
   // On failed authentication, removes the user from state and
   // setts the isAuthenticated flag to false
-  on(AuthActions.initAuthFailure, (state, { errorMessage }) => ({
+  on(AuthActions.initAuthFailure, (state) => ({
     ...state,
     isAuthenticated: false,
     user: null,
     token: null,
-    errorMessage,
   })),
 
   // On failed login, removes authentication and user from state
