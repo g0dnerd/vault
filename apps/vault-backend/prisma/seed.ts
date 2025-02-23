@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 const roundsOfHashing = 10;
 
 async function main() {
-  // create two dummy tournaments
   const tournament1 = await prisma.tournament.upsert({
     where: { name: 'Test Tournament 1' },
     update: {
@@ -28,6 +27,18 @@ async function main() {
       name: 'Test Tournament 2',
       playerCapacity: 32,
       public: true,
+    },
+  });
+
+  const tournament3 = await prisma.tournament.upsert({
+    where: { name: 'Test League Tournament' },
+    update: {
+      public: true,
+    },
+    create: {
+      name: 'Test League Tournament',
+      public: true,
+      isLeague: true,
     },
   });
 
@@ -262,6 +273,118 @@ async function main() {
     },
   });
 
+  const enrollment9 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user1.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user1.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
+  const enrollment10 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user2.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user2.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
+  const enrollment11 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user3.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user3.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
+  const enrollment12 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user4.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user4.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
+  const enrollment13 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user5.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user5.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
+  const enrollment14 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user6.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user6.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
+  const enrollment15 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user7.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user7.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
+  const enrollment16 = await prisma.enrollment.upsert({
+    where: {
+      playerTournament: {
+        userId: user8.id,
+        tournamentId: tournament3.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: user8.id,
+      tournamentId: tournament3.id,
+    },
+  });
+
   const phase1 = await prisma.phase.upsert({
     where: {
       tournamentPhase: {
@@ -269,9 +392,23 @@ async function main() {
         phaseIndex: 1,
       },
     },
-    update: {},
+    update: { started: true },
     create: {
       tournamentId: tournament1.id,
+      phaseIndex: 1,
+    },
+  });
+
+  const phase2 = await prisma.phase.upsert({
+    where: {
+      tournamentPhase: {
+        tournamentId: tournament3.id,
+        phaseIndex: 1,
+      },
+    },
+    update: { started: true },
+    create: {
+      tournamentId: tournament3.id,
       phaseIndex: 1,
     },
   });
@@ -296,10 +433,27 @@ async function main() {
         cubeId: cube1.id,
       },
     },
-    update: {},
+    update: {
+      started: true,
+    },
     create: {
       phaseId: phase1.id,
       cubeId: cube1.id,
+    },
+  });
+
+  const leagueDraft = await prisma.draft.upsert({
+    where: {
+      phaseCube: {
+        phaseId: phase2.id,
+        cubeId: cube1.id,
+      },
+    },
+    update: {},
+    create: {
+      phaseId: phase2.id,
+      cubeId: cube1.id,
+      started: true,
     },
   });
 
@@ -409,6 +563,118 @@ async function main() {
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment8.id,
+    },
+  });
+
+  const draftPlayer9 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment9.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment9.id,
+    },
+  });
+
+  const draftPlayer10 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment10.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment10.id,
+    },
+  });
+
+  const draftPlayer11 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment11.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment11.id,
+    },
+  });
+
+  const draftPlayer12 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment12.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment12.id,
+    },
+  });
+
+  const draftPlayer13 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment13.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment13.id,
+    },
+  });
+
+  const draftPlayer14 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment14.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment14.id,
+    },
+  });
+
+  const draftPlayer15 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment15.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment15.id,
+    },
+  });
+
+  const draftPlayer16 = await prisma.draftPlayer.upsert({
+    where: {
+      draftEnrollment: {
+        draftId: leagueDraft.id,
+        enrollmentId: enrollment16.id,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      enrollmentId: enrollment16.id,
     },
   });
 
@@ -670,10 +936,10 @@ async function main() {
     },
   });
 
-  console.log({ tournament1, tournament2 });
-  console.log({ phase1 });
+  console.log({ tournament1, tournament2, tournament3 });
+  console.log({ phase1, phase2 });
   console.log({ cube1 });
-  console.log({ draft1 });
+  console.log({ draft1, leagueDraft });
   console.log({ round1 });
   console.log({
     user1,
@@ -695,6 +961,14 @@ async function main() {
     enrollment6,
     enrollment7,
     enrollment8,
+    enrollment9,
+    enrollment10,
+    enrollment11,
+    enrollment12,
+    enrollment13,
+    enrollment14,
+    enrollment15,
+    enrollment16,
   });
   console.log({
     enrollment1Score,
@@ -715,6 +989,14 @@ async function main() {
     draftPlayer6,
     draftPlayer7,
     draftPlayer8,
+    draftPlayer9,
+    draftPlayer10,
+    draftPlayer11,
+    draftPlayer12,
+    draftPlayer13,
+    draftPlayer14,
+    draftPlayer15,
+    draftPlayer16,
   });
   console.log({
     player1DraftScore,
