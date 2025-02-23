@@ -35,4 +35,8 @@ export class CreateTournamentDto {
   @IsNotEmpty()
   @ApiProperty()
   playerCapacity: number;
+
+  @IsBoolean()
+  @ApiProperty()
+  isLeague: boolean;
 }

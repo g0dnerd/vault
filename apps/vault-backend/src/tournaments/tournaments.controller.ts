@@ -17,6 +17,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
 import { TournamentEntity } from './entities/tournament.entity';
 import { TournamentsService } from './tournaments.service';
 import { CreateTournamentDto } from './dto/create-tournament.dto';
@@ -51,6 +52,14 @@ export class TournamentsController {
   @ApiOkResponse({ type: TournamentEntity, isArray: true })
   async findEnrolled(@Req() req: Request) {
     return this.findByUser(req.user['id']);
+  }
+
+  @Get('enrolled-leagues')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: TournamentEntity, isArray: true })
+  findEnrolledLeagues(@Req() req: Request) {
+    return this.tournamentsService.findLeaguesByUser(req.user['id']);
   }
 
   @Get('available')

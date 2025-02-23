@@ -16,4 +16,7 @@ export class TournamentEntity implements Tournament {
 
   @ApiProperty({ required: false, nullable: true })
   description: string | null;
+
+  @ApiProperty()
+  isLeague: boolean;
 }
