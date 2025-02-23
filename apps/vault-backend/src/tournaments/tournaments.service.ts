@@ -31,8 +31,22 @@ export class TournamentsService {
       where: {
         id: {
           in: enrollments.map((enrollment) => enrollment.tournamentId),
-        }
-      }
+        },
+      },
+    });
+  }
+
+  async findLeaguesByUser(userId: number) {
+    const enrollments = await this.prisma.enrollment.findMany({
+      where: { userId: userId },
+    });
+    return this.prisma.tournament.findMany({
+      where: {
+        id: {
+          in: enrollments.map((enrollment) => enrollment.tournamentId),
+        },
+        isLeague: true,
+      },
     });
   }
 
