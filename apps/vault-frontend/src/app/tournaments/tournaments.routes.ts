@@ -19,6 +19,7 @@ import { imageReducer } from '../_store/reducers/image.reducer';
 import { matchReducer } from '../_store/reducers/match.reducer';
 import { playerReducer } from '../_store/reducers/player.reducer';
 import { tournamentReducer } from '../_store/reducers/tournaments.reducer';
+import { LeaguesHomeComponent } from '../leagues/leagues-home.component';
 
 export const TOURNAMENT_ROUTES: Routes = [
   {
@@ -45,6 +46,7 @@ export const TOURNAMENT_ROUTES: Routes = [
     canActivate: [AuthGuard],
     data: { requiredRole: Role.Player },
   },
+  { path: 'leagues', component: LeaguesHomeComponent },
   {
     path: 'admin',
     component: AdminDashboardComponent,

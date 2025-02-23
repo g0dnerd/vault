@@ -1,5 +1,8 @@
 <div class="mb-1">
-  <nav class="navbar navbar-expand-md navbar-light bg-light" *ngIf="(authState$ | async)">
+  <nav
+    class="navbar navbar-expand-md navbar-light bg-light"
+    *ngIf="authState$ | async"
+  >
     <button
       class="navbar-toggler"
       type="button"
@@ -16,8 +19,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <div *ngIf="isAdmin$ | async as isAdmin; else noAdmin">
-          <li class="nav-item" >
-            <a class="nav-link" routerLink="tournaments/admin">Admin Dashboard</a>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="tournaments/admin"
+              >Admin Dashboard</a
+            >
           </li>
         </div>
         <ng-template #noAdmin>
@@ -31,13 +36,17 @@
           </li>
         </ng-template>
         <li class="nav-item">
+          <a class="nav-link" routerLink="/tournaments/leagues">Leagues</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" routerLink="/profile">Profile</a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-link nav-link" (click)="logout()">Logout</button>
+          <button class="btn btn-link nav-link" (click)="logout()">
+            Logout
+          </button>
         </li>
       </ul>
-
     </div>
   </nav>
 </div>
