@@ -126,6 +126,28 @@ export const selectEnrolledTournaments = createSelector(
         (tournament): tournament is Tournament => tournament !== undefined
       )
 );
+export const selectAvailableLeagues = createSelector(
+  selectTournamentEntities,
+  selectAvailableTournamentIds,
+  (tournaments, ids) =>
+    ids
+      .map((id) => tournaments[id])
+      .filter(
+        (tournament): tournament is Tournament =>
+          tournament !== undefined && tournament.isLeague
+      )
+);
+export const selectEnrolledLeagues = createSelector(
+  selectTournamentEntities,
+  selectEnrolledTournamentIds,
+  (tournaments, ids) =>
+    ids
+      .map((id) => tournaments[id])
+      .filter(
+        (tournament): tournament is Tournament =>
+          tournament !== undefined && tournament.isLeague
+      )
+);
 
 // PLAYERS
 export const selectPlayerState =
