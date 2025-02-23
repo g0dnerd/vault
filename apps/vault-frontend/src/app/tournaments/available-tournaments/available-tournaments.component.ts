@@ -34,8 +34,6 @@ export class AvailableTournamentsComponent implements OnInit {
     selectAvailableTournaments
   );
 
-  constructor() {}
-
   ngOnInit() {
     this.store$.dispatch(initializeAllTournaments());
     this.store$.dispatch(initializeAvailableTournaments());
