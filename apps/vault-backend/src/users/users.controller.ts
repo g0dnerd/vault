@@ -71,6 +71,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
+    console.log(`Trying to find user by id ${id}`);
     const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
