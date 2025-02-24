@@ -704,6 +704,20 @@ async function main() {
     },
   });
 
+  const round2 = await prisma.round.upsert({
+    where: {
+      draftRound: {
+        draftId: leagueDraft.id,
+        roundIndex: 1,
+      },
+    },
+    update: {},
+    create: {
+      draftId: leagueDraft.id,
+      roundIndex: 1,
+    },
+  });
+
   const match1 = await prisma.match.upsert({
     where: {
       roundPairing: {
@@ -781,6 +795,24 @@ async function main() {
       roundId: round1.id,
     },
   });
+  const match5 = await prisma.match.upsert({
+    where: {
+      roundPairing: {
+        roundId: round2.id,
+        player1Id: draftPlayer9.id,
+        player2Id: draftPlayer10.id,
+      },
+    },
+    update: {
+      roundId: round2.id,
+    },
+    create: {
+      player1Id: draftPlayer9.id,
+      player2Id: draftPlayer10.id,
+      tableNumber: 1,
+      roundId: round2.id,
+    },
+  });
 
   const image1 = await prisma.image.upsert({
     where: {
@@ -846,7 +878,7 @@ async function main() {
     draftPlayer15,
     draftPlayer16,
   });
-  console.log({ match1, match2, match3, match4 });
+  console.log({ match1, match2, match3, match4, match5 });
   console.log({ image1 });
 }
 
