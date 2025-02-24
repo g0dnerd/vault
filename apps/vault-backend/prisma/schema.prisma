@@ -38,24 +38,23 @@ model Enrollment {
   tournamentId     Int
   tournament       Tournament    @relation(fields: [tournamentId], references: [id])
   enrolledOn       DateTime      @default(now())
-  scorecards       Scorecard[]
   draftEnrollments DraftPlayer[]
+  elo              Int?
 
   @@unique(fields: [userId, tournamentId], name: "playerTournament")
 }
 
 model DraftPlayer {
-  id              Int             @id @default(autoincrement())
-  draft           Draft           @relation(fields: [draftId], references: [id])
+  id              Int        @id @default(autoincrement())
+  draft           Draft      @relation(fields: [draftId], references: [id])
   draftId         Int
-  enrollment      Enrollment      @relation(fields: [enrollmentId], references: [id])
+  enrollment      Enrollment @relation(fields: [enrollmentId], references: [id])
   enrollmentId    Int
-  draftScore      DraftScorecard?
-  player1Matches  Match[]         @relation("player1")
-  player2Matches  Match[]         @relation("player2")
+  player1Matches  Match[]    @relation("player1")
+  player2Matches  Match[]    @relation("player2")
   reportedResults Match[]
-  checkedIn       Boolean         @default(false)
-  checkedOut      Boolean         @default(false)
+  checkedIn       Boolean    @default(false)
+  checkedOut      Boolean    @default(false)
   Image           Image[]
 
   @@unique(fields: [draftId, enrollmentId], name: "draftEnrollment")
@@ -78,31 +77,6 @@ model Match {
   resultConfirmed Boolean?
 
   @@unique(fields: [roundId, player1Id, player2Id], name: "roundPairing")
-}
-
-model Scorecard {
-  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
-  enrollmentId Int        @id @unique
-  score        Int        @default(0)
-  gamesPlayed  Int        @default(0)
-  gamesWon     Int        @default(0)
-  pmw          Float      @default(0.0)
-  omw          Float      @default(0.0)
-  pgw          Float      @default(0.0)
-  ogw          Float      @default(0.0)
-}
-
-model DraftScorecard {
-  id          Int         @id @default(autoincrement())
-  player      DraftPlayer @relation(fields: [playerId], references: [id])
-  playerId    Int         @unique
-  score       Int         @default(0)
-  gamesPlayed Int         @default(0)
-  gamesWon    Int         @default(0)
-  pmw         Float       @default(0.0)
-  omw         Float       @default(0.0)
-  pgw         Float       @default(0.0)
-  ogw         Float       @default(0.0)
 }
 
 model Phase {
