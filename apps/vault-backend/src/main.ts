@@ -10,7 +10,12 @@ import { HttpExceptionFilter } from './http-exception-filter/http-exception.filt
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: ['192.168.2.65', 'http://localhost', 'http://localhost:4200'],
+      origin: [
+        '192.168.2.65',
+        'http://localhost',
+        'http://localhost:4200',
+        'https://vault.paulkukowski.net',
+      ],
       preflightContinue: false,
       maxAge: 3600,
     },
