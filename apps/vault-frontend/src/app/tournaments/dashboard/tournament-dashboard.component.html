@@ -1,5 +1,9 @@
 <div class="event-dashboard">
   <h4>Tournament Dashboard</h4>
   <h1 class="event-name">{{ (tournament$ | ngrxPush)?.name }}</h1>
+  <ng-container *ngIf="(tournament$ | ngrxPush)?.isLeague">
+    <p class="elo-panel">Your elo: {{ (enrollment$ | ngrxPush)?.elo }}</p>
+  </ng-container>
+  <p class="elo-panel"></p>
   <app-draft-panel></app-draft-panel>
 </div>
