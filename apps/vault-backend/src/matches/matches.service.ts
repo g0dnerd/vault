@@ -208,13 +208,23 @@ export class MatchesService {
   ) {
     // Destructure the updateMatchDto and check if the reporting user
     // is authorized to change this match
-    const g = await this.prisma.match.findUnique({ where: { id: matchId } });
-    if (userId != g.player1Id && userId != g.player2Id) {
+    const g = await this.prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        player1: { select: { enrollment: { select: { userId: true } } } },
+        player2: { select: { enrollment: { select: { userId: true } } } },
+      },
+    });
+    if (
+      userId != g.player1.enrollment.userId &&
+      userId != g.player2.enrollment.userId
+    ) {
+      console.error(
+        `User with ID ${userId} tried to update match, but players have IDs ${g.player1.enrollment.userId} and ${g.player2.enrollment.userId}`
+      );
       const user = await this.prisma.user.findUnique({
         where: { id: userId },
       });
-      console.log(`dto: ${JSON.stringify(updateMatchDto)}`);
-      console.log(JSON.stringify(user));
       // If the user is not a player in the game, they need to be
       // an admin to be authorized to update the match
       if (!user.roles.includes(Role.ADMIN)) {
@@ -268,6 +278,9 @@ export class MatchesService {
       userId != g.player1.enrollment.userId &&
       userId != g.player2.enrollment.userId
     ) {
+      console.error(
+        `User with ID ${userId} tried to update match, but players have IDs ${g.player1.enrollment.userId} and ${g.player2.enrollment.userId}`
+      );
       const user = await this.prisma.user.findUnique({
         where: { id: userId },
       });
@@ -290,33 +303,42 @@ export class MatchesService {
       data: { resultConfirmed: true },
     });
 
+    const p1Elo = g.player1.enrollment.elo;
+    const p2Elo = g.player2.enrollment.elo;
+
     if (game.round.draft.phase.tournament.isLeague) {
-      if (!g.player1.enrollment.elo || !g.player1.enrollment.elo) {
+      if (!p1Elo || !p2Elo) {
         throw new InternalServerErrorException('Could not update elo');
       }
-      const p1WinProbability = Math.pow(
-        1 +
-          10 *
-            ((g.player2.enrollment.elo - g.player1.enrollment.elo) / 1135.77),
-        -1
-      );
 
-      const p2WinProbability = 1 - p1WinProbability;
       let p1EloNew = 0;
       let p2EloNew = 0;
+      let p1WinProb = 0.0;
+      let p2WinProb = 0.0;
+
+      if (p1Elo == p2Elo) {
+        p1WinProb = 0.5;
+        p2WinProb = 0.5;
+      } else {
+        p1WinProb = 1.0 / (1 + 10 * (Math.abs(p2Elo - p1Elo) / 1135.77));
+        p2WinProb = 1.0 - p1WinProb;
+      }
+
+      console.log(`P(p1Win) = ${p1WinProb}`);
+      console.log(`P(p2Win) = ${p2WinProb}`);
 
       if (game.player1Wins > game.player2Wins) {
-        const p1EloGain = p2WinProbability * eloProportionality;
-        p1EloNew = g.player1.enrollment.elo + p1EloGain;
-        p2EloNew = g.player2.enrollment.elo - p1EloGain;
+        const p1EloGain = p2WinProb * eloProportionality;
+        p1EloNew = p1Elo + p1EloGain;
+        p2EloNew = p2Elo - p1EloGain;
       } else if (game.player1Wins < game.player2Wins) {
-        const p2EloGain = p1WinProbability * eloProportionality;
-        p1EloNew = g.player1.enrollment.elo - p2EloGain;
-        p2EloNew = g.player2.enrollment.elo + p2EloGain;
+        const p2EloGain = p1WinProb * eloProportionality;
+        p1EloNew = p1Elo - p2EloGain;
+        p2EloNew = p2Elo + p2EloGain;
       } else {
-        const eloGain = p2WinProbability * eloProportionality;
-        p1EloNew = g.player1.enrollment.elo + eloGain / 2;
-        p2EloNew = g.player2.enrollment.elo - eloGain / 2;
+        const eloGain = p2WinProb * eloProportionality;
+        p1EloNew = p1Elo + eloGain / 2;
+        p2EloNew = p2Elo - eloGain / 2;
       }
 
       await this.prisma.enrollment.update({
@@ -335,7 +357,10 @@ export class MatchesService {
           elo: p2EloNew,
         },
       });
+      this.matchGateway.handleMatchUpdate(game);
+      return game;
     }
+    console.log('Not a league match');
 
     this.matchGateway.handleMatchUpdate(game);
     return game;
