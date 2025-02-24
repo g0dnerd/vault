@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 import { Enrollment, API_ROUTES } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EnrollmentsService {
-  private apiUrl = `${environment.apiUrl}${API_ROUTES.ENROLLMENTS}`;
+  private apiUrl = `${dev.apiUrl}${API_ROUTES.ENROLLMENTS}`;
 
   constructor(private http: HttpClient) {}
 

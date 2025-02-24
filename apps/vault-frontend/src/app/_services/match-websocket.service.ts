@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 import { Match } from '@vault/shared';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class MatchWebSocketService {
   private webSocket: Socket;
   constructor() {
     this.webSocket = new Socket({
-      url: environment.webSocketUrl,
+      url: dev.webSocketUrl,
       options: {
         transports: ['websocket'],
       },

@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_ROUTES, Player } from '@vault/shared';
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DraftPlayerService {
-  private apiUrl = `${environment.apiUrl}${API_ROUTES.PLAYERS}`;
+  private apiUrl = `${dev.apiUrl}${API_ROUTES.PLAYERS}`;
 
   constructor(private readonly http: HttpClient) {}
 
