@@ -17,7 +17,6 @@ export function errorInterceptor(
   return next(req).pipe(
     catchError((err) => {
       if ([401, 403].includes(err.status)) {
-        console.log(router.url);
         authStore$.dispatch(logout());
         router.navigateByUrl('/account/login');
       }

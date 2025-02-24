@@ -65,7 +65,6 @@ export class ManagePoolComponent implements OnInit {
 
     this.loading = true;
 
-    console.log('Doing the file upload with', this.imgFile?.name);
     const formData = new FormData();
     formData.append('file', this.imgFile);
     this.imageService.handleImageUpload(formData).subscribe();

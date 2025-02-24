@@ -69,8 +69,6 @@ export class ReportResultFormComponent implements OnInit {
     this.submitted = true;
     // this.alertService.clear();
 
-    console.log(this.f['player1Wins'].value, this.f['player2Wins'].value);
-
     if (this.form.invalid) return;
     this.loading = true;
 
