@@ -4,11 +4,18 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Image, Match, Player, Role, Tournament } from '@vault/shared';
+import {
+  Enrollment,
+  Image,
+  Match,
+  Player,
+  Role,
+  Tournament,
+} from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
-import { EnrollmentState } from './reducers/enrollment.reducer';
 
+import * as fromEnrollment from './reducers/enrollment.reducer';
 import * as fromImage from './reducers/image.reducer';
 import * as fromMatch from './reducers/match.reducer';
 import * as fromPlayer from './reducers/player.reducer';
@@ -271,11 +278,35 @@ export const selectSelectedDraft = createSelector(
 );
 
 // ENROLLMENTS
-export interface EnrollmentAppState {
-  enrollment: EnrollmentState;
-}
-export const selectEnrollment = (state: EnrollmentAppState) => state.enrollment;
-export const selectCurrentEnrollment = createSelector(
-  selectEnrollment,
-  (state: EnrollmentState) => state.current
+export const selectEnrollmentState =
+  createFeatureSelector<fromEnrollment.EnrollmentState>('enrollments');
+export const selectEnrollmentIds = createSelector(
+  selectEnrollmentState,
+  fromEnrollment.selectEnrollmentIds
 );
+export const selectEnrollmentEntities = createSelector(
+  selectEnrollmentState,
+  fromEnrollment.selectEnrollmentEntities
+);
+export const selectAllEnrollments = createSelector(
+  selectEnrollmentState,
+  fromEnrollment.selectAllEnrollments
+);
+export const selectEnrollmentTotal = createSelector(
+  selectEnrollmentState,
+  fromEnrollment.selectEnrollmentTotal
+);
+export const selectEnrollmentById = (enrollmentId: number) =>
+  createSelector(
+    selectEnrollmentState,
+    (enrollmentState) => enrollmentState.entities[enrollmentId]
+  );
+export const selectEnrollmentByQuery = (
+  query: (enrollment: Enrollment) => boolean
+) =>
+  createSelector(selectEnrollmentState, (state) => {
+    return Object.values(state.entities).find(
+      (enrollment): enrollment is Enrollment =>
+        !!enrollment && query(enrollment)
+    );
+  });
