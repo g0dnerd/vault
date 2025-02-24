@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   name: 'dev',
-  apiUrl: 'https://vault-api.paulkukowski.net/api',
-  webSocketUrl: 'https://vault-api.paulkukowski.net',
+  apiUrl: 'http://localhost:3000/api',
+  webSocketUrl: 'http://localhost:3000',
   userUploadUrl: '/images/',
 };
