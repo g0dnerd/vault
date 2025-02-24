@@ -32,7 +32,7 @@
         >
       </p>
       <ng-template #noDraw>
-        <p *ngIf="(currentMatch$ | ngrxPush)?.result === -1; else p2Win">
+        <p *ngIf="(currentMatch$ | ngrxPush)?.result === 1; else p2Win">
           {{ (currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username }}
           wins
           {{ (currentMatch$ | ngrxPush)?.player1Wins }}-{{
