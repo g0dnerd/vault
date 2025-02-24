@@ -1,17 +1,23 @@
 import { NgIf } from '@angular/common';
-import { Component, Input, numberAttribute, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
-import { Tournament } from '@vault/shared';
+import { Enrollment, Tournament } from '@vault/shared';
 import { DraftPanelComponent } from './draft-panel.component';
-import { DraftAppState, selectTournamentById, State } from '../../_store';
+import {
+  DraftAppState,
+  selectEnrollmentByQuery,
+  selectTournamentById,
+  State,
+} from '../../_store';
 import { initCurrent } from '../../_store/actions/draft.actions';
 import { initializeAllPlayers } from '../../_store/actions/player.actions';
 import { initializeAllTournaments } from '../../_store/actions/tournaments.actions';
 import { initializeAllImages } from '../../_store/actions/image.actions';
+import { initializeAllEnrollments } from '../../_store/actions/enrollment.actions';
 
 @Component({
   selector: 'app-tournament-dashboard',
@@ -21,20 +27,25 @@ import { initializeAllImages } from '../../_store/actions/image.actions';
   styleUrl: './tournament-dashboard.component.css',
 })
 export class TournamentDashboardComponent implements OnInit {
+  id = input.required<number>();
+
+  private readonly store$ = inject(Store<State>);
+  private readonly draftStore$ = inject(Store<DraftAppState>);
+
   tournament$: Observable<Tournament | undefined> = of(undefined);
-
-  constructor(
-    private readonly store$: Store<State>,
-    private readonly draftStore$: Store<DraftAppState>
-  ) {}
-
-  @Input({ transform: numberAttribute }) id = 0;
+  enrollment$: Observable<Enrollment | undefined> = of(undefined);
 
   ngOnInit() {
     this.store$.dispatch(initializeAllTournaments());
     this.store$.dispatch(initializeAllPlayers());
     this.store$.dispatch(initializeAllImages());
-    this.draftStore$.dispatch(initCurrent({ tournamentId: this.id }));
-    this.tournament$ = this.store$.select(selectTournamentById(this.id));
+    this.store$.dispatch(initializeAllEnrollments());
+    this.draftStore$.dispatch(initCurrent({ tournamentId: this.id() }));
+    this.tournament$ = this.store$.select(selectTournamentById(this.id()));
+    this.enrollment$ = this.store$.select(
+      selectEnrollmentByQuery(
+        (enrollment: Enrollment) => enrollment?.tournamentId == this.id()
+      )
+    );
   }
 }
