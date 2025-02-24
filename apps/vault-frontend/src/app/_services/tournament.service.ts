@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 import { API_ROUTES, CreateTournamentDto, Tournament } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TournamentService {
-  private apiUrl = `${environment.apiUrl}${API_ROUTES.TOURNAMENTS}`;
+  private apiUrl = `${dev.apiUrl}${API_ROUTES.TOURNAMENTS}`;
 
   constructor(private http: HttpClient) {}
 

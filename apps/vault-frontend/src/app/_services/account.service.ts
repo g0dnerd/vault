@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 import { API_ROUTES, User } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
-  private apiUrl = `${environment.apiUrl}${API_ROUTES.USER}`;
+  private apiUrl = `${dev.apiUrl}${API_ROUTES.USER}`;
 
   constructor(private http: HttpClient) {}
 

@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { Image } from '@vault/shared';
-import { environment } from '../../../environments/environment';
+import { dev } from '../../../environments/environment';
 import { AlertService, ImageService } from '../../_services';
 import { selectPlayerImages, State } from '../../_store';
 import { initializePlayerImages } from '../../_store/actions/image.actions';
@@ -29,7 +29,7 @@ export class ManagePoolComponent implements OnInit {
   loading = false;
   submitted = false;
 
-  readonly imageUrl = environment.userUploadUrl;
+  readonly imageUrl = dev.userUploadUrl;
   imgFile: File | null = null;
 
   private readonly store$ = inject(Store<State>);

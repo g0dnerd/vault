@@ -1,7 +1,7 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class ConfigService {
   }
 
   load() {
-    const jsonFile = `/environments/${environment.name}.json`;
+    const jsonFile = `/environments/${dev.name}.json`;
 
     return new Promise<void>((resolve, reject) => {
       firstValueFrom(this.http.get(jsonFile))

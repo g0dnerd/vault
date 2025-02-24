@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { API_ROUTES, Draft, DraftScorecard } from '@vault/shared';
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DraftService {
-  private readonly apiUrl = `${environment.apiUrl}${API_ROUTES.DRAFTS}`;
-  private readonly scorecardApiUrl = `${environment.apiUrl}${API_ROUTES.DRAFTS}`;
+  private readonly apiUrl = `${dev.apiUrl}${API_ROUTES.DRAFTS}`;
+  private readonly scorecardApiUrl = `${dev.apiUrl}${API_ROUTES.DRAFTS}`;
 
   constructor(private readonly http: HttpClient) {}
 

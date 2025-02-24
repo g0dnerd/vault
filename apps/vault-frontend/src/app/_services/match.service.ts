@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { API_ROUTES, Match, Result } from '@vault/shared';
-import { environment } from '../../environments/environment';
+import { dev } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MatchService {
-  private apiUrl = `${environment.apiUrl}${API_ROUTES.MATCHES}`;
+  private apiUrl = `${dev.apiUrl}${API_ROUTES.MATCHES}`;
 
   constructor(private readonly http: HttpClient) {}
 
