@@ -29,11 +29,13 @@ export class MatchGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('updateMatch')
   handleMatchUpdate(game: UpdateMatchDto) {
     // Broadcast the updated match to all connected clients
+    console.log('Handling match update');
     this.sendMatchUpdate(game);
   }
 
   // Method to trigger match updates from other parts of the application
   sendMatchUpdate(game: UpdateMatchDto) {
+    console.log(`Emitting match update: ${JSON.stringify(game)}`);
     this.server.emit('matchUpdated', game);
   }
 }
