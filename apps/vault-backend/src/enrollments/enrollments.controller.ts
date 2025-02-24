@@ -54,6 +54,14 @@ export class EnrollmentsController {
     return this.enrollmentsService.findByUser(req.user['id']);
   }
 
+  @Get('league')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
+  findAllLeagueEnrollments() {
+    return this.enrollmentsService.findAllLeagueEnrollments();
+  }
+
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

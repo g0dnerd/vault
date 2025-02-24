@@ -9,6 +9,9 @@ const TYPE = '[Enrollments/API]';
 export enum EnrollmentActionTypes {
   ENROLLMENT_STORE_FAILURE = `${TYPE} Error`,
   INITIALIZE_ALL_ENROLLMENTS = `${TYPE} Initialize all enrollments`,
+  INITIALIZE_ALL_LEAGUE_PLAYERS = `${TYPE} Initialize league players`,
+  INITIALIZE_ALL_LEAGUE_ENROLLMENTS = `${TYPE} Initialize league enrollments`,
+  SET_LEAGUE_PLAYERS = `${TYPE} Set league players`,
   SELECT_ENROLLMENT = `${TYPE} Select enrollment`,
   LOAD_ENROLLMENTS = `${TYPE} Load enrollments`,
   SET_ENROLLMENTS = `${TYPE} Set enrollments`,
@@ -31,8 +34,15 @@ export const enrollmentStoreFailure = createAction(
   EnrollmentActionTypes.ENROLLMENT_STORE_FAILURE,
   props<{ errorMessage: string }>()
 );
+export const setLeaguePlayers = createAction(
+  EnrollmentActionTypes.SET_LEAGUE_PLAYERS,
+  props<{ ids: number[] }>()
+);
 export const initializeAllEnrollments = createAction(
   EnrollmentActionTypes.INITIALIZE_ALL_ENROLLMENTS
+);
+export const initializeAllLeaguePlayers = createAction(
+  EnrollmentActionTypes.INITIALIZE_ALL_LEAGUE_PLAYERS
 );
 export const selectEnrollment = createAction(
   EnrollmentActionTypes.SELECT_ENROLLMENT,

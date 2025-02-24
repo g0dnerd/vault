@@ -310,3 +310,19 @@ export const selectEnrollmentByQuery = (
         !!enrollment && query(enrollment)
     );
   });
+export const selectLeaguePlayerIds = createSelector(
+  selectEnrollmentState,
+  fromEnrollment.getLeaguePlayerIds
+);
+export const selectLeaguePlayers = (tournamentId: number) =>
+  createSelector(
+    selectEnrollmentEntities,
+    selectEnrollmentIds,
+    (enrollments, ids) =>
+      ids
+        .map((id) => enrollments[id])
+        .filter(
+          (enrollment): enrollment is Enrollment =>
+            enrollment !== undefined && enrollment.tournamentId == tournamentId
+        )
+  );
