@@ -57,6 +57,22 @@ export class EnrollmentsService {
     });
   }
 
+  findAllLeagueEnrollments() {
+    return this.prisma.enrollment.findMany({
+      where: { tournament: { isLeague: true } },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+      orderBy: {
+        elo: 'desc',
+      },
+    });
+  }
+
   findByUser(id: number) {
     return this.prisma.enrollment.findMany({
       where: { userId: id },

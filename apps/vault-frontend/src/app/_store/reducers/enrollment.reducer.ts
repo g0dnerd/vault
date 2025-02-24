@@ -6,6 +6,7 @@ import * as EnrollmentActions from '../actions/enrollment.actions';
 
 export interface EnrollmentState extends EntityState<Enrollment> {
   selectedEnrollmentId: number | null;
+  leaguePlayerIds: number[];
 }
 
 export function selectEnrollmentId(a: Enrollment): number {
@@ -20,10 +21,15 @@ export const enrollmentAdapter: EntityAdapter<Enrollment> =
 
 export const initialState: EnrollmentState = enrollmentAdapter.getInitialState({
   selectedEnrollmentId: null,
+  leaguePlayerIds: [],
 });
 
 export const enrollmentReducer = createReducer(
   initialState,
+  on(EnrollmentActions.setLeaguePlayers, (state, { ids }) => ({
+    ...state,
+    leaguePlayerIds: ids,
+  })),
   on(EnrollmentActions.addEnrollment, (state, { enrollment }) => {
     return enrollmentAdapter.addOne(enrollment, state);
   }),
@@ -73,6 +79,9 @@ export const enrollmentReducer = createReducer(
     });
   })
 );
+
+export const getLeaguePlayerIds = (state: EnrollmentState) =>
+  state.leaguePlayerIds;
 
 const { selectIds, selectEntities, selectAll, selectTotal } =
   enrollmentAdapter.getSelectors();
