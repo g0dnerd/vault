@@ -1,14 +1,27 @@
-<h1>Available Leagues</h1>
-<ul class="available-event-list">
-  @defer {
-  <li *ngFor="let league of availableLeagues$ | ngrxPush; index as i">
-    <app-tournament-register-panel
-      [userId]="(user$ | ngrxPush)?.id"
-      [tournamentId]="league.id"
-      [tournamentName]="league.name"
-      [tournamentCapacity]="league.playerCapacity"
-      (registerTournament)="registerTournament($event)"
-    />
-  </li>
-  }
-</ul>
+<h1>Leagues</h1>
+<ng-container *ngIf="(enrolledLeagues$ | ngrxPush)?.length">
+  <h5>My Leagues</h5>
+  <ul class="enrolled-leagues-list">
+    @defer{
+    <li *ngFor="let league of enrolledLeagues$ | ngrxPush; index as i">
+      <app-league-detail-card [id]="league.id" [tournamentName]="league.name" />
+    </li>
+    }
+  </ul>
+</ng-container>
+<ng-container *ngIf="(availableLeagues$ | ngrxPush)?.length">
+  <h5>Available Leagues</h5>
+  <ul class="available-event-list">
+    @defer {
+    <li *ngFor="let league of availableLeagues$ | ngrxPush; index as i">
+      <app-tournament-register-panel
+        [userId]="(user$ | ngrxPush)?.id"
+        [tournamentId]="league.id"
+        [tournamentName]="league.name"
+        [tournamentCapacity]="league.playerCapacity"
+        (registerTournament)="registerTournament($event)"
+      />
+    </li>
+    }
+  </ul>
+</ng-container>
