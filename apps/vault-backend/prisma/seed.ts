@@ -280,10 +280,13 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: {
+      elo: 1500,
+    },
     create: {
       userId: user1.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -294,10 +297,13 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: {
+      elo: 1500,
+    },
     create: {
       userId: user2.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -308,10 +314,11 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: { elo: 1500 },
     create: {
       userId: user3.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -322,10 +329,11 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: { elo: 1500 },
     create: {
       userId: user4.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -336,10 +344,11 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: { elo: 1500 },
     create: {
       userId: user5.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -350,10 +359,11 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: { elo: 1500 },
     create: {
       userId: user6.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -364,10 +374,11 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: { elo: 1500 },
     create: {
       userId: user7.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -378,10 +389,11 @@ async function main() {
         tournamentId: tournament3.id,
       },
     },
-    update: {},
+    update: { elo: 1500 },
     create: {
       userId: user8.id,
       tournamentId: tournament3.id,
+      elo: 1500,
     },
   });
 
@@ -770,160 +782,6 @@ async function main() {
     },
   });
 
-  const enrollment1Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment1.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment1.id,
-    },
-  });
-
-  const enrollment2Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment2.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment2.id,
-    },
-  });
-
-  const enrollment3Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment3.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment3.id,
-    },
-  });
-
-  const enrollment4Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment4.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment4.id,
-    },
-  });
-
-  const enrollment5Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment5.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment5.id,
-    },
-  });
-  const enrollment6Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment6.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment6.id,
-    },
-  });
-  const enrollment7Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment7.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment7.id,
-    },
-  });
-  const enrollment8Score = await prisma.scorecard.upsert({
-    where: {
-      enrollmentId: enrollment8.id,
-    },
-    update: {},
-    create: {
-      enrollmentId: enrollment8.id,
-    },
-  });
-
-  const player1DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer1.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer1.id,
-    },
-  });
-
-  const player2DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer2.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer2.id,
-    },
-  });
-
-  const player3DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer3.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer3.id,
-    },
-  });
-
-  const player4DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer4.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer4.id,
-    },
-  });
-
-  const player5DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer5.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer5.id,
-    },
-  });
-  const player6DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer6.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer6.id,
-    },
-  });
-  const player7DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer7.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer7.id,
-    },
-  });
-  const player8DraftScore = await prisma.draftScorecard.upsert({
-    where: {
-      playerId: draftPlayer8.id,
-    },
-    update: {},
-    create: {
-      playerId: draftPlayer8.id,
-    },
-  });
-
   const image1 = await prisma.image.upsert({
     where: {
       url: 'foo.jpg',
@@ -971,16 +829,6 @@ async function main() {
     enrollment16,
   });
   console.log({
-    enrollment1Score,
-    enrollment2Score,
-    enrollment3Score,
-    enrollment4Score,
-    enrollment5Score,
-    enrollment6Score,
-    enrollment7Score,
-    enrollment8Score,
-  });
-  console.log({
     draftPlayer1,
     draftPlayer2,
     draftPlayer3,
@@ -997,16 +845,6 @@ async function main() {
     draftPlayer14,
     draftPlayer15,
     draftPlayer16,
-  });
-  console.log({
-    player1DraftScore,
-    player2DraftScore,
-    player3DraftScore,
-    player4DraftScore,
-    player5DraftScore,
-    player6DraftScore,
-    player7DraftScore,
-    player8DraftScore,
   });
   console.log({ match1, match2, match3, match4 });
   console.log({ image1 });

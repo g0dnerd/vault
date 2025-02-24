@@ -10,8 +10,6 @@ import { AuthModule } from '../auth/auth.module';
 import { ImagesModule } from '../images/images.module';
 import { CubesModule } from '../cubes/cubes.module';
 import { RoundsModule } from '../rounds/rounds.module';
-import { ScorecardsModule } from '../scorecards/scorecards.module';
-import { DraftScorecardsModule } from '../draft-scorecards/draft-scorecards.module';
 import { PhasesModule } from '../phases/phases.module';
 import { DraftPlayersModule } from '../draft-players/draft-players.module';
 import { DraftsModule } from '../drafts/drafts.module';
@@ -28,8 +26,6 @@ import { MatchGateway } from '../matches/matches.gateway';
     AuthModule,
     CubesModule,
     RoundsModule,
-    ScorecardsModule,
-    DraftScorecardsModule,
     PhasesModule,
     DraftPlayersModule,
     DraftsModule,
