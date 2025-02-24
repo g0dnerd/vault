@@ -7,4 +7,5 @@ export interface Enrollment {
   tournamentId: number;
   userId: number;
   user: User;
+  elo?: number;
 }

@@ -25,3 +25,5 @@ export enum ImageStatus {
   SUCCESS = 'success',
   FAIL = 'fail',
 }
+
+export const eloProportionality: number = 36;

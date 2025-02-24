@@ -19,13 +19,12 @@ export class EnrollmentsService {
     );
   }
 
-  getForUserIdAndTournamentId(
-    userId: number,
-    tournamentId: number
-  ): Observable<Enrollment> {
-    return this.http.get<Enrollment>(
-      `${this.apiUrl}/user/${userId}/tournament/${tournamentId}`
-    );
+  getForUser(): Observable<Enrollment[]> {
+    return this.http.get<Enrollment[]>(`${this.apiUrl}/current`);
+  }
+
+  getForUserAndTournamentId(tournamentId: number): Observable<Enrollment> {
+    return this.http.get<Enrollment>(`${this.apiUrl}/current/${tournamentId}`);
   }
 
   enrollUser(tournamentId: number, userId: number): Observable<Enrollment> {
