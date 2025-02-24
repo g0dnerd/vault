@@ -7,8 +7,21 @@ import { PrismaService } from '../prisma/prisma.service';
 export class EnrollmentsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createEnrollmentDto: CreateEnrollmentDto) {
-    return this.prisma.enrollment.create({ data: createEnrollmentDto, include: { tournament: true } });
+  async create(createEnrollmentDto: CreateEnrollmentDto) {
+    const tournament = await this.prisma.tournament.findUnique({
+      where: { id: createEnrollmentDto.tournamentId },
+    });
+    if (tournament.isLeague) {
+      createEnrollmentDto = {
+        elo: 1500,
+        ...createEnrollmentDto,
+      };
+    }
+
+    return this.prisma.enrollment.create({
+      data: createEnrollmentDto,
+      include: { tournament: true },
+    });
   }
 
   findAll() {

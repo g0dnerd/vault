@@ -13,4 +13,7 @@ export class EnrollmentEntity implements Enrollment {
 
   @ApiProperty()
   enrolledOn: Date;
+
+  @ApiProperty({ required: false, nullable: true })
+  elo: number | null;
 }

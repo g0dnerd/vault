@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsPositive } from 'class-validator';
+import { IsInt, IsNumber, IsOptional, IsPositive } from 'class-validator';
 
 export class CreateEnrollmentDto {
   @IsNumber()
@@ -11,4 +11,10 @@ export class CreateEnrollmentDto {
   @IsPositive()
   @ApiProperty()
   userId: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsInt()
+  @ApiProperty()
+  elo?: number;
 }
