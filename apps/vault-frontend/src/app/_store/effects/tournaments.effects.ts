@@ -11,7 +11,7 @@ import {
 import { State } from '..';
 import * as TournamentsActions from '../actions/tournaments.actions';
 
-export const gameStoreFailure = createEffect(
+export const tournamentStoreFailure = createEffect(
   (actions$ = inject(Actions), alertService = inject(AlertService)) => {
     return actions$.pipe(
       ofType(TournamentsActions.tournamentStoreFailure),

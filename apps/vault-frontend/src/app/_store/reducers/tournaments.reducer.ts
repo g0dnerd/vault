@@ -81,7 +81,7 @@ export const tournamentReducer = createReducer(
   on(TournamentActions.clearTournaments, (state) => {
     return tournamentAdapter.removeAll({
       ...state,
-      selectedMatchId: null,
+      selectedTournamentId: null,
       availableIds: [],
       enrolledIds: [],
     });
