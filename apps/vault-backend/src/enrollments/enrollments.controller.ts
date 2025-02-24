@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   NotFoundException,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -22,6 +23,7 @@ import { CreateEnrollmentDto } from './dto/create-enrollment.dto';
 import { UpdateEnrollmentDto } from './dto/update-enrollment.dto';
 import { EnrollmentEntity } from './entities/enrollment.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('enrollments')
 @ApiTags('enrollments')
@@ -42,6 +44,14 @@ export class EnrollmentsController {
   @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
   findAll() {
     return this.enrollmentsService.findAll();
+  }
+
+  @Get('current')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
+  findForUser(@Req() req: Request) {
+    return this.enrollmentsService.findByUser(req.user['id']);
   }
 
   @Get(':id')
@@ -91,16 +101,16 @@ export class EnrollmentsController {
     return this.enrollmentsService.findByUser(id);
   }
 
-  @Get('user/:userId/tournament/:tournamentId')
+  @Get('current/:tournamentId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: EnrollmentEntity })
   findByUserAndTournament(
-    @Param('userId', ParseIntPipe) userId: number,
-    @Param('tournamentId', ParseIntPipe) tournamentId: number
+    @Param('tournamentId', ParseIntPipe) tournamentId: number,
+    @Req() req: Request
   ) {
     return this.enrollmentsService.findByUserAndTournament(
-      userId,
+      req.user['id'],
       tournamentId
     );
   }
