@@ -1,36 +1,42 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
 
+import { AlertService, EnrollmentsService } from '../../_services';
 import * as EnrollmentActions from '../actions/enrollment.actions';
-import { EnrollmentsService } from '../../_services';
 
-// Gets the enrollment for the currently authenticated user
-// in the given tournament and stores it in state.
-// Dispatches a getByTournamentIdFailure action on error response
-// from the API.
-export const getByTournamentId = createEffect(
+export const enrollmentStoreFailure = createEffect(
+  (actions$ = inject(Actions), alertService = inject(AlertService)) => {
+    return actions$.pipe(
+      ofType(EnrollmentActions.enrollmentStoreFailure),
+      tap(({ errorMessage }) => {
+        alertService.error(errorMessage, true);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
+export const initAllEnrollments = createEffect(
   (
     actions$ = inject(Actions),
     enrollmentService = inject(EnrollmentsService)
   ) => {
     return actions$.pipe(
-      ofType(EnrollmentActions.getByTournamentId),
-      mergeMap(({ userId, tournamentId }) => {
-        return enrollmentService
-          .getForUserIdAndTournamentId(userId, tournamentId)
-          .pipe(
-            map((current) => {
-              return EnrollmentActions.getByTournamentIdSuccess({ current });
-            }),
-            catchError((error) => {
-              return of(
-                EnrollmentActions.getByTournamentIdFailure({
-                  errorMessage: error.message,
-                })
-              );
-            })
-          );
+      ofType(EnrollmentActions.initializeAllEnrollments),
+      mergeMap(() => {
+        return enrollmentService.getForUser().pipe(
+          map((enrollments) => {
+            return EnrollmentActions.loadEnrollments({ enrollments });
+          }),
+          catchError((error) => {
+            return of(
+              EnrollmentActions.enrollmentStoreFailure({
+                errorMessage: error.message,
+              })
+            );
+          })
+        );
       })
     );
   },
