@@ -1,9 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
+
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { MatchGateway } from './matches.gateway';
 import { Role } from '@prisma/client';
+import { eloProportionality } from '@vault/shared';
 
 @Injectable()
 export class MatchesService {
@@ -243,8 +249,16 @@ export class MatchesService {
     const g = await this.prisma.match.findUnique({
       where: { id: matchId },
       include: {
-        player1: { select: { enrollment: { select: { userId: true } } } },
-        player2: { select: { enrollment: { select: { userId: true } } } },
+        player1: {
+          select: {
+            enrollment: { select: { id: true, userId: true, elo: true } },
+          },
+        },
+        player2: {
+          select: {
+            enrollment: { select: { id: true, userId: true, elo: true } },
+          },
+        },
       },
     });
 
@@ -263,10 +277,65 @@ export class MatchesService {
         );
       }
     }
+
     const game = await this.prisma.match.update({
       where: { id: matchId },
+      include: {
+        round: {
+          select: {
+            draft: { select: { phase: { select: { tournament: true } } } },
+          },
+        },
+      },
       data: { resultConfirmed: true },
     });
+
+    if (game.round.draft.phase.tournament.isLeague) {
+      if (!g.player1.enrollment.elo || !g.player1.enrollment.elo) {
+        throw new InternalServerErrorException('Could not update elo');
+      }
+      const p1WinProbability = Math.pow(
+        1 +
+          10 *
+            ((g.player2.enrollment.elo - g.player1.enrollment.elo) / 1135.77),
+        -1
+      );
+
+      const p2WinProbability = 1 - p1WinProbability;
+      let p1EloNew = 0;
+      let p2EloNew = 0;
+
+      if (game.player1Wins > game.player2Wins) {
+        const p1EloGain = p2WinProbability * eloProportionality;
+        p1EloNew = g.player1.enrollment.elo + p1EloGain;
+        p2EloNew = g.player2.enrollment.elo - p1EloGain;
+      } else if (game.player1Wins < game.player2Wins) {
+        const p2EloGain = p1WinProbability * eloProportionality;
+        p1EloNew = g.player1.enrollment.elo - p2EloGain;
+        p2EloNew = g.player2.enrollment.elo + p2EloGain;
+      } else {
+        const eloGain = p2WinProbability * eloProportionality;
+        p1EloNew = g.player1.enrollment.elo + eloGain / 2;
+        p2EloNew = g.player2.enrollment.elo - eloGain / 2;
+      }
+
+      await this.prisma.enrollment.update({
+        where: {
+          id: g.player1.enrollment.id,
+        },
+        data: {
+          elo: p1EloNew,
+        },
+      });
+      await this.prisma.enrollment.update({
+        where: {
+          id: g.player2.enrollment.id,
+        },
+        data: {
+          elo: p2EloNew,
+        },
+      });
+    }
 
     this.matchGateway.handleMatchUpdate(game);
     return game;
