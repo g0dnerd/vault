@@ -24,6 +24,8 @@ import { TournamentsService } from './tournaments.service';
 import { CreateTournamentDto } from './dto/create-tournament.dto';
 import { UpdateTournamentDto } from './dto/update-tournament.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../roles-guard/roles.decorator';
+import { RolesGuard } from '../roles-guard/roles.guard';
 
 @Controller('tournaments')
 @ApiTags('tournaments')
@@ -31,8 +33,8 @@ export class TournamentsController {
   constructor(private readonly tournamentsService: TournamentsService) {}
 
   @Post()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiCreatedResponse({ type: TournamentEntity })
   create(@Body() createTournamentDto: CreateTournamentDto) {
     return this.tournamentsService.create(createTournamentDto);
@@ -40,7 +42,8 @@ export class TournamentsController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: TournamentEntity, isArray: true })
   findAll() {
     return this.tournamentsService.findAll();
@@ -88,7 +91,8 @@ export class TournamentsController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: TournamentEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const tournament = await this.tournamentsService.findOne(id);
@@ -111,7 +115,8 @@ export class TournamentsController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: TournamentEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.tournamentsService.remove(id);

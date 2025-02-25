@@ -24,6 +24,8 @@ import { UpdateEnrollmentDto } from './dto/update-enrollment.dto';
 import { EnrollmentEntity } from './entities/enrollment.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
+import { Roles } from '../roles-guard/roles.decorator';
+import { RolesGuard } from '../roles-guard/roles.guard';
 
 @Controller('enrollments')
 @ApiTags('enrollments')
@@ -40,7 +42,8 @@ export class EnrollmentsController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
   findAll() {
     return this.enrollmentsService.findAll();
@@ -64,7 +67,8 @@ export class EnrollmentsController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: EnrollmentEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const enrollment = await this.enrollmentsService.findOne(id);
@@ -76,7 +80,8 @@ export class EnrollmentsController {
 
   @Patch(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: EnrollmentEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -87,7 +92,8 @@ export class EnrollmentsController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: EnrollmentEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.enrollmentsService.remove(id);

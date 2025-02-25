@@ -49,7 +49,6 @@ export class AuthController {
   }
 
   @Get('status')
-  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: AuthEntity })
   status(@Req() req: Request) {

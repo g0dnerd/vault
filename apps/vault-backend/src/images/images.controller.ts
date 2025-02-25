@@ -37,22 +37,6 @@ import { UpdateImageDto } from './dto/update-image.dto';
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
-  @Post()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiCreatedResponse({ type: ImageEntity })
-  create(@Body() createImageDto: CreateImageDto) {
-    return this.imagesService.create(createImageDto);
-  }
-
-  @Get()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: ImageEntity, isArray: true })
-  findAll(@Req() req: Request) {
-    return this.imagesService.findAll(req.user['id']);
-  }
-
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiBearerAuth()

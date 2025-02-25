@@ -22,6 +22,8 @@ import { CreateCubeDto } from './dto/create-cube.dto';
 import { UpdateCubeDto } from './dto/update-cube.dto';
 import { CubeEntity } from './entities/cube.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../roles-guard/roles.guard';
+import { Roles } from '../roles-guard/roles.decorator';
 
 @Controller('cubes')
 @ApiTags('cubes')
@@ -30,7 +32,8 @@ export class CubesController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiCreatedResponse({ type: CubeEntity })
   create(@Body() createCubeDto: CreateCubeDto) {
     return this.cubesService.create(createCubeDto);
@@ -58,7 +61,8 @@ export class CubesController {
 
   @Patch(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: CubeEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -69,7 +73,8 @@ export class CubesController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: CubeEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.cubesService.remove(id);
