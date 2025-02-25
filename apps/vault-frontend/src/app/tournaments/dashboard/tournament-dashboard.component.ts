@@ -14,9 +14,8 @@ import {
   State,
 } from '../../_store';
 import { initCurrent } from '../../_store/actions/draft.actions';
-import { initializeAllPlayers } from '../../_store/actions/player.actions';
+import { initializePlayersForTournament } from '../../_store/actions/player.actions';
 import { initializeAllTournaments } from '../../_store/actions/tournaments.actions';
-import { initializeAllImages } from '../../_store/actions/image.actions';
 import { initializeAllEnrollments } from '../../_store/actions/enrollment.actions';
 
 @Component({
@@ -37,8 +36,9 @@ export class TournamentDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.store$.dispatch(initializeAllTournaments());
-    this.store$.dispatch(initializeAllPlayers());
-    this.store$.dispatch(initializeAllImages());
+    this.store$.dispatch(
+      initializePlayersForTournament({ tournamentId: this.id() })
+    );
     this.store$.dispatch(initializeAllEnrollments());
     this.draftStore$.dispatch(initCurrent({ tournamentId: this.id() }));
     this.tournament$ = this.store$.select(selectTournamentById(this.id()));

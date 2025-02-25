@@ -21,9 +21,9 @@ export const playerStoreFailure = createEffect(
 export const initializeAllPlayers = createEffect(
   (actions$ = inject(Actions), playerService = inject(DraftPlayerService)) => {
     return actions$.pipe(
-      ofType(PlayerActions.initializeAllPlayers),
-      mergeMap(() => {
-        return playerService.getAllPlayers().pipe(
+      ofType(PlayerActions.initializePlayersForTournament),
+      mergeMap(({ tournamentId }) => {
+        return playerService.getPlayersForTournament(tournamentId).pipe(
           map((players) => {
             return PlayerActions.loadPlayers({ players });
           }),

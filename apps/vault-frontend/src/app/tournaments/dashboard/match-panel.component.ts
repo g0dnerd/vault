@@ -18,18 +18,21 @@ import {
   of,
 } from 'rxjs';
 
-import { Match, User } from '@vault/shared';
+import { Match } from '@vault/shared';
 import {
   MatchWebSocketService,
   AlertService,
   MatchService,
 } from '../../_services';
-import { AuthAppState, State, selectMatchByQuery } from '../../_store';
 import {
-  initializeMatchesForDraft,
-  updateMatch,
-} from '../../_store/actions/match.actions';
+  AuthAppState,
+  State,
+  selectMatchByQuery,
+  selectUsername,
+} from '../../_store';
+import { updateMatch } from '../../_store/actions/match.actions';
 import { ReportResultFormComponent } from '../report-result-form/report-result-form.component';
+import { initProfile } from '../../_store/actions/auth.actions';
 
 @Component({
   selector: 'app-match-panel',
@@ -48,13 +51,15 @@ import { ReportResultFormComponent } from '../report-result-form/report-result-f
 export class MatchPanelComponent implements OnInit {
   @Input({ required: true, transform: numberAttribute }) id = 0;
 
-  private store$ = inject(Store<State>);
-  private matchWebSocketService = inject(MatchWebSocketService);
+  private readonly authStore$ = inject(Store<AuthAppState>);
+  private readonly store$ = inject(Store<State>);
+  private readonly matchWebSocketService = inject(MatchWebSocketService);
 
   loading = false;
 
   currentMatch$: Observable<Match | undefined> = of(undefined);
-  // Observable for the opponent's name
+  username$: Observable<string | undefined> =
+    this.authStore$.select(selectUsername);
   opponentName$: Observable<string | undefined> = of(undefined);
 
   constructor(
@@ -73,30 +78,32 @@ export class MatchPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
-    // this.user$.subscribe((user) => {
-    //   if (user) {
-    //     this.currentMatch$ = this.store$
-    //       .select(
-    //         selectMatchByQuery(
-    //           (game) =>
-    //             game.round?.draftId == this.id &&
-    //             (game.player1?.enrollment?.userId == user.id ||
-    //               game.player2?.enrollment?.userId == user.id)
-    //         )
-    //       )
-    //       .pipe(filter((game): game is Match => game != undefined));
-    //   }
-    // });
-    // this.opponentName$ = combineLatest([this.currentMatch$, this.user$]).pipe(
-    //   map(([game, user]) => {
-    //     const p1 = game?.player1?.enrollment?.user.username;
-    //     const p2 = game?.player2?.enrollment?.user.username;
-    //
-    //     // Determine the opponent's name
-    //     return user?.username === p1 ? p2 : p1;
-    //   })
-    // );
+    this.authStore$.dispatch(initProfile());
+    this.username$.subscribe((username) => {
+      if (username) {
+        this.currentMatch$ = this.store$
+          .select(
+            selectMatchByQuery(
+              (game) =>
+                game.player1?.enrollment?.user?.username == username ||
+                game.player2?.enrollment?.user?.username == username
+            )
+          )
+          .pipe(filter((game): game is Match => game != undefined));
+      }
+    });
+    this.opponentName$ = combineLatest([
+      this.currentMatch$,
+      this.username$,
+    ]).pipe(
+      map(([game, username]) => {
+        const p1 = game?.player1?.enrollment?.user.username;
+        const p2 = game?.player2?.enrollment?.user.username;
+
+        // Determine the opponent's name
+        return username === p1 ? p2 : p1;
+      })
+    );
   }
 
   // Handles result confirmation

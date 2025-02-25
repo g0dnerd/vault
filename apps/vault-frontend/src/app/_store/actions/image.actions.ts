@@ -8,7 +8,6 @@ const TYPE = '[Images/API]';
 
 export enum ImageActionTypes {
   IMAGE_STORE_FAILURE = `${TYPE} Error`,
-  INITIALIZE_ALL_IMAGES = `${TYPE} Initialize all images`,
   INITIALIZE_PLAYER_IMAGES = `${TYPE} Initialize player images`,
   SET_PLAYER_IMAGES = `${TYPE} Set player images`,
   SELECT_IMAGE = `${TYPE} Select image`,
@@ -33,12 +32,9 @@ export const imageStoreFailure = createAction(
   ImageActionTypes.IMAGE_STORE_FAILURE,
   props<{ errorMessage: string }>()
 );
-export const initializeAllImages = createAction(
-  ImageActionTypes.INITIALIZE_ALL_IMAGES
-);
 export const initializePlayerImages = createAction(
   ImageActionTypes.INITIALIZE_PLAYER_IMAGES,
-  props<{ playerId: number }>()
+  props<{ draftId: number }>()
 );
 export const setPlayerImages = createAction(
   ImageActionTypes.SET_PLAYER_IMAGES,

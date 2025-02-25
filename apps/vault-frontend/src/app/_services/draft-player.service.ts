@@ -13,8 +13,8 @@ export class DraftPlayerService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getAllPlayers(): Observable<Player[]> {
-    return this.http.get<Player[]>(`${this.apiUrl}`);
+  getPlayersForTournament(tournamentId: number): Observable<Player[]> {
+    return this.http.get<Player[]>(`${this.apiUrl}/tournament/${tournamentId}`);
   }
 
   checkIn(player: Player, playerId: number): Observable<Player> {

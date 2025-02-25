@@ -17,8 +17,8 @@ export class ImageService {
     return this.http.get<Image[]>(this.apiUrl);
   }
 
-  getImagesForPlayer(draftPlayerId: number): Observable<Image[]> {
-    return this.http.get<Image[]>(`${this.apiUrl}/player/${draftPlayerId}`);
+  getImagesForPlayer(draftId: number): Observable<Image[]> {
+    return this.http.get<Image[]>(`${this.apiUrl}/draft/${draftId}`);
   }
 
   delete(id: number): Observable<Image> {
@@ -26,9 +26,6 @@ export class ImageService {
   }
 
   handleImageUpload(formData: FormData): Observable<Image> {
-    // const timestamp = Date.now();
-    // const fname = `${draftPlayerId}_${imageType}_${timestamp}.${imgFile.type}`;
-
     return this.http.post<Image>(`${this.apiUrl}/upload`, formData);
   }
 }
