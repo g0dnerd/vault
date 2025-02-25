@@ -74,7 +74,7 @@ export const initProfileFailure = createAction(
 // Attempts a PATCH request to the API to update the currently logged in user.
 export const updateUser = createAction(
   AuthActionTypes.UPDATE_USER,
-  props<{ email: string; username: string; userId: number }>()
+  props<{ email: string; username: string }>()
 );
 
 // Returns authentication data for the now changed user to ensure validity

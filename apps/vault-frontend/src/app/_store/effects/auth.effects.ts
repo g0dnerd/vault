@@ -116,8 +116,8 @@ export const updateUserEffect = createEffect(
   (actions$ = inject(Actions), accountService = inject(AccountService)) => {
     return actions$.pipe(
       ofType(AuthActions.updateUser),
-      mergeMap(({ email, username, userId }) => {
-        return accountService.updateUserProfile(username, email, userId).pipe(
+      mergeMap(({ email, username }) => {
+        return accountService.updateUserProfile(username, email).pipe(
           map((authBlob) => {
             return AuthActions.updateUserSuccess({ user: authBlob });
           }),

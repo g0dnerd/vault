@@ -16,13 +16,9 @@ export class AccountService {
     return this.http.get<User>(`${this.apiUrl}/profile`);
   }
 
-  updateUserProfile(
-    username: string,
-    email: string,
-    id: number
-  ): Observable<User> {
+  updateUserProfile(username: string, email: string): Observable<User> {
     const user = { email, username };
-    const response = this.http.patch<User>(`${this.apiUrl}/${id}`, user);
+    const response = this.http.patch<User>(this.apiUrl, user);
     return response;
   }
 

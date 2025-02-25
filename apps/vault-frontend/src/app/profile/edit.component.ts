@@ -40,7 +40,6 @@ export class EditComponent implements OnInit {
     this.form = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', Validators.required],
-      id: ['', Validators.required],
     });
     this.user$.subscribe((user) => {
       this.form.setValue({
@@ -66,7 +65,6 @@ export class EditComponent implements OnInit {
       updateUser({
         email: this.f['email'].value,
         username: this.f['username'].value,
-        userId: this.f['id'].value,
       })
     );
   }
