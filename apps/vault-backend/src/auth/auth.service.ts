@@ -8,6 +8,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from '../users/entities/user.entity';
+import { Role } from '../users/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +30,6 @@ export class AuthService {
     }
 
     return {
-      user: user,
       token: this.jwtService.sign({ userId: user.id }),
     };
   }
@@ -48,7 +48,6 @@ export class AuthService {
       },
     });
     return {
-      user: user,
       token: this.jwtService.sign({ userId: user.id }),
     };
   }
@@ -59,9 +58,10 @@ export class AuthService {
         where: { id: userId },
       })
     );
+    const isAdmin = user.roles.includes(Role.Admin);
     return {
-      user: user,
       token: this.jwtService.sign({ userId: user.id }),
+      isAdmin,
     };
   }
 }
