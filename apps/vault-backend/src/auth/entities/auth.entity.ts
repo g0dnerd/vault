@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from '../../users/entities/user.entity';
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class AuthEntity {
   @ApiProperty()
@@ -8,5 +7,6 @@ export class AuthEntity {
   token: string;
 
   @ApiProperty()
-  user: UserEntity;
+  @IsBoolean()
+  isAdmin?: boolean;
 }
