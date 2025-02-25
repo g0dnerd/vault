@@ -1,7 +1,7 @@
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
-  UnauthorizedException,
 } from '@nestjs/common';
 
 import { CreateMatchDto } from './dto/create-match.dto';
@@ -228,7 +228,7 @@ export class MatchesService {
       // If the user is not a player in the game, they need to be
       // an admin to be authorized to update the match
       if (!user.roles.includes(Role.ADMIN)) {
-        throw new UnauthorizedException(
+        throw new ForbiddenException(
           'User is not authorized to update this match'
         );
       } else {
@@ -278,14 +278,11 @@ export class MatchesService {
       userId != g.player1.enrollment.userId &&
       userId != g.player2.enrollment.userId
     ) {
-      console.error(
-        `User with ID ${userId} tried to update match, but players have IDs ${g.player1.enrollment.userId} and ${g.player2.enrollment.userId}`
-      );
       const user = await this.prisma.user.findUnique({
         where: { id: userId },
       });
       if (!user.roles.includes(Role.ADMIN)) {
-        throw new UnauthorizedException(
+        throw new ForbiddenException(
           'User is not authorized to update this match'
         );
       }
@@ -324,9 +321,6 @@ export class MatchesService {
         p2WinProb = 1.0 - p1WinProb;
       }
 
-      console.log(`P(p1Win) = ${p1WinProb}`);
-      console.log(`P(p2Win) = ${p2WinProb}`);
-
       if (game.player1Wins > game.player2Wins) {
         const p1EloGain = p2WinProb * eloProportionality;
         p1EloNew = p1Elo + p1EloGain;
@@ -360,7 +354,6 @@ export class MatchesService {
       this.matchGateway.handleMatchUpdate(game);
       return game;
     }
-    console.log('Not a league match');
 
     this.matchGateway.handleMatchUpdate(game);
     return game;
