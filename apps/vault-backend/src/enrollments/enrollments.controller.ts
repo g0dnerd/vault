@@ -99,6 +99,14 @@ export class EnrollmentsController {
     return this.enrollmentsService.remove(id);
   }
 
+  @Get('register/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: EnrollmentEntity })
+  register(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    return this.enrollmentsService.register(req.user['id'], id);
+  }
+
   @Get('tournament/:id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)

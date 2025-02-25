@@ -9,7 +9,7 @@ import { Enrollment, API_ROUTES } from '@vault/shared';
   providedIn: 'root',
 })
 export class EnrollmentsService {
-  private apiUrl = `${dev.apiUrl}${API_ROUTES.ENROLLMENTS}`;
+  private readonly apiUrl = `${dev.apiUrl}${API_ROUTES.ENROLLMENTS}`;
 
   constructor(private http: HttpClient) {}
 
@@ -32,7 +32,9 @@ export class EnrollmentsService {
   }
 
   enrollUser(tournamentId: number): Observable<Enrollment> {
-    const enrollData = { tournamentId };
-    return this.http.post<Enrollment>(this.apiUrl, enrollData);
+    return this.http.get<Enrollment>(
+      `${this.apiUrl}/register/${tournamentId}`,
+      {}
+    );
   }
 }

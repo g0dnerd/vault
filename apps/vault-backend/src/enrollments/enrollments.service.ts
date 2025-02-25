@@ -24,6 +24,14 @@ export class EnrollmentsService {
     });
   }
 
+  register(userId: number, tournamentId: number) {
+    const createEnrollmentDto = {
+      tournamentId,
+      userId,
+    };
+    return this.create(createEnrollmentDto);
+  }
+
   findAll() {
     return this.prisma.enrollment.findMany();
   }
