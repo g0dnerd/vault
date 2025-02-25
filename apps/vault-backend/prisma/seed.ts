@@ -31,12 +31,12 @@ async function main() {
   });
 
   const tournament3 = await prisma.tournament.upsert({
-    where: { name: 'Test League Tournament' },
+    where: { name: 'Test League' },
     update: {
       public: true,
     },
     create: {
-      name: 'Test League Tournament',
+      name: 'Test League',
       public: true,
       isLeague: true,
     },
