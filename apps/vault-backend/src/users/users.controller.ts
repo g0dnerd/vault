@@ -24,7 +24,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Role } from '@prisma/client';
 
 @Controller('users')
 @ApiTags('users')
@@ -50,9 +49,8 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: Boolean })
-  async isAdmin(@Req() req: Request) {
-    const user = new UserEntity(req.user);
-    return user.roles.includes(Role.ADMIN);
+  isAdmin(@Req() req: Request) {
+    return this.usersService.isAdmin(req.user['id']);
   }
 
   @Get('profile')
@@ -60,10 +58,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   getProfile(@Req() req: Request) {
-    // Create a UserEntity without password
-    const user = new UserEntity(req.user);
-    delete user.password;
-    return user;
+    return this.usersService.getProfile(req.user['id']);
   }
 
   @Get(':id')
@@ -71,7 +66,6 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    console.log(`Trying to find user by id ${id}`);
     const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
