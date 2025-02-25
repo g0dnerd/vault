@@ -24,6 +24,8 @@ import { UpdateDraftDto } from './dto/update-draft.dto';
 import { DraftEntity } from './entities/draft.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
+import { Roles } from '../roles-guard/roles.decorator';
+import { RolesGuard } from '../roles-guard/roles.guard';
 
 @Controller('drafts')
 @ApiTags('drafts')
@@ -32,16 +34,11 @@ export class DraftsController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiCreatedResponse({ type: DraftEntity })
   create(@Body() createDraftDto: CreateDraftDto) {
     return this.draftsService.create(createDraftDto);
-  }
-
-  @Get()
-  @ApiOkResponse({ type: DraftEntity, isArray: true })
-  findAll() {
-    return this.draftsService.findAll();
   }
 
   @Get('current/:tournamentId')
@@ -72,7 +69,8 @@ export class DraftsController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: DraftEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const draft = await this.draftsService.findOne(id);
@@ -84,7 +82,8 @@ export class DraftsController {
 
   @Patch(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: DraftEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -95,7 +94,8 @@ export class DraftsController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: DraftEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.draftsService.remove(id);

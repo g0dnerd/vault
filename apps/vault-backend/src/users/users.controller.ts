@@ -1,27 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  ParseIntPipe,
-  NotFoundException,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiTags,
-} from '@nestjs/swagger';
 import { Request } from 'express';
+import { Controller, Get, Body, Patch, UseGuards, Req } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -29,21 +11,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  @ApiCreatedResponse({ type: UserEntity })
-  async create(@Body() createUserDto: CreateUserDto) {
-    return new UserEntity(await this.usersService.create(createUserDto));
-  }
-
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOkResponse({ type: UserEntity, isArray: true })
-  async findAll() {
-    const users = await this.usersService.findAll();
-    return users.map((user) => new UserEntity(user));
-  }
 
   @Get('is-admin')
   @UseGuards(JwtAuthGuard)
@@ -61,34 +28,13 @@ export class UsersController {
     return this.usersService.getProfile(req.user['id']);
   }
 
-  @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOkResponse({ type: UserEntity })
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.usersService.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return new UserEntity(user);
-  }
-
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto
-  ) {
-    return new UserEntity(await this.usersService.update(id, updateUserDto));
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOkResponse({ type: UserEntity })
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return new UserEntity(await this.usersService.remove(id));
+  async update(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
+    return new UserEntity(
+      await this.usersService.update(req.user['id'], updateUserDto)
+    );
   }
 }

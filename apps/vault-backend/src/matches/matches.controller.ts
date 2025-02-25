@@ -24,6 +24,8 @@ import { MatchesService } from './matches.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../roles-guard/roles.guard';
+import { Roles } from '../roles-guard/roles.decorator';
 
 @Controller('matches')
 @ApiTags('matches')
@@ -32,7 +34,8 @@ export class MatchesController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiCreatedResponse({ type: MatchEntity })
   create(@Body() createMatchDto: CreateMatchDto) {
     return this.matchesService.create(createMatchDto);
@@ -40,7 +43,8 @@ export class MatchesController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: MatchEntity, isArray: true })
   findAll() {
     return this.matchesService.findAll();
@@ -48,7 +52,8 @@ export class MatchesController {
 
   @Get('ongoing')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: MatchEntity, isArray: true })
   findOngoing() {
     return this.matchesService.findOngoing();
@@ -75,7 +80,8 @@ export class MatchesController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: MatchEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const match = await this.matchesService.findOne(id);
@@ -85,8 +91,6 @@ export class MatchesController {
     return match;
   }
 
-  // TODO: Ensure that only this request is only possible for
-  // privileged users at certain times
   @Patch('/report/:id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -117,7 +121,8 @@ export class MatchesController {
 
   @Patch(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: MatchEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -128,7 +133,8 @@ export class MatchesController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: MatchEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.matchesService.remove(id);

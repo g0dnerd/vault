@@ -24,6 +24,8 @@ import { DraftPlayersService } from './draft-players.service';
 import { CreateDraftPlayerDto } from './dto/create-draft-player.dto';
 import { UpdateDraftPlayerDto } from './dto/update-draft-player.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../roles-guard/roles.guard';
+import { Roles } from '../roles-guard/roles.decorator';
 
 @Controller('draft-players')
 @ApiTags('draft-players')
@@ -32,17 +34,10 @@ export class DraftPlayersController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   create(@Body() createDraftPlayerDto: CreateDraftPlayerDto) {
     return this.draftPlayersService.create(createDraftPlayerDto);
-  }
-
-  @Get()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: DraftPlayerEntity, isArray: true })
-  findAll(@Req() req: Request) {
-    return this.draftPlayersService.findAll(req.user['id']);
   }
 
   @Get('user')
@@ -55,7 +50,8 @@ export class DraftPlayersController {
 
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: DraftPlayerEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const draftPlayer = await this.draftPlayersService.findOne(id);
@@ -67,7 +63,8 @@ export class DraftPlayersController {
 
   @Patch(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiCreatedResponse({ type: DraftPlayerEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -78,7 +75,8 @@ export class DraftPlayersController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: DraftPlayerEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.draftPlayersService.remove(id);
