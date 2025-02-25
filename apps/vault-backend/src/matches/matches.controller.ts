@@ -50,15 +50,6 @@ export class MatchesController {
     return this.matchesService.findAll();
   }
 
-  @Get('ongoing')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(['ADMIN'])
-  @ApiOkResponse({ type: MatchEntity, isArray: true })
-  findOngoing() {
-    return this.matchesService.findOngoing();
-  }
-
   @Get('draft/:draftId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -67,21 +58,9 @@ export class MatchesController {
     return this.matchesService.findForDraft(draftId);
   }
 
-  @Get(':id/current/:tournamentId')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: MatchEntity })
-  findCurrentMatchForUserId(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('tournamentId', ParseIntPipe) tournamentId: number
-  ) {
-    return this.matchesService.findCurrentMatchByUserId(id, tournamentId);
-  }
-
   @Get(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(['ADMIN'])
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: MatchEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const match = await this.matchesService.findOne(id);

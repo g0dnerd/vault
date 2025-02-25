@@ -18,17 +18,11 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ImagesService } from './images.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateImageDto } from './dto/create-image.dto';
 import { ImageEntity } from './entities/image.entity';
 import { UpdateImageDto } from './dto/update-image.dto';
 
@@ -56,7 +50,7 @@ export class ImagesController {
     return this.imagesService.handleUpload(file);
   }
 
-  @Get('player/:id')
+  @Get('draft/:id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: ImageEntity, isArray: true })

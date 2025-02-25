@@ -42,8 +42,7 @@ export class TournamentsController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(['ADMIN'])
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: TournamentEntity, isArray: true })
   findAll() {
     return this.tournamentsService.findAll();
@@ -54,7 +53,7 @@ export class TournamentsController {
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: TournamentEntity, isArray: true })
   async findEnrolled(@Req() req: Request) {
-    return this.findByUser(req.user['id']);
+    return this.tournamentsService.findByUser(req.user['id']);
   }
 
   @Get('enrolled-leagues')
@@ -70,23 +69,7 @@ export class TournamentsController {
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: TournamentEntity, isArray: true })
   async findAvailable(@Req() req: Request) {
-    return this.findAvailableForUser(req.user['id']);
-  }
-
-  @Get(':userId/enrolled')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: TournamentEntity, isArray: true })
-  findByUser(@Param('userId', ParseIntPipe) userId: number) {
-    return this.tournamentsService.findByUser(userId);
-  }
-
-  @Get(':userId/available')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: TournamentEntity, isArray: true })
-  findAvailableForUser(@Param('userId', ParseIntPipe) userId: number) {
-    return this.tournamentsService.findAvailableForUser(userId);
+    return this.tournamentsService.findAvailableForUser(req.user['id']);
   }
 
   @Get(':id')

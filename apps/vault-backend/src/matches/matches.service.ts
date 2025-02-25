@@ -22,44 +22,6 @@ export class MatchesService {
     return this.prisma.match.create({ data: createMatchDto });
   }
 
-  findOngoing() {
-    return this.prisma.match.findMany({
-      where: {
-        round: {
-          draft: {
-            started: true,
-            finished: false,
-          },
-        },
-      },
-      include: {
-        round: {
-          select: { draftId: true },
-        },
-        player1: {
-          select: {
-            enrollment: {
-              select: {
-                userId: true,
-                user: { select: { username: true } },
-              },
-            },
-          },
-        },
-        player2: {
-          select: {
-            enrollment: {
-              select: {
-                userId: true,
-                user: { select: { username: true } },
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
   findAll() {
     return this.prisma.match.findMany({
       include: {
@@ -67,7 +29,6 @@ export class MatchesService {
           select: {
             enrollment: {
               select: {
-                userId: true,
                 user: { select: { username: true } },
               },
             },
@@ -77,7 +38,6 @@ export class MatchesService {
           select: {
             enrollment: {
               select: {
-                userId: true,
                 user: { select: { username: true } },
               },
             },
@@ -99,14 +59,10 @@ export class MatchesService {
         },
       },
       include: {
-        round: {
-          select: { draftId: true },
-        },
         player1: {
           select: {
             enrollment: {
               select: {
-                userId: true,
                 user: { select: { username: true } },
               },
             },
@@ -116,7 +72,6 @@ export class MatchesService {
           select: {
             enrollment: {
               select: {
-                userId: true,
                 user: { select: { username: true } },
               },
             },
@@ -127,72 +82,12 @@ export class MatchesService {
     return games;
   }
 
-  async findCurrentMatchByUserId(userId: number, tournamentId: number) {
-    // Find the active match for given user's draft player
-    const game = await this.prisma.match.findFirst({
-      where: {
-        OR: [
-          { player1: { enrollment: { tournamentId, userId } } },
-          { player2: { enrollment: { tournamentId, userId } } },
-        ],
-        round: {
-          started: true,
-          finished: false,
-        },
-      },
-      // Include userId and username for both players
-      // so that we can return information on the opponent
-      include: {
-        player1: {
-          select: {
-            enrollment: {
-              select: {
-                userId: true,
-                user: { select: { username: true } },
-              },
-            },
-          },
-        },
-        player2: {
-          select: {
-            enrollment: {
-              select: {
-                userId: true,
-                user: { select: { username: true } },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    return game;
-  }
-
   findOne(id: number) {
     return this.prisma.match.findUnique({
       where: { id },
       include: {
         player1: true,
         player2: true,
-      },
-    });
-  }
-
-  findOtherGamesInRound(playerId: number, roundId: number) {
-    return this.prisma.match.findMany({
-      where: {
-        round: {
-          id: roundId,
-          started: true,
-          finished: false,
-        },
-        player1Id: {
-          not: playerId,
-        },
-        player2Id: {
-          not: playerId,
-        },
       },
     });
   }

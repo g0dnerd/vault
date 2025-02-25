@@ -18,38 +18,14 @@ export const imageStoreFailure = createEffect(
   { functional: true, dispatch: false }
 );
 
-export const initAllImages = createEffect(
-  (actions$ = inject(Actions), imageService = inject(ImageService)) => {
-    return actions$.pipe(
-      ofType(ImageActions.initializeAllImages),
-      mergeMap(() => {
-        return imageService.getAllImages().pipe(
-          map((images) => {
-            return ImageActions.loadImages({ images });
-          }),
-          catchError((error) => {
-            return of(
-              ImageActions.imageStoreFailure({
-                errorMessage: error.message,
-              })
-            );
-          })
-        );
-      })
-    );
-  },
-  { functional: true, dispatch: true }
-);
-
 export const initPlayerImages = createEffect(
   (actions$ = inject(Actions), imageService = inject(ImageService)) => {
     return actions$.pipe(
       ofType(ImageActions.initializePlayerImages),
-      mergeMap(({ playerId }) => {
-        return imageService.getImagesForPlayer(playerId).pipe(
+      mergeMap(({ draftId }) => {
+        return imageService.getImagesForPlayer(draftId).pipe(
           map((images) => {
-            const ids = images.map((i) => i.id);
-            return ImageActions.setPlayerImages({ ids });
+            return ImageActions.loadImages({ images });
           }),
           catchError((error) => {
             return of(

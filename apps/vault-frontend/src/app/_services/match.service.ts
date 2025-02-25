@@ -13,10 +13,6 @@ export class MatchService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getAllOngoingMatches(): Observable<Match[]> {
-    return this.http.get<Match[]>(`${this.apiUrl}/ongoing`);
-  }
-
   getMatchesForDraft(draftId: number): Observable<Match[]> {
     return this.http.get<Match[]>(`${this.apiUrl}/draft/${draftId}`);
   }

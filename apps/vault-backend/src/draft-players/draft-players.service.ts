@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 import { CreateDraftPlayerDto } from './dto/create-draft-player.dto';
@@ -39,7 +43,13 @@ export class DraftPlayersService {
     return this.prisma.draftPlayer.delete({ where: { id } });
   }
 
-  findByTournament(tournamentId: number) {
+  findByTournamentFromUser(tournamentId: number, userId: number) {
+    const enrollment = this.prisma.draftPlayer.findFirst({
+      where: { enrollment: { userId, tournamentId } },
+    });
+    if (!enrollment) {
+      throw new ForbiddenException();
+    }
     return this.prisma.draftPlayer.findMany({
       where: {
         enrollment: {

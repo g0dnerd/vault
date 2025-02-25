@@ -47,9 +47,9 @@ export class ImagesService {
     writeStream.end();
   }
 
-  async findForPlayer(id: number, userId: number) {
-    const player = await this.prisma.draftPlayer.findUnique({
-      where: { id },
+  async findForPlayer(draftId: number, userId: number) {
+    const player = await this.prisma.draftPlayer.findFirstOrThrow({
+      where: { draftId, enrollment: { userId } },
       include: { enrollment: { select: { userId: true } } },
     });
     if (player.enrollment.userId !== userId) {
@@ -59,7 +59,7 @@ export class ImagesService {
     }
     return this.prisma.image.findMany({
       where: {
-        draftPlayerId: id,
+        draftPlayerId: player.id,
       },
     });
   }

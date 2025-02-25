@@ -40,14 +40,6 @@ export class DraftPlayersController {
     return this.draftPlayersService.create(createDraftPlayerDto);
   }
 
-  @Get('user')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: DraftPlayerEntity, isArray: true })
-  async findForCurrentUser(@Req() req: Request) {
-    return this.draftPlayersService.findByUser(req.user['id']);
-  }
-
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -86,7 +78,10 @@ export class DraftPlayersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: DraftPlayerEntity, isArray: true })
-  findByTournament(@Param('id', ParseIntPipe) id: number) {
-    return this.draftPlayersService.findByTournament(id);
+  findByTournament(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    return this.draftPlayersService.findByTournamentFromUser(
+      id,
+      req.user['id']
+    );
   }
 }

@@ -240,6 +240,10 @@ export const selectProfileData = createSelector(
   selectAuth,
   (state: AuthState) => state.profileData
 );
+export const selectUsername = createSelector(
+  selectAuth,
+  (state: AuthState) => state.profileData?.username
+);
 export const selectAdminStatus = createSelector(
   selectAuth,
   (state: AuthState) => state.isAdmin
