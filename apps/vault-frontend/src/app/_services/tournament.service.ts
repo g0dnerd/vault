@@ -21,10 +21,6 @@ export class TournamentService {
     return this.http.get<Tournament[]>(this.apiUrl);
   }
 
-  getById(tournamentId: number): Observable<Tournament> {
-    return this.http.get<Tournament>(`${this.apiUrl}/${tournamentId}`);
-  }
-
   getAvailableTournaments(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.apiUrl}/available`);
   }
