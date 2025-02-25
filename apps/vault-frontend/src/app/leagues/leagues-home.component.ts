@@ -4,10 +4,8 @@ import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { Enrollment, Tournament, User } from '@vault/shared';
+import { Enrollment, Tournament } from '@vault/shared';
 import {
-  AuthAppState,
-  selectAuthUser,
   selectAvailableLeagues,
   selectEnrolledLeagues,
   State,
@@ -36,10 +34,7 @@ import { RegisterPanelComponent } from '../tournaments/available-tournaments';
 })
 export class LeaguesHomeComponent implements OnInit {
   private readonly store$ = inject(Store<State>);
-  private readonly authStore$ = inject(Store<AuthAppState>);
 
-  readonly user$: Observable<User | null> =
-    this.authStore$.select(selectAuthUser);
   readonly availableLeagues$: Observable<Tournament[]> = this.store$.select(
     selectAvailableLeagues
   );
@@ -54,7 +49,7 @@ export class LeaguesHomeComponent implements OnInit {
   }
 
   registerTournament(registrationData: Enrollment) {
-    const { userId, tournamentId } = registrationData;
-    this.store$.dispatch(register({ tournamentId, userId }));
+    const { tournamentId } = registrationData;
+    this.store$.dispatch(register({ tournamentId }));
   }
 }

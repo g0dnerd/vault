@@ -14,7 +14,6 @@
       [id]="(currentMatch$ | ngrxPush)?.id"
       [p1name]="(currentMatch$ | ngrxPush)?.player1?.enrollment?.user?.username"
       [p2name]="(currentMatch$ | ngrxPush)?.player2?.enrollment?.user?.username"
-      [userId]="(user$ | ngrxPush)?.id"
     />
 
     <ng-template #resultKnown>
@@ -64,7 +63,7 @@
       <ng-template #confirmationOpen>
         <button
           *ngIf="
-            (currentMatch$ | ngrxPush)?.reportedById != (user$ | ngrxPush)?.id;
+            (currentMatch$ | ngrxPush)?.reportedById != 1;
             else awaitingConfirmation
           "
           [disabled]="loading"

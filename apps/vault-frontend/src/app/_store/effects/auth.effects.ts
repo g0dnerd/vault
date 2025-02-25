@@ -6,18 +6,23 @@ import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { AccountService, AuthService } from '../../_services';
 import * as AuthActions from '../actions/auth.actions';
 
-export const initAuth = createEffect(
+export const refreshAuth = createEffect(
   (actions$ = inject(Actions), authService = inject(AuthService)) => {
     return actions$.pipe(
-      ofType(AuthActions.initAuth),
+      ofType(AuthActions.refreshAuth),
       mergeMap(() => {
-        return authService.status().pipe(
-          map(({ token, user }) => {
-            user.token = token;
-            return AuthActions.authSuccess({ authBlob: { token, user } });
+        return authService.checkToken().pipe(
+          map(({ token, isAdmin }) => {
+            if (isAdmin == undefined) {
+              isAdmin = false;
+            }
+            return AuthActions.authSuccess({
+              token,
+              isAdmin,
+            });
           }),
           catchError(() => {
-            return of(AuthActions.initAuthFailure());
+            return of(AuthActions.logout());
           })
         );
       })
@@ -30,8 +35,8 @@ export const authSuccess = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(AuthActions.authSuccess),
-      tap(({ authBlob, returnUrl }) => {
-        localStorage.setItem('token', authBlob.token);
+      tap(({ token, returnUrl }) => {
+        localStorage.setItem('token', token);
         if (returnUrl) {
           router.navigate([returnUrl || '/']);
         }
@@ -47,12 +52,15 @@ export const login = createEffect(
       ofType(AuthActions.login),
       mergeMap(({ loginData, returnUrl }) => {
         return authService.login(loginData).pipe(
-          map(({ token, user }) => {
+          map(({ token, isAdmin }) => {
             if (!token)
               return AuthActions.loginFailure({ errorMessage: 'JWT error' });
-            user.token = token;
+            if (isAdmin == undefined) {
+              isAdmin = false;
+            }
             return AuthActions.authSuccess({
-              authBlob: { token, user },
+              token,
+              isAdmin,
               returnUrl,
             });
           }),
@@ -75,11 +83,33 @@ export const logout = createEffect(
       ofType(AuthActions.logout),
       tap(() => {
         localStorage.removeItem('token');
-        router.navigateByUrl('/');
+        router.navigateByUrl('/account/login');
       })
     );
   },
   { functional: true, dispatch: false }
+);
+
+export const initProfileEffect = createEffect(
+  (actions$ = inject(Actions), accountService = inject(AccountService)) => {
+    return actions$.pipe(
+      ofType(AuthActions.initProfile),
+      mergeMap(() => {
+        return accountService.getUserProfile().pipe(
+          map((user) => {
+            return AuthActions.initProfileSuccess({ user });
+          }),
+          catchError((error) => {
+            const errorMessage = error
+              ? error[0]
+              : `${AuthActions.updateUser.type} Error while updating user`;
+            return of(AuthActions.initProfileFailure({ errorMessage }));
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
 );
 
 export const updateUserEffect = createEffect(
@@ -114,14 +144,16 @@ export const registerEffect = createEffect(
       ofType(AuthActions.register),
       mergeMap(({ registerData }) => {
         return authService.register(registerData).pipe(
-          map(({ user, token }) => {
+          map(({ token, isAdmin }) => {
             if (!token)
               return AuthActions.registerFailure({
                 errorMessage: 'JWT error ',
               });
-            user.token = token;
+            if (isAdmin == undefined) {
+              isAdmin = false;
+            }
             router.navigate(['/']);
-            return AuthActions.authSuccess({ authBlob: { user, token } });
+            return AuthActions.authSuccess({ token, isAdmin });
           }),
           catchError((error) => {
             const errorMessage = error

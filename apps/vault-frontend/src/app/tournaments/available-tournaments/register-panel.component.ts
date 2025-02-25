@@ -18,7 +18,6 @@ import { AlertService } from '../../_services';
   styleUrl: './register-panel.component.css',
 })
 export class RegisterPanelComponent implements OnInit {
-  @Input({ required: true }) userId: number | undefined = 0;
   @Input({ required: true }) tournamentId: number | undefined = 0;
   @Input({ required: true }) tournamentName = '';
   @Input({ required: true }) tournamentCapacity = 0;
@@ -48,7 +47,7 @@ export class RegisterPanelComponent implements OnInit {
     this.submitted = true;
     this.alertService.clear();
 
-    if (this.form.invalid || !this.userId || !this.tournamentId) {
+    if (this.form.invalid || !this.tournamentId) {
       // TODO: Give this a proper feedback message
       this.alertService.error(`Invalid registration form.`);
       return;
@@ -57,7 +56,6 @@ export class RegisterPanelComponent implements OnInit {
     this.loading = true;
     this.registerTournament.emit({
       tournamentId: this.tournamentId,
-      userId: this.userId,
     });
     this.loading = false;
   }

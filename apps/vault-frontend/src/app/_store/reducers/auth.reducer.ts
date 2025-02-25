@@ -1,80 +1,57 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { User } from '@vault/shared';
 import * as AuthActions from '../actions/auth.actions';
+import { User } from '@vault/shared';
 
 export interface AuthState {
-  isAuthenticated: boolean | null;
-  user: User | null;
   token: string | null;
+  isAdmin: boolean;
+  profileData: User | null;
   errorMessage: string | null;
 }
 
 export const initialState: AuthState = {
-  isAuthenticated: null,
-  user: null,
   token: null,
+  isAdmin: false,
+  profileData: null,
   errorMessage: null,
 };
 
 export const authReducer = createReducer(
   initialState,
-  // On successful authentication, sets the user into state and
-  // sets the isAuthenticated flag to true
-  on(AuthActions.authSuccess, (state, { authBlob }) => ({
+  on(AuthActions.authSuccess, (state, { token, isAdmin }) => ({
     ...state,
-    isAuthenticated: true,
-    user: authBlob.user,
-    token: authBlob.token,
+    token: token,
+    isAdmin,
     errorMessage: null,
   })),
-
-  // On failed authentication, removes the user from state and
-  // setts the isAuthenticated flag to false
-  on(AuthActions.initAuthFailure, (state) => ({
-    ...state,
-    isAuthenticated: false,
-    user: null,
-    token: null,
-  })),
-
-  // On failed login, removes authentication and user from state
-  on(AuthActions.loginFailure, (state, { errorMessage }) => ({
-    ...state,
-    isAuthenticated: false,
-    user: null,
+  on(AuthActions.loginFailure, (_state, { errorMessage }) => ({
+    isAdmin: false,
+    profileData: null,
     token: null,
     errorMessage,
   })),
-
-  // On logout, removes authentication and user from state
-  on(AuthActions.logout, (state) => ({
-    ...state,
-    isAuthenticated: false,
-    user: null,
+  // On logout, clears state
+  on(AuthActions.logout, (_state) => ({
     token: null,
+    isAdmin: false,
+    profileData: null,
     errorMessage: null,
   })),
-
-  // On failed register, removes authentication and user from state
+  // On failed registration, removes authentication and user from state
   on(AuthActions.registerFailure, (state, { errorMessage }) => ({
     ...state,
-    isAuthenticated: false,
-    user: null,
     token: null,
     errorMessage,
   })),
-
-  // On successful user update, set the new user object into state
-  on(AuthActions.updateUserSuccess, (state, { user }) => ({
+  on(AuthActions.initProfileSuccess, (state, { user }) => ({
     ...state,
-    user,
+    profileData: user,
     errorMessage: null,
   })),
-
-  // On failed user update, removes authentication and user from state
-  on(AuthActions.updateUserFailure, (state, { errorMessage }) => ({
+  on(AuthActions.initProfileFailure, (state, { errorMessage }) => ({
     ...state,
+    profileData: null,
     errorMessage,
   }))
 );

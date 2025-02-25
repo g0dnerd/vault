@@ -1,13 +1,15 @@
 import { createAction, props } from '@ngrx/store';
 
-import { AuthInterface, AuthPayload, User } from '@vault/shared';
+import { AuthPayload, User } from '@vault/shared';
 
 const TYPE = '[Auth]';
 
 export enum AuthActionTypes {
   AUTH_SUCCESS = `${TYPE} Auth Success`,
-  INIT_AUTH = `${TYPE} Initialize Auth`,
-  INIT_AUTH_FAILURE = `${TYPE} Initialize Auth Failure`,
+  REFRESH_AUTH = `${TYPE} Refresh Auth`,
+  INIT_PROFILE = `${TYPE} Initialize profile data`,
+  INIT_PROFILE_SUCCESS = `${TYPE} Initialize profile data success`,
+  INIT_PROFILE_FAILURE = `${TYPE} Initialize profile data failure`,
   LOGIN = `${TYPE} Login`,
   LOGIN_FAILURE = `${TYPE} Login Failure`,
   LOGOUT = `${TYPE} Logout`,
@@ -18,19 +20,14 @@ export enum AuthActionTypes {
   UPDATE_USER_FAILURE = `${TYPE} Update User Failure`,
 }
 
-// checks if valid authentication exists for the current user
-// and either returns an authSuccess or initAuthFailure
-export const initAuth = createAction(AuthActionTypes.INIT_AUTH);
+export const refreshAuth = createAction(AuthActionTypes.REFRESH_AUTH);
 
 // Stores auth data in redux state and local storage and returns
 // to returnUrl, if given
 export const authSuccess = createAction(
   AuthActionTypes.AUTH_SUCCESS,
-  props<{ authBlob: AuthInterface; returnUrl?: string }>()
+  props<{ token: string; isAdmin: boolean; returnUrl?: string }>()
 );
-
-// Resets authentication because no valid authentication was found
-export const initAuthFailure = createAction(AuthActionTypes.INIT_AUTH_FAILURE);
 
 // Tries to authenticate to the backend using loginData and
 // returns to returnUrl on success
@@ -59,6 +56,18 @@ export const register = createAction(
 // the registration attempt failed
 export const registerFailure = createAction(
   AuthActionTypes.REGISTER_FAILURE,
+  props<{ errorMessage: string }>()
+);
+
+export const initProfile = createAction(AuthActionTypes.INIT_PROFILE);
+
+export const initProfileSuccess = createAction(
+  AuthActionTypes.INIT_PROFILE_SUCCESS,
+  props<{ user: User }>()
+);
+
+export const initProfileFailure = createAction(
+  AuthActionTypes.INIT_PROFILE_FAILURE,
   props<{ errorMessage: string }>()
 );
 

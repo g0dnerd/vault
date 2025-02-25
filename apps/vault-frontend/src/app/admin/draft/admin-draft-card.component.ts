@@ -16,7 +16,6 @@ import {
   AuthAppState,
   DraftAppState,
   State,
-  selectAuthUser,
   selectMatchesByQuery,
   selectSelectedDraft,
 } from '../../_store';
@@ -35,13 +34,11 @@ import { ReportResultFormComponent } from '../../tournaments/report-result-form/
   styleUrl: './admin-draft-card.component.css',
 })
 export class AdminDraftCardComponent implements OnInit {
-  private authStore$ = inject(Store<AuthAppState>);
-  private matchStore$ = inject(Store<State>);
+  private store$ = inject(Store<State>);
   private matchWebSocketService = inject(MatchWebSocketService);
 
   draft$: Observable<Draft | null> = of(null);
   matches$: Observable<Match[]> = of([]);
-  user$: Observable<User | null> = this.authStore$.select(selectAuthUser);
 
   @Input({ transform: numberAttribute }) id = 0;
 
@@ -51,17 +48,17 @@ export class AdminDraftCardComponent implements OnInit {
     this.matchWebSocketService
       .listenForMatchUpdates()
       .subscribe((game: Match) => {
-        this.matchStore$.dispatch(
+        this.store$.dispatch(
           updateMatch({ update: { id: game.id, changes: game } })
         );
       });
   }
 
   ngOnInit() {
-    this.matchStore$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
+    this.store$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
     this.draftStore$.dispatch(selectDraft({ id: this.id }));
     this.draft$ = this.draftStore$.select(selectSelectedDraft);
-    this.matches$ = this.matchStore$.select(
+    this.matches$ = this.store$.select(
       selectMatchesByQuery((game: Match) => game?.round?.draftId == this.id)
     );
   }

@@ -28,7 +28,6 @@ export class ReportResultFormComponent implements OnInit {
   @Input({ transform: numberAttribute }) id = 0;
   @Input() p1name: string | undefined = '';
   @Input() p2name: string | undefined = '';
-  @Input({ transform: numberAttribute }) userId: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,7 +81,7 @@ export class ReportResultFormComponent implements OnInit {
         : 1;
 
     await firstValueFrom(
-      this.matchService.reportResult(this.userId, this.id, {
+      this.matchService.reportResult(this.id, {
         player1Wins: this.f['player1Wins'].value,
         player2Wins: this.f['player2Wins'].value,
         result,

@@ -1,12 +1,17 @@
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { PushPipe } from '@ngrx/component';
-import { Store } from '@ngrx/store';
 
 import { AlertComponent } from './alert/alert.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { Store } from '@ngrx/store';
 import { AuthAppState } from './_store';
-import { initAuth } from './_store/actions/auth.actions';
+import { logout, refreshAuth } from './_store/actions/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -24,9 +29,18 @@ import { initAuth } from './_store/actions/auth.actions';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  constructor(private readonly authStore$: Store<AuthAppState>) {}
+  constructor(
+    private readonly authStore$: Store<AuthAppState>,
+    private readonly router: Router
+  ) {}
 
   ngOnInit() {
-    this.authStore$.dispatch(initAuth());
+    const token = localStorage.getItem('token');
+    if (token == null) {
+      this.authStore$.dispatch(logout());
+      this.router.navigateByUrl('/account/login');
+    } else {
+      this.authStore$.dispatch(refreshAuth());
+    }
   }
 }

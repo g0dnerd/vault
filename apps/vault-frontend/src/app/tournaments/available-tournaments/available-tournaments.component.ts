@@ -6,12 +6,7 @@ import { PushPipe } from '@ngrx/component';
 
 import { Enrollment, Tournament, User } from '@vault/shared';
 import { RegisterPanelComponent } from './register-panel.component';
-import {
-  AuthAppState,
-  selectAuthUser,
-  selectAvailableTournaments,
-  State,
-} from '../../_store';
+import { AuthAppState, selectAvailableTournaments, State } from '../../_store';
 import {
   initializeAllTournaments,
   initializeAvailableTournaments,
@@ -26,10 +21,7 @@ import {
 })
 export class AvailableTournamentsComponent implements OnInit {
   private readonly store$ = inject(Store<State>);
-  private readonly authStore$ = inject(Store<AuthAppState>);
 
-  readonly user$: Observable<User | null> =
-    this.authStore$.select(selectAuthUser);
   readonly availableTournaments$: Observable<Tournament[]> = this.store$.select(
     selectAvailableTournaments
   );
@@ -42,7 +34,7 @@ export class AvailableTournamentsComponent implements OnInit {
   // Handler for the event emitter in `RegisterPanelComponent`,
   // dispatches registration to `tournamentStore$`
   registerTournament(registrationData: Enrollment) {
-    const { userId, tournamentId } = registrationData;
-    this.store$.dispatch(register({ tournamentId, userId }));
+    const { tournamentId } = registrationData;
+    this.store$.dispatch(register({ tournamentId }));
   }
 }

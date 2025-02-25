@@ -24,12 +24,7 @@ import {
   AlertService,
   MatchService,
 } from '../../_services';
-import {
-  AuthAppState,
-  State,
-  selectAuthUser,
-  selectMatchByQuery,
-} from '../../_store';
+import { AuthAppState, State, selectMatchByQuery } from '../../_store';
 import {
   initializeMatchesForDraft,
   updateMatch,
@@ -53,14 +48,12 @@ import { ReportResultFormComponent } from '../report-result-form/report-result-f
 export class MatchPanelComponent implements OnInit {
   @Input({ required: true, transform: numberAttribute }) id = 0;
 
-  private authStore$ = inject(Store<AuthAppState>);
   private store$ = inject(Store<State>);
   private matchWebSocketService = inject(MatchWebSocketService);
 
   loading = false;
 
   currentMatch$: Observable<Match | undefined> = of(undefined);
-  user$: Observable<User | null> = this.authStore$.select(selectAuthUser);
   // Observable for the opponent's name
   opponentName$: Observable<string | undefined> = of(undefined);
 
@@ -81,29 +74,29 @@ export class MatchPanelComponent implements OnInit {
 
   ngOnInit() {
     this.store$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
-    this.user$.subscribe((user) => {
-      if (user) {
-        this.currentMatch$ = this.store$
-          .select(
-            selectMatchByQuery(
-              (game) =>
-                game.round?.draftId == this.id &&
-                (game.player1?.enrollment?.userId == user.id ||
-                  game.player2?.enrollment?.userId == user.id)
-            )
-          )
-          .pipe(filter((game): game is Match => game != undefined));
-      }
-    });
-    this.opponentName$ = combineLatest([this.currentMatch$, this.user$]).pipe(
-      map(([game, user]) => {
-        const p1 = game?.player1?.enrollment?.user.username;
-        const p2 = game?.player2?.enrollment?.user.username;
-
-        // Determine the opponent's name
-        return user?.username === p1 ? p2 : p1;
-      })
-    );
+    // this.user$.subscribe((user) => {
+    //   if (user) {
+    //     this.currentMatch$ = this.store$
+    //       .select(
+    //         selectMatchByQuery(
+    //           (game) =>
+    //             game.round?.draftId == this.id &&
+    //             (game.player1?.enrollment?.userId == user.id ||
+    //               game.player2?.enrollment?.userId == user.id)
+    //         )
+    //       )
+    //       .pipe(filter((game): game is Match => game != undefined));
+    //   }
+    // });
+    // this.opponentName$ = combineLatest([this.currentMatch$, this.user$]).pipe(
+    //   map(([game, user]) => {
+    //     const p1 = game?.player1?.enrollment?.user.username;
+    //     const p2 = game?.player2?.enrollment?.user.username;
+    //
+    //     // Determine the opponent's name
+    //     return user?.username === p1 ? p2 : p1;
+    //   })
+    // );
   }
 
   // Handles result confirmation

@@ -36,7 +36,6 @@
           [id]="game?.id"
           [p1name]="game?.player1?.enrollment?.user?.username"
           [p2name]="game?.player2?.enrollment?.user?.username"
-          [userId]="(user$ | ngrxPush)?.id"
         />
         <ng-template #confirmResult> </ng-template>
         }

@@ -118,5 +118,5 @@ export const clearTournaments = createAction(
 );
 export const register = createAction(
   TournamentActionTypes.REGISTER,
-  props<{ tournamentId: number; userId: number }>()
+  props<{ tournamentId: number }>()
 );

@@ -26,15 +26,7 @@ export class MatchService {
   }
 
   // Reports a result to the API and returns the API response.
-  reportResult(
-    userId: number,
-    matchId: number,
-    result: Result
-  ): Observable<Match> {
-    result = {
-      ...result,
-      reportedById: userId,
-    };
+  reportResult(matchId: number, result: Result): Observable<Match> {
     return this.http.patch<Match>(`${this.apiUrl}/report/${matchId}`, result);
   }
 

@@ -1,7 +1,7 @@
 <div class="mb-1">
   <nav
     class="navbar navbar-expand-md navbar-light bg-light"
-    *ngIf="authState$ | async"
+    *ngIf="authState$ | ngrxPush"
   >
     <button
       class="navbar-toggler"
@@ -18,7 +18,7 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <div *ngIf="isAdmin$ | async as isAdmin; else noAdmin">
+        <div *ngIf="isAdmin$ | ngrxPush as isAdmin; else noAdmin">
           <li class="nav-item">
             <a class="nav-link" routerLink="tournaments/admin"
               >Admin Dashboard</a

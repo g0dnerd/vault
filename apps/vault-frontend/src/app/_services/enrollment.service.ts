@@ -31,8 +31,8 @@ export class EnrollmentsService {
     return this.http.get<Enrollment[]>(`${this.apiUrl}/league`);
   }
 
-  enrollUser(tournamentId: number, userId: number): Observable<Enrollment> {
-    const enrollData = { tournamentId, userId };
+  enrollUser(tournamentId: number): Observable<Enrollment> {
+    const enrollData = { tournamentId };
     return this.http.post<Enrollment>(this.apiUrl, enrollData);
   }
 }
