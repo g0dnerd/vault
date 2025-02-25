@@ -1,8 +1,6 @@
-import { User } from "./user.interface";
-
 export interface AuthInterface {
   token: string;
-  user: User;
+  isAdmin?: boolean;
 }
 
 export interface AuthPayload {
