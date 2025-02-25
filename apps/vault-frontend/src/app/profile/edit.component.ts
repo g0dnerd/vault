@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,11 +9,11 @@ import {
 import { RouterLink } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { User } from '@vault/shared';
 import { AlertService } from '../_services';
-import { AuthAppState, selectAuthUser } from '../_store';
+import { AuthAppState, selectProfileData } from '../_store';
 import { updateUser } from '../_store/actions/auth.actions';
 
 @Component({
@@ -23,20 +23,20 @@ import { updateUser } from '../_store/actions/auth.actions';
   styleUrl: './edit.component.css',
 })
 export class EditComponent implements OnInit {
+  private readonly store$ = inject(Store<AuthAppState>);
+
+  user$: Observable<User | null> = this.store$.select(selectProfileData);
+
   form!: FormGroup;
   loading = false;
   submitted = false;
 
-  user$: Observable<User | null> = of(null);
-
   constructor(
     private formBuilder: FormBuilder,
-    private alertService: AlertService,
-    private readonly store$: Store<AuthAppState>
+    private alertService: AlertService
   ) {}
 
   async ngOnInit() {
-    this.user$ = this.store$.select(selectAuthUser);
     this.form = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', Validators.required],
@@ -46,7 +46,6 @@ export class EditComponent implements OnInit {
       this.form.setValue({
         username: user?.username,
         email: user?.email,
-        id: user?.id,
       });
     });
   }

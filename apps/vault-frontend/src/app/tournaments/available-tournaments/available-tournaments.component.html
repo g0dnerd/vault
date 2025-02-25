@@ -3,7 +3,6 @@
   @defer {
   <li *ngFor="let tournament of availableTournaments$ | ngrxPush; index as i">
     <app-tournament-register-panel
-      [userId]="(user$ | ngrxPush)?.id"
       [tournamentId]="tournament.id"
       [tournamentName]="tournament.name"
       [tournamentCapacity]="tournament.playerCapacity"

@@ -10,7 +10,7 @@ import { API_ROUTES, User } from '@vault/shared';
 export class AccountService {
   private apiUrl = `${dev.apiUrl}${API_ROUTES.USER}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getUserProfile(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/profile`);

@@ -24,7 +24,7 @@ export class AuthService {
     return this.http.post<AuthInterface>(this.registerApiUrl, payload);
   }
 
-  status(): Observable<AuthInterface> {
+  checkToken(): Observable<AuthInterface> {
     return this.http.get<AuthInterface>(this.statusApiUrl);
   }
 }

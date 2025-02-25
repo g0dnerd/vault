@@ -12,7 +12,9 @@ export function jwtInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
   let accessToken = authStore$.select(selectAuthToken).pipe(take(1));
 
   accessToken.subscribe((token) => {
-    if (!token) token = localStorage['token'];
+    if (!token) {
+      token = localStorage['token'];
+    }
     if (token) {
       req = req.clone({
         setHeaders: {

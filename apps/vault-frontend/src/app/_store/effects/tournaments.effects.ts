@@ -123,8 +123,8 @@ export const register = createEffect(
   ) => {
     return actions$.pipe(
       ofType(TournamentsActions.register),
-      mergeMap(({ tournamentId, userId }) => {
-        return enrollmentService.enrollUser(tournamentId, userId).pipe(
+      mergeMap(({ tournamentId }) => {
+        return enrollmentService.enrollUser(tournamentId).pipe(
           map((res) => {
             // If the response did not contain a tournament,
             // the user could not be enrolled. Return an error.

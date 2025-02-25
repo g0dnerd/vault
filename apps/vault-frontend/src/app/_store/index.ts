@@ -4,14 +4,7 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import {
-  Enrollment,
-  Image,
-  Match,
-  Player,
-  Role,
-  Tournament,
-} from '@vault/shared';
+import { Enrollment, Image, Match, Player, Tournament } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
 
@@ -235,24 +228,21 @@ export interface AuthAppState {
   auth: AuthState;
 }
 export const selectAuth = (state: AuthAppState) => state.auth;
-export const selectAuthUser = createSelector(
-  selectAuth,
-  (state: AuthState) => state.user
-);
-export const selectUserId = createSelector(selectAuthUser, (user) =>
-  user ? user.id : null
-);
 export const selectAuthStatus = createSelector(
   selectAuth,
-  (state: AuthState) => state.isAuthenticated
+  (state: AuthState) => state.token !== null
 );
 export const selectAuthToken = createSelector(
   selectAuth,
   (state: AuthState) => state.token
 );
+export const selectProfileData = createSelector(
+  selectAuth,
+  (state: AuthState) => state.profileData
+);
 export const selectAdminStatus = createSelector(
   selectAuth,
-  (state: AuthState) => state.user?.roles?.includes(Role.Admin)
+  (state: AuthState) => state.isAdmin
 );
 export const selectErrorMessage = createSelector(
   selectAuth,
