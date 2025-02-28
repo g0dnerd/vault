@@ -6,46 +6,30 @@ import * as DraftActions from '../actions/draft.actions';
 export interface DraftState {
   ongoing: Draft[];
   current: Draft | null;
-  selected: Draft | null;
   errorMessage: string | null;
 }
 
 export const initialState: DraftState = {
   ongoing: [],
   current: null,
-  selected: null,
   errorMessage: null,
 };
 
 export const draftReducer = createReducer(
   initialState,
-  on(DraftActions.initOngoingSuccess, (state, { allDrafts: ongoing }) => ({
-    ...state,
-    ongoing,
-    errorMessage: null,
-  })),
-  on(DraftActions.initOngoingFailure, (state, { errorMessage }) => ({
-    ...state,
+  on(DraftActions.draftStoreFailure, (_state, { errorMessage }) => ({
     ongoing: [],
+    current: null,
     errorMessage,
   })),
-  on(DraftActions.initCurrentSuccess, (state, { currentDraft: current }) => ({
+  on(DraftActions.initCurrentDraftSuccess, (state, { current }) => ({
     ...state,
     current,
     errorMessage: null,
   })),
-  on(DraftActions.initCurrentFailure, (state, { errorMessage }) => ({
+  on(DraftActions.initOngoingDraftsSuccess, (state, { ongoing }) => ({
     ...state,
-    current: null,
-    errorMessage,
-  })),
-  on(DraftActions.selectDraftSuccess, (state, { draft: selected }) => ({
-    ...state,
-    selected,
-  })),
-  on(DraftActions.selectDraftFailure, (state, { errorMessage }) => ({
-    ...state,
-    selected: null,
-    errorMessage,
+    ongoing,
+    errorMessage: null,
   }))
 );

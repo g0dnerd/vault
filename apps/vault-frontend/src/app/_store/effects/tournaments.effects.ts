@@ -92,7 +92,7 @@ export const initEnrolled = createEffect(
     return actions$.pipe(
       ofType(TournamentsActions.initializeEnrolledTournaments),
       mergeMap(() => {
-        return tournamentService.getUserTournaments().pipe(
+        return tournamentService.getEnrolled().pipe(
           map((enrolledTournaments) => {
             const ids = enrolledTournaments.map((t) => t.id);
             return TournamentsActions.setEnrolledTournaments({ ids });
@@ -124,7 +124,7 @@ export const register = createEffect(
     return actions$.pipe(
       ofType(TournamentsActions.register),
       mergeMap(({ tournamentId }) => {
-        return enrollmentService.enrollUser(tournamentId).pipe(
+        return enrollmentService.enroll(tournamentId).pipe(
           map((res) => {
             // If the response did not contain a tournament,
             // the user could not be enrolled. Return an error.
