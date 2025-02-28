@@ -51,7 +51,7 @@ export const initLeaguePlayers = createEffect(
     return actions$.pipe(
       ofType(EnrollmentActions.initializeAllLeaguePlayers),
       mergeMap(() => {
-        return enrollmentService.getLeaguePlayers().pipe(
+        return enrollmentService.getForLeague().pipe(
           map((enrollments) => {
             return EnrollmentActions.loadEnrollments({ enrollments });
           }),

@@ -4,7 +4,9 @@
     My Opponent at Table
     <span id="my-table">{{ (currentMatch$ | ngrxPush)?.tableNumber }}</span
     >:
-    <span id="my-opponent">{{ opponentName$ | ngrxPush }}</span>
+    <span id="my-opponent">{{
+      (currentMatch$ | ngrxPush)?.opponentName | ngrxPush
+    }}</span>
   </p>
 
   @defer {

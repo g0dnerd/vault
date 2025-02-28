@@ -1,11 +1,14 @@
 <h5 class="card-title">My pool</h5>
-<app-manage-pool [draftId]="id" />
-<p class="card-text" *ngIf="(player$ | ngrxPush)?.checkedIn; else notCheckedIn">
+<app-manage-pool />
+<p
+  class="card-text"
+  *ngIf="(poolStatus$ | ngrxPush)?.checkedIn; else notCheckedIn"
+>
   I am checked in.
 </p>
 <p
   class="card-text"
-  *ngIf="(player$ | ngrxPush)?.checkedOut; else notCheckedOut"
+  *ngIf="(poolStatus$ | ngrxPush)?.checkedOut; else notCheckedOut"
 >
   I am checked out.
 </p>

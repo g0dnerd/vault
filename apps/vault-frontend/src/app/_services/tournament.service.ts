@@ -9,9 +9,9 @@ import { API_ROUTES, CreateTournamentDto, Tournament } from '@vault/shared';
   providedIn: 'root',
 })
 export class TournamentService {
-  private apiUrl = `${dev.apiUrl}${API_ROUTES.TOURNAMENTS}`;
+  private readonly apiUrl = `${dev.apiUrl}${API_ROUTES.TOURNAMENTS}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   createTournament(tournament: CreateTournamentDto): Observable<Tournament> {
     return this.http.post<Tournament>(this.apiUrl, tournament);
@@ -21,11 +21,15 @@ export class TournamentService {
     return this.http.get<Tournament[]>(this.apiUrl);
   }
 
+  getAllPublicTournaments(): Observable<Tournament[]> {
+    return this.http.get<Tournament[]>(`${this.apiUrl}/public`);
+  }
+
   getAvailableTournaments(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.apiUrl}/available`);
   }
 
-  getUserTournaments(): Observable<Tournament[]> {
+  getEnrolled(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.apiUrl}/enrolled`);
   }
 

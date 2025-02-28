@@ -449,6 +449,7 @@ async function main() {
       started: true,
     },
     create: {
+      started: true,
       phaseId: phase1.id,
       cubeId: cube1.id,
     },
@@ -697,9 +698,12 @@ async function main() {
         roundIndex: 1,
       },
     },
-    update: {},
+    update: {
+      started: true,
+    },
     create: {
       draftId: draft1.id,
+      started: true,
       roundIndex: 1,
     },
   });
@@ -711,8 +715,11 @@ async function main() {
         roundIndex: 1,
       },
     },
-    update: {},
+    update: {
+      started: true,
+    },
     create: {
+      started: true,
       draftId: leagueDraft.id,
       roundIndex: 1,
     },

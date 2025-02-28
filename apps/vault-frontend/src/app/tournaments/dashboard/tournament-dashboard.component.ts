@@ -1,22 +1,33 @@
 import { NgIf } from '@angular/common';
-import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  numberAttribute,
+  OnInit,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
 
 import { Enrollment, Tournament } from '@vault/shared';
-import { DraftPanelComponent } from './draft-panel.component';
+import { DraftPanelComponent } from '.';
 import {
+  AuthAppState,
   DraftAppState,
+  MatchAppState,
+  PlayerAppState,
   selectEnrollmentByQuery,
   selectTournamentById,
   State,
 } from '../../_store';
-import { initCurrent } from '../../_store/actions/draft.actions';
-import { initializePlayersForTournament } from '../../_store/actions/player.actions';
+import { initCurrentDraft } from '../../_store/actions/draft.actions';
 import { initializeAllTournaments } from '../../_store/actions/tournaments.actions';
 import { initializeAllEnrollments } from '../../_store/actions/enrollment.actions';
+import { initCurrentMatch } from '../../_store/actions/match.actions';
+import { initProfile } from '../../_store/actions/auth.actions';
+import { initCurrentPoolStatus } from '../../_store/actions/player.actions';
 
 @Component({
   selector: 'app-tournament-dashboard',
@@ -26,25 +37,37 @@ import { initializeAllEnrollments } from '../../_store/actions/enrollment.action
   styleUrl: './tournament-dashboard.component.css',
 })
 export class TournamentDashboardComponent implements OnInit {
-  id = input.required<number>();
+  @Input({ required: true, transform: numberAttribute }) tournamentId = 0;
 
   private readonly store$ = inject(Store<State>);
+  private readonly authStore$ = inject(Store<AuthAppState>);
   private readonly draftStore$ = inject(Store<DraftAppState>);
+  private readonly matchStore$ = inject(Store<MatchAppState>);
+  private readonly playerStore$ = inject(Store<PlayerAppState>);
 
   tournament$: Observable<Tournament | undefined> = of(undefined);
   enrollment$: Observable<Enrollment | undefined> = of(undefined);
 
   ngOnInit() {
+    this.authStore$.dispatch(initProfile());
     this.store$.dispatch(initializeAllTournaments());
-    this.store$.dispatch(
-      initializePlayersForTournament({ tournamentId: this.id() })
-    );
     this.store$.dispatch(initializeAllEnrollments());
-    this.draftStore$.dispatch(initCurrent({ tournamentId: this.id() }));
-    this.tournament$ = this.store$.select(selectTournamentById(this.id()));
+    this.draftStore$.dispatch(
+      initCurrentDraft({ tournamentId: this.tournamentId })
+    );
+    this.matchStore$.dispatch(
+      initCurrentMatch({ tournamentId: this.tournamentId })
+    );
+    this.playerStore$.dispatch(
+      initCurrentPoolStatus({ tournamentId: this.tournamentId })
+    );
+    this.tournament$ = this.store$.select(
+      selectTournamentById(this.tournamentId)
+    );
     this.enrollment$ = this.store$.select(
       selectEnrollmentByQuery(
-        (enrollment: Enrollment) => enrollment?.tournamentId == this.id()
+        (enrollment: Enrollment) =>
+          enrollment?.tournamentId == this.tournamentId
       )
     );
   }

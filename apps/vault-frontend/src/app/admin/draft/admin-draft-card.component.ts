@@ -12,18 +12,8 @@ import { Observable, of } from 'rxjs';
 
 import { Draft, Match, User } from '@vault/shared';
 import { MatchWebSocketService } from '../../_services';
-import {
-  AuthAppState,
-  DraftAppState,
-  State,
-  selectMatchesByQuery,
-  selectSelectedDraft,
-} from '../../_store';
-import { selectDraft } from '../../_store/actions/draft.actions';
-import {
-  initializeMatchesForDraft,
-  updateMatch,
-} from '../../_store/actions/match.actions';
+import { AuthAppState, DraftAppState, State } from '../../_store';
+// import { selectDraft } from '../../_store/actions/draft.actions';
 import { ReportResultFormComponent } from '../../tournaments/report-result-form/report-result-form.component';
 
 @Component({
@@ -45,21 +35,21 @@ export class AdminDraftCardComponent implements OnInit {
   constructor(private readonly draftStore$: Store<DraftAppState>) {
     // Listen to the match WebSocket service and have it update matches
     // on the corresponding event
-    this.matchWebSocketService
-      .listenForMatchUpdates()
-      .subscribe((game: Match) => {
-        this.store$.dispatch(
-          updateMatch({ update: { id: game.id, changes: game } })
-        );
-      });
+    // this.matchWebSocketService
+    //   .listenForMatchUpdates()
+    //   .subscribe((game: Match) => {
+    //     this.store$.dispatch(
+    //       updateMatch({ update: { id: game.id, changes: game } })
+    //     );
+    //   });
   }
 
   ngOnInit() {
-    this.store$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
-    this.draftStore$.dispatch(selectDraft({ id: this.id }));
-    this.draft$ = this.draftStore$.select(selectSelectedDraft);
-    this.matches$ = this.store$.select(
-      selectMatchesByQuery((game: Match) => game?.round?.draftId == this.id)
-    );
+    // this.store$.dispatch(initializeMatchesForDraft({ draftId: this.id }));
+    // this.draftStore$.dispatch(selectDraft({ id: this.id }));
+    // this.draft$ = this.draftStore$.select(selectSelectedDraft);
+    // this.matches$ = this.store$.select(
+    //   selectMatchesByQuery((game: Match) => game?.round?.draftId == this.id)
+    // );
   }
 }

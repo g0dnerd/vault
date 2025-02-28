@@ -2,11 +2,7 @@
 <ul class="event-list">
   @defer {
   <li *ngFor="let tournament of enrolledTournaments$ | ngrxPush; index as i">
-    <app-tournament-detail-card
-      [tournamentId]="tournament.id"
-      [tournamentName]="tournament.name"
-      [tournamentCapacity]="tournament.playerCapacity"
-    />
+    <app-tournament-detail-card [tournamentId]="tournament.id" />
   </li>
   <li *ngIf="!(enrolledTournaments$ | ngrxPush)?.length">
     You are not enrolled in any tournaments.

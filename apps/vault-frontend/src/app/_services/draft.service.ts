@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { API_ROUTES, Draft, DraftScorecard } from '@vault/shared';
+import { API_ROUTES, Draft } from '@vault/shared';
 import { dev } from '../../environments/environment';
 
 @Injectable({
@@ -10,25 +10,14 @@ import { dev } from '../../environments/environment';
 })
 export class DraftService {
   private readonly apiUrl = `${dev.apiUrl}${API_ROUTES.DRAFTS}`;
-  private readonly scorecardApiUrl = `${dev.apiUrl}${API_ROUTES.DRAFTS}`;
 
   constructor(private readonly http: HttpClient) {}
 
-  getById(id: number): Observable<Draft> {
-    return this.http.get<Draft>(`${this.apiUrl}/${id}`);
-  }
-
   getOngoingDrafts(tournamentId: number): Observable<Draft[]> {
-    return this.http.get<Draft[]>(`${this.apiUrl}/${tournamentId}/ongoing`);
+    return this.http.get<Draft[]>(`${this.apiUrl}/ongoing/${tournamentId}`);
   }
 
   getCurrentDraft(tournamentId: number): Observable<Draft> {
     return this.http.get<Draft>(`${this.apiUrl}/current/${tournamentId}`);
-  }
-
-  getScorecardsForDraft(draftId: number): Observable<DraftScorecard[]> {
-    return this.http.get<DraftScorecard[]>(
-      `${this.scorecardApiUrl}/draft/${draftId}`
-    );
   }
 }

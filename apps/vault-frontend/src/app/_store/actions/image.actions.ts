@@ -33,8 +33,7 @@ export const imageStoreFailure = createAction(
   props<{ errorMessage: string }>()
 );
 export const initializePlayerImages = createAction(
-  ImageActionTypes.INITIALIZE_PLAYER_IMAGES,
-  props<{ draftId: number }>()
+  ImageActionTypes.INITIALIZE_PLAYER_IMAGES
 );
 export const setPlayerImages = createAction(
   ImageActionTypes.SET_PLAYER_IMAGES,

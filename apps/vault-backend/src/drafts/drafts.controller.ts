@@ -57,7 +57,7 @@ export class DraftsController {
     return currentDraft;
   }
 
-  @Get(':tournamentId/ongoing')
+  @Get('ongoing/:tournamentId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: DraftEntity, isArray: true })

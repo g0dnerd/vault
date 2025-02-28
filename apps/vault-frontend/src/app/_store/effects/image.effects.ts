@@ -22,8 +22,8 @@ export const initPlayerImages = createEffect(
   (actions$ = inject(Actions), imageService = inject(ImageService)) => {
     return actions$.pipe(
       ofType(ImageActions.initializePlayerImages),
-      mergeMap(({ draftId }) => {
-        return imageService.getImagesForPlayer(draftId).pipe(
+      mergeMap(() => {
+        return imageService.getUserImages().pipe(
           map((images) => {
             return ImageActions.loadImages({ images });
           }),

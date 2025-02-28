@@ -4,66 +4,45 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Enrollment, Image, Match, Player, Tournament } from '@vault/shared';
+import { Enrollment, Image, Tournament } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
+import { MatchState } from './reducers/match.reducer';
+import { PlayerState } from './reducers/player.reducer';
 
 import * as fromEnrollment from './reducers/enrollment.reducer';
 import * as fromImage from './reducers/image.reducer';
-import * as fromMatch from './reducers/match.reducer';
-import * as fromPlayer from './reducers/player.reducer';
 import * as fromTournament from './reducers/tournaments.reducer';
 
 export interface State {
   images: fromImage.ImageState;
-  matches: fromMatch.MatchState;
-  players: fromPlayer.PlayerState;
   tournaments: fromTournament.TournamentState;
 }
 
 export const reducers: ActionReducerMap<State> = {
   images: fromImage.imageReducer,
-  matches: fromMatch.matchReducer,
-  players: fromPlayer.playerReducer,
   tournaments: fromTournament.tournamentReducer,
 };
 
 // MATCHES
-export const selectMatchState =
-  createFeatureSelector<fromMatch.MatchState>('matches');
-export const selectMatchIds = createSelector(
-  selectMatchState,
-  fromMatch.selectMatchIds
+export interface MatchAppState {
+  matches: MatchState;
+}
+export const selectMatches = (state: MatchAppState) => state.matches;
+export const selectCurrentMatch = createSelector(
+  selectMatches,
+  (state: MatchState) => state.current
 );
-export const selectMatchEntities = createSelector(
-  selectMatchState,
-  fromMatch.selectMatchEntities
+
+// PLAYERS
+export interface PlayerAppState {
+  players: PlayerState;
+}
+export const selectPlayers = (state: PlayerAppState) => state.players;
+export const selectCurrentPoolStatus = createSelector(
+  selectPlayers,
+  (state: PlayerState) => state.status
 );
-export const selectAllMatches = createSelector(
-  selectMatchState,
-  fromMatch.selectAllMatches
-);
-export const selectMatchTotal = createSelector(
-  selectMatchState,
-  fromMatch.selectMatchTotal
-);
-export const selectMatchById = (matchId: number) =>
-  createSelector(
-    selectMatchState,
-    (matchState) => matchState.entities[matchId]
-  );
-export const selectMatchByQuery = (query: (game: Match) => boolean) =>
-  createSelector(selectMatchState, (state) => {
-    return Object.values(state.entities).find(
-      (game): game is Match => !!game && query(game)
-    );
-  });
-export const selectMatchesByQuery = (query: (game: Match) => boolean) =>
-  createSelector(selectMatchState, (state) => {
-    return Object.values(state.entities).filter(
-      (game): game is Match => !!game && query(game)
-    );
-  });
 
 // TOURNAMENTS
 export const selectTournamentState =
@@ -148,37 +127,6 @@ export const selectEnrolledLeagues = createSelector(
           tournament !== undefined && tournament.isLeague
       )
 );
-
-// PLAYERS
-export const selectPlayerState =
-  createFeatureSelector<fromPlayer.PlayerState>('players');
-export const selectPlayerIds = createSelector(
-  selectPlayerState,
-  fromPlayer.selectPlayerIds
-);
-export const selectPlayerEntities = createSelector(
-  selectPlayerState,
-  fromPlayer.selectPlayerEntities
-);
-export const selectAllPlayers = createSelector(
-  selectPlayerState,
-  fromPlayer.selectAllPlayers
-);
-export const selectPlayerTotal = createSelector(
-  selectPlayerState,
-  fromPlayer.selectPlayerTotal
-);
-export const selectPlayerById = (playerId: number) =>
-  createSelector(
-    selectPlayerState,
-    (playerState) => playerState.entities[playerId]
-  );
-export const selectPlayerByQuery = (query: (player: Player) => boolean) =>
-  createSelector(selectPlayerState, (state) => {
-    return Object.values(state.entities).find(
-      (player): player is Player => !!player && query(player)
-    );
-  });
 
 // IMAGES
 export const selectImageState =
@@ -265,10 +213,6 @@ export const selectOngoingDraft = createSelector(
 export const selectCurrentDraft = createSelector(
   selectDrafts,
   (state: DraftState) => state.current
-);
-export const selectSelectedDraft = createSelector(
-  selectDrafts,
-  (state: DraftState) => state.selected
 );
 
 // ENROLLMENTS

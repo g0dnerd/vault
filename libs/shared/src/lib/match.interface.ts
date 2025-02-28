@@ -5,15 +5,16 @@ export interface Match {
   id: number;
   roundId: number;
   player1Id: number;
-  player1: Player | null;
+  player1?: Player;
   player2Id: number;
-  player2: Player | null;
+  player2?: Player;
   tableNumber: number;
-  player1Wins: number | null;
-  player2Wins: number | null;
-  result: number | null;
-  reportedById: number | null;
-  reportedBy: Player | null;
+  player1Wins?: number;
+  player2Wins?: number;
+  result?: number;
+  reportedById?: number;
+  reportedBy?: Player;
   resultConfirmed: boolean;
-  round: Round | null;
+  round?: Round;
+  opponentName?: string;
 }
