@@ -9,7 +9,6 @@ export const API_ROUTES = {
   USER: '/users',
   PLAYERS: '/draft-players',
   DRAFTS: '/drafts',
-  DRAFT_SCORECARDS: '/draft-scorecards',
   IMAGES: '/images',
 };
 
