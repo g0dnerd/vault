@@ -4,10 +4,11 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Enrollment, Image, Match, Tournament } from '@vault/shared';
+import { Enrollment, Image, Tournament } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
 import { MatchState } from './reducers/match.reducer';
+import { PlayerState } from './reducers/player.reducer';
 
 import * as fromEnrollment from './reducers/enrollment.reducer';
 import * as fromImage from './reducers/image.reducer';
@@ -31,6 +32,16 @@ export const selectMatches = (state: MatchAppState) => state.matches;
 export const selectCurrentMatch = createSelector(
   selectMatches,
   (state: MatchState) => state.current
+);
+
+// PLAYERS
+export interface PlayerAppState {
+  players: PlayerState;
+}
+export const selectPlayers = (state: PlayerAppState) => state.players;
+export const selectCurrentPoolStatus = createSelector(
+  selectPlayers,
+  (state: PlayerState) => state.status
 );
 
 // TOURNAMENTS
