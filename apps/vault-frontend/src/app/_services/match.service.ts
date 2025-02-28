@@ -13,8 +13,8 @@ export class MatchService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getCurrentMatch(draftId: number) {
-    return this.http.get<Match>(`${this.apiUrl}/draft/${draftId}`);
+  getCurrentMatch(tournamentId: number) {
+    return this.http.get<Match>(`${this.apiUrl}/current/${tournamentId}`);
   }
 
   // Reports a result to the API and returns the API response.

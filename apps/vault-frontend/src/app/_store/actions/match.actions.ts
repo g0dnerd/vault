@@ -17,7 +17,7 @@ export const matchStoreFailure = createAction(
 );
 export const initCurrentMatch = createAction(
   MatchActionTypes.INIT_CURRENT_MATCH,
-  props<{ draftId: number }>()
+  props<{ tournamentId: number }>()
 );
 export const initCurrentMatchSuccess = createAction(
   MatchActionTypes.INIT_CURRENT_MATCH_SUCCESS,

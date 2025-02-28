@@ -50,12 +50,18 @@ export class MatchesController {
     return this.matchesService.findAll();
   }
 
-  @Get('draft/:draftId')
+  @Get('current/:tournamentId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: MatchEntity, isArray: true })
-  findForDraft(@Param('draftId', ParseIntPipe) draftId: number) {
-    return this.matchesService.findForDraft(draftId);
+  findForDraft(
+    @Req() req: Request,
+    @Param('tournamentId', ParseIntPipe) tournamentId: number
+  ) {
+    return this.matchesService.findCurrentForTournament(
+      tournamentId,
+      req.user['id']
+    );
   }
 
   @Get(':id')
