@@ -13,27 +13,17 @@ export class EnrollmentsService {
 
   constructor(private http: HttpClient) {}
 
-  getForTournament(tournamentId: number): Observable<Enrollment[]> {
-    return this.http.get<Enrollment[]>(
-      `${this.apiUrl}/tournament/${tournamentId}`
-    );
-  }
-
   getForUser(): Observable<Enrollment[]> {
     return this.http.get<Enrollment[]>(`${this.apiUrl}/current`);
   }
 
-  getForUserAndTournamentId(tournamentId: number): Observable<Enrollment> {
-    return this.http.get<Enrollment>(`${this.apiUrl}/current/${tournamentId}`);
-  }
-
-  getLeaguePlayers(): Observable<Enrollment[]> {
+  getForLeague(): Observable<Enrollment[]> {
     return this.http.get<Enrollment[]>(`${this.apiUrl}/league`);
   }
 
-  enrollUser(tournamentId: number): Observable<Enrollment> {
+  enroll(tournamentId: number): Observable<Enrollment> {
     return this.http.get<Enrollment>(
-      `${this.apiUrl}/register/${tournamentId}`,
+      `${this.apiUrl}/enroll/${tournamentId}`,
       {}
     );
   }

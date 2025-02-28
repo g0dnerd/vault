@@ -40,15 +40,6 @@ export class EnrollmentsController {
     return this.enrollmentsService.create(createEnrollmentDto);
   }
 
-  @Get()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(['ADMIN'])
-  @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
-  findAll() {
-    return this.enrollmentsService.findAll();
-  }
-
   @Get('current')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -99,41 +90,11 @@ export class EnrollmentsController {
     return this.enrollmentsService.remove(id);
   }
 
-  @Get('register/:id')
+  @Get('enroll/:id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: EnrollmentEntity })
   register(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-    return this.enrollmentsService.register(req.user['id'], id);
-  }
-
-  @Get('tournament/:id')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
-  findByTournament(@Param('id', ParseIntPipe) id: number) {
-    return this.enrollmentsService.findByTournament(id);
-  }
-
-  @Get('user/:id')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
-  findByUser(@Param('id', ParseIntPipe) id: number) {
-    return this.enrollmentsService.findByUser(id);
-  }
-
-  @Get('current/:tournamentId')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: EnrollmentEntity })
-  findByUserAndTournament(
-    @Param('tournamentId', ParseIntPipe) tournamentId: number,
-    @Req() req: Request
-  ) {
-    return this.enrollmentsService.findByUserAndTournament(
-      req.user['id'],
-      tournamentId
-    );
+    return this.enrollmentsService.enroll(req.user['id'], id);
   }
 }

@@ -24,7 +24,7 @@ export class EnrollmentsService {
     });
   }
 
-  register(userId: number, tournamentId: number) {
+  enroll(userId: number, tournamentId: number) {
     const createEnrollmentDto = {
       tournamentId,
       userId,
