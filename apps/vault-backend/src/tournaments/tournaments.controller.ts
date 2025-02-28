@@ -42,9 +42,18 @@ export class TournamentsController {
 
   @Get()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiOkResponse({ type: TournamentEntity, isArray: true })
   findAll() {
+    return this.tournamentsService.findAll();
+  }
+
+  @Get('public')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: TournamentEntity, isArray: true })
+  findAllPublic() {
     return this.tournamentsService.findAll();
   }
 
