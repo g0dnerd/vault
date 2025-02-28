@@ -13,16 +13,8 @@ export class ImageService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getAllImages(): Observable<Image[]> {
-    return this.http.get<Image[]>(this.apiUrl);
-  }
-
-  getImagesForPlayer(draftId: number): Observable<Image[]> {
-    return this.http.get<Image[]>(`${this.apiUrl}/draft/${draftId}`);
-  }
-
-  delete(id: number): Observable<Image> {
-    return this.http.delete<Image>(`${this.apiUrl}/${id}`);
+  getUserImages(): Observable<Image[]> {
+    return this.http.get<Image[]>(`${this.apiUrl}/user`);
   }
 
   handleImageUpload(formData: FormData): Observable<Image> {

@@ -47,19 +47,14 @@ export class ImagesService {
     writeStream.end();
   }
 
-  async findForPlayer(draftId: number, userId: number) {
-    const player = await this.prisma.draftPlayer.findFirstOrThrow({
-      where: { draftId, enrollment: { userId } },
-      include: { enrollment: { select: { userId: true } } },
-    });
-    if (player.enrollment.userId !== userId) {
-      throw new UnauthorizedException(
-        'Player is unauthorized to view these images.'
-      );
-    }
+  async findForUser(userId: number) {
     return this.prisma.image.findMany({
       where: {
-        draftPlayerId: player.id,
+        draftPlayer: {
+          enrollment: {
+            userId,
+          },
+        },
       },
     });
   }
