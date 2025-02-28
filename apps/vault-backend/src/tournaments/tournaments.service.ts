@@ -11,12 +11,14 @@ export class TournamentsService {
     return this.prisma.tournament.create({ data: createTournamentDto });
   }
 
-  findPrivate() {
-    return this.prisma.tournament.findMany({ where: { public: false } });
-  }
-
   findAll() {
     return this.prisma.tournament.findMany();
+  }
+
+  findAllPublic() {
+    return this.prisma.tournament.findMany({
+      where: { public: true },
+    });
   }
 
   findOne(id: number) {
