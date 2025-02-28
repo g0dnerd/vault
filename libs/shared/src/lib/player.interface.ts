@@ -7,3 +7,8 @@ export interface Player {
   checkedOut: boolean;
   enrollment?: Enrollment;
 }
+
+export interface PoolStatus {
+  checkedIn: boolean;
+  checkedOut: boolean;
+}
