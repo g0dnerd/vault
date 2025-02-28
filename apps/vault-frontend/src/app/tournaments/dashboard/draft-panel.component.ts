@@ -1,15 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  numberAttribute,
+  OnInit,
+} from '@angular/core';
 import { NgIf } from '@angular/common';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 
-import { Draft } from '@vault/shared';
-import { DraftAppState, selectCurrentDraft, State } from '../../_store';
+import { DraftAppState, MatchAppState, selectCurrentDraft } from '../../_store';
 import { MatchPanelComponent } from './match-panel.component';
 import { MyPoolComponent } from './my-pool.component';
-import { initializePlayerImages } from '../../_store/actions/image.actions';
-import { initializeMatchesForDraft } from '../../_store/actions/match.actions';
+import { initCurrentMatch } from '../../_store/actions/match.actions';
 
 @Component({
   selector: 'app-draft-panel',
@@ -19,17 +22,18 @@ import { initializeMatchesForDraft } from '../../_store/actions/match.actions';
   styleUrl: './draft-panel.component.css',
 })
 export class DraftPanelComponent implements OnInit {
+  @Input({ required: true, transform: numberAttribute }) tournamentId = 0;
   private readonly draftStore$ = inject(Store<DraftAppState>);
-  private readonly store$ = inject(Store<State>);
 
-  currentDraft$: Observable<Draft | null> =
-    this.draftStore$.select(selectCurrentDraft);
+  readonly currentDraft$ = this.draftStore$.select(selectCurrentDraft);
+
+  constructor(private readonly matchStore$: Store<MatchAppState>) {}
 
   ngOnInit() {
     this.currentDraft$.subscribe((draft) => {
+      console.log('Draft panel has draftId ', draft?.id);
       if (draft) {
-        this.store$.dispatch(initializePlayerImages({ draftId: draft.id }));
-        this.store$.dispatch(initializeMatchesForDraft({ draftId: draft.id }));
+        this.matchStore$.dispatch(initCurrentMatch({ draftId: draft.id }));
       }
     });
   }

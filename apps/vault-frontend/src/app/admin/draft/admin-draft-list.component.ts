@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 
 import { Draft } from '@vault/shared';
 import { DraftAppState, selectOngoingDraft } from '../../_store';
-import { initOngoing } from '../../_store/actions/draft.actions';
+import { initOngoingDrafts } from '../../_store/actions/draft.actions';
 import { AdminDraftCardComponent } from './admin-draft-card.component';
 
 @Component({
@@ -21,10 +21,12 @@ export class AdminDraftListComponent implements OnInit {
 
   constructor(private readonly draftsStore$: Store<DraftAppState>) {}
 
-  @Input({ transform: numberAttribute }) id = 0;
+  @Input({ transform: numberAttribute }) tournamentId = 0;
 
   ngOnInit(): void {
-    this.draftsStore$.dispatch(initOngoing({ id: this.id }));
+    this.draftsStore$.dispatch(
+      initOngoingDrafts({ tournamentId: this.tournamentId })
+    );
     this.drafts$ = this.draftsStore$.select(selectOngoingDraft);
   }
 }

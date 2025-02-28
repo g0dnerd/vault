@@ -1,8 +1,13 @@
 <div class="card">
   <div class="card-body text-white" style="background-color: #000">
-    <h5 class="card-title">{{ tournamentName }}</h5>
-    <p class="card-subtitle mb-2">Capacity: {{ tournamentCapacity }}</p>
-    <a routerLink="/tournaments/{{ tournamentId }}" class="card-link">
+    <h5 class="card-title">{{ (tournament$ | ngrxPush)?.name }}</h5>
+    <p class="card-subtitle mb-2">
+      Capacity: {{ (tournament$ | ngrxPush)?.playerCapacity }}
+    </p>
+    <a
+      routerLink="/tournaments/{{ (tournament$ | ngrxPush)?.id }}"
+      class="card-link"
+    >
       Go to tournament dashboard
     </a>
   </div>

@@ -13,13 +13,11 @@ import * as draftEffects from '../_store/effects/draft.effects';
 import * as enrollmentEffects from '../_store/effects/enrollment.effects';
 import * as imageEffects from '../_store/effects/image.effects';
 import * as matchEffects from '../_store/effects/match.effects';
-import * as playerEffects from '../_store/effects/player.effects';
 import * as tournamentEffects from '../_store/effects/tournaments.effects';
 import { draftReducer } from '../_store/reducers/draft.reducer';
 import { enrollmentReducer } from '../_store/reducers/enrollment.reducer';
 import { imageReducer } from '../_store/reducers/image.reducer';
 import { matchReducer } from '../_store/reducers/match.reducer';
-import { playerReducer } from '../_store/reducers/player.reducer';
 import { tournamentReducer } from '../_store/reducers/tournaments.reducer';
 
 export const TOURNAMENT_ROUTES: Routes = [
@@ -35,8 +33,6 @@ export const TOURNAMENT_ROUTES: Routes = [
       provideState('images', imageReducer),
       provideEffects(imageEffects),
       provideState('matches', matchReducer),
-      provideEffects(playerEffects),
-      provideState('players', playerReducer),
       provideEffects(enrollmentEffects),
       provideState('enrollments', enrollmentReducer),
     ],
@@ -59,7 +55,7 @@ export const TOURNAMENT_ROUTES: Routes = [
     data: { requiredRole: Role.Admin },
   },
   {
-    path: ':id',
+    path: ':tournamentId',
     component: TournamentDashboardComponent,
   },
 ];
