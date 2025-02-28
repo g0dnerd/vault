@@ -10,15 +10,15 @@ import {
   MatchWebSocketService,
   AlertService,
   MatchService,
-} from '../../_services';
+} from '../../../_services';
 import {
   AuthAppState,
   MatchAppState,
   selectCurrentMatch,
   selectUsername,
-} from '../../_store';
-import { updateCurrentMatch } from '../../_store/actions/match.actions';
-import { ReportResultFormComponent } from '../report-result-form/report-result-form.component';
+} from '../../../_store';
+import { updateCurrentMatch } from '../../../_store/actions/match.actions';
+import { ReportResultFormComponent } from '../../report-result-form/report-result-form.component';
 
 @Component({
   selector: 'app-match-panel',

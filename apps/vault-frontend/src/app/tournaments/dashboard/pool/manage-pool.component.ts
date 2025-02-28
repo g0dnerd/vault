@@ -5,9 +5,9 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { Image } from '@vault/shared';
-import { dev } from '../../../environments/environment';
-import { AlertService, ImageService } from '../../_services';
-import { selectAllImages, State } from '../../_store';
+import { dev } from '../../../../environments/environment';
+import { AlertService, ImageService } from '../../../_services';
+import { selectAllImages, State } from '../../../_store';
 
 @Component({
   selector: 'app-manage-pool',
@@ -17,7 +17,6 @@ import { selectAllImages, State } from '../../_store';
   styleUrl: './manage-pool.component.css',
 })
 export class ManagePoolComponent {
-  draftId = input.required<number>();
   loading = false;
   submitted = false;
   imgFile: File | null = null;
@@ -53,7 +52,6 @@ export class ManagePoolComponent {
 
     const formData = new FormData();
     formData.append('file', this.imgFile);
-    formData.append('draftId', String(this.draftId()));
     this.imageService.handleImageUpload(formData).subscribe();
     this.imgFile = null;
     this.loading = false;

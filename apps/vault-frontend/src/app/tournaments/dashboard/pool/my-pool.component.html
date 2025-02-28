@@ -1,5 +1,5 @@
 <h5 class="card-title">My pool</h5>
-<app-manage-pool [draftId]="draftId()" />
+<app-manage-pool />
 <p
   class="card-text"
   *ngIf="(poolStatus$ | ngrxPush)?.checkedIn; else notCheckedIn"
