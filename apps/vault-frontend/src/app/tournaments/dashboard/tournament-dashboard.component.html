@@ -4,6 +4,5 @@
   <ng-container *ngIf="(tournament$ | ngrxPush)?.isLeague">
     <p class="elo-panel">Your elo: {{ (enrollment$ | ngrxPush)?.elo }}</p>
   </ng-container>
-  <p class="elo-panel"></p>
-  <app-draft-panel></app-draft-panel>
+  <app-draft-panel [tournamentId]="tournamentId" />
 </div>
