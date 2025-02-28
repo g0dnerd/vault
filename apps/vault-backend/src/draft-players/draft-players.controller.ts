@@ -84,4 +84,12 @@ export class DraftPlayersController {
       req.user['id']
     );
   }
+
+  @Get('pool-status/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: DraftPlayerEntity })
+  getPoolStatus(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    return this.draftPlayersService.getPoolStatus(id, req.user['id']);
+  }
 }
