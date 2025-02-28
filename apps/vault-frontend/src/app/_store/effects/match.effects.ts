@@ -9,8 +9,8 @@ export const initCurrentMatchEffect = createEffect(
   (actions$ = inject(Actions), matchService = inject(MatchService)) => {
     return actions$.pipe(
       ofType(MatchActions.initCurrentMatch),
-      mergeMap(({ draftId }) => {
-        return matchService.getCurrentMatch(draftId).pipe(
+      mergeMap(({ tournamentId }) => {
+        return matchService.getCurrentMatch(tournamentId).pipe(
           map((current) => {
             return MatchActions.initCurrentMatchSuccess({
               current,
