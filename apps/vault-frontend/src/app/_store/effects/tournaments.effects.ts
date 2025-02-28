@@ -33,7 +33,7 @@ export const initAllTournaments = createEffect(
     return actions$.pipe(
       ofType(TournamentsActions.initializeAllTournaments),
       mergeMap(() => {
-        return tournamentService.getAllTournaments().pipe(
+        return tournamentService.getAllPublicTournaments().pipe(
           map((tournaments) => {
             return TournamentsActions.loadTournaments({ tournaments });
           }),
