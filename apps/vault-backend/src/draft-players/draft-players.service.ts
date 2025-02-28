@@ -71,4 +71,19 @@ export class DraftPlayersService {
       },
     });
   }
+
+  async getPoolStatus(draftId: number, userId: number) {
+    return this.prisma.draftPlayer.findFirstOrThrow({
+      where: {
+        enrollment: {
+          userId,
+        },
+        draftId,
+      },
+      select: {
+        checkedIn: true,
+        checkedOut: true,
+      },
+    });
+  }
 }

@@ -1,12 +1,11 @@
 import { NgIf } from '@angular/common';
-import { Component, inject, Input, numberAttribute } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { PushPipe } from '@ngrx/component';
-import { filter, Observable, of } from 'rxjs';
 
-import { Player } from '@vault/shared';
+import { PoolStatus } from '@vault/shared';
 import { ManagePoolComponent } from './manage-pool.component';
-import { Store } from '@ngrx/store';
-import { selectPlayerByQuery, State } from '../../_store';
+import { PlayerService } from '../../_services/player.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-my-pool',
@@ -15,15 +14,13 @@ import { selectPlayerByQuery, State } from '../../_store';
   templateUrl: './my-pool.component.html',
   styleUrl: './my-pool.component.css',
 })
-export class MyPoolComponent {
-  @Input({ required: true, transform: numberAttribute }) id = 0;
+export class MyPoolComponent implements OnInit {
+  draftId = input.required<number>();
+  poolStatus$: Observable<PoolStatus | null> = of(null);
 
-  private readonly store$ = inject(Store<State>);
+  constructor(private readonly playerService: PlayerService) {}
 
-  readonly checkinStatus$: Observable<boolean> = of(false);
-  readonly checkoutStatus$: Observable<boolean> = of(false);
-
-  player$: Observable<Player | undefined> = this.store$
-    .select(selectPlayerByQuery((player) => player.draftId == this.id))
-    .pipe(filter((player): player is Player => player != undefined));
+  ngOnInit() {
+    this.poolStatus$ = this.playerService.getPoolStatuses(this.draftId());
+  }
 }
