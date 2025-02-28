@@ -72,13 +72,17 @@ export class DraftPlayersService {
     });
   }
 
-  async getPoolStatus(draftId: number, userId: number) {
+  async getPoolStatus(tournamentId: number, userId: number) {
     return this.prisma.draftPlayer.findFirstOrThrow({
       where: {
         enrollment: {
           userId,
+          tournamentId,
         },
-        draftId,
+        draft: {
+          started: true,
+          finished: false,
+        },
       },
       select: {
         checkedIn: true,

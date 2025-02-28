@@ -13,7 +13,7 @@ export class PlayerService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getPoolStatuses(draftId: number): Observable<Player> {
-    return this.http.get<Player>(`${this.apiUrl}/pool-status/${draftId}`);
+  getPoolStatuses(tournamentId: number): Observable<Player> {
+    return this.http.get<Player>(`${this.apiUrl}/pool-status/${tournamentId}`);
   }
 }
