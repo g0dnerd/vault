@@ -13,8 +13,8 @@ export class MatchService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getMatchesForDraft(draftId: number): Observable<Match[]> {
-    return this.http.get<Match[]>(`${this.apiUrl}/draft/${draftId}`);
+  getCurrentMatch(draftId: number) {
+    return this.http.get<Match>(`${this.apiUrl}/draft/${draftId}`);
   }
 
   // Reports a result to the API and returns the API response.
