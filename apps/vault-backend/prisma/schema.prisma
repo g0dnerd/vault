@@ -55,6 +55,10 @@ model DraftPlayer {
   reportedResults Match[]
   checkedIn       Boolean    @default(false)
   checkedOut      Boolean    @default(false)
+  dropped         Boolean    @default(false)
+  seat            Int        @default(0)
+  bye             Boolean    @default(false)
+  hadBye          Boolean    @default(false)
   Image           Image[]
 
   @@unique(fields: [draftId, enrollmentId], name: "draftEnrollment")
@@ -71,7 +75,6 @@ model Match {
   tableNumber     Int
   player1Wins     Int?
   player2Wins     Int?
-  result          Int? // -1 = Player 1 wins, 0 = draw, 1 = Player 2 wins
   reportedBy      DraftPlayer? @relation(fields: [reportedById], references: [id])
   reportedById    Int?
   resultConfirmed Boolean?
