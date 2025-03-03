@@ -55,3 +55,26 @@ export const initCurrentEffect = createEffect(
   },
   { functional: true, dispatch: true }
 );
+
+export const initSingleDraftEffect = createEffect(
+  (actions$ = inject(Actions), draftService = inject(DraftService)) => {
+    return actions$.pipe(
+      ofType(DraftActions.initSingleDraft),
+      mergeMap(({ draftId }) => {
+        return draftService.getDraftById(draftId).pipe(
+          map((current) => {
+            return DraftActions.initCurrentDraftSuccess({ current });
+          }),
+          catchError((error) => {
+            return of(
+              DraftActions.draftStoreFailure({
+                errorMessage: error.message,
+              })
+            );
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);

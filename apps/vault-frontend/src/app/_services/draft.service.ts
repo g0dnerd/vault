@@ -20,4 +20,8 @@ export class DraftService {
   getCurrentDraft(tournamentId: number): Observable<Draft> {
     return this.http.get<Draft>(`${this.apiUrl}/current/${tournamentId}`);
   }
+
+  getDraftById(draftId: number): Observable<Draft> {
+    return this.http.get<Draft>(`${this.apiUrl}/${draftId}`);
+  }
 }
