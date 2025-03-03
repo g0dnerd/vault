@@ -41,13 +41,13 @@ export class MatchesController {
     return this.matchesService.create(createMatchDto);
   }
 
-  @Get()
+  @Get('ongoing/:draftId')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['ADMIN'])
   @ApiOkResponse({ type: MatchEntity, isArray: true })
-  findAll() {
-    return this.matchesService.findAll();
+  findAll(@Param('draftId', ParseIntPipe) draftId: number) {
+    return this.matchesService.findOngoing(draftId);
   }
 
   @Get('current/:tournamentId')
@@ -74,6 +74,15 @@ export class MatchesController {
       throw new NotFoundException(`Match with ID ${id} does not exist.`);
     }
     return match;
+  }
+
+  @Get('/pair-round/:draftId')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
+  @ApiCreatedResponse({ type: MatchEntity, isArray: true })
+  pairRound(@Param('draftId', ParseIntPipe) draftId: number) {
+    return this.matchesService.pairRound(draftId);
   }
 
   @Patch('/report/:id')
