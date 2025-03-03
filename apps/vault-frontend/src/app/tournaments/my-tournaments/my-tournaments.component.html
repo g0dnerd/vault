@@ -2,7 +2,17 @@
 <ul class="event-list">
   @defer {
   <li *ngFor="let tournament of enrolledTournaments$ | ngrxPush; index as i">
-    <app-tournament-detail-card [tournamentId]="tournament.id" />
+    <div class="card">
+      <div class="card-body text-white" style="background-color: #000">
+        <h5 class="card-title">{{ tournament.name }}</h5>
+        <p class="card-subtitle mb-2">
+          Capacity: {{ tournament.playerCapacity }}
+        </p>
+        <a routerLink="/tournaments/{{ tournament.id }}" class="card-link">
+          Go to tournament dashboard
+        </a>
+      </div>
+    </div>
   </li>
   <li *ngIf="!(enrolledTournaments$ | ngrxPush)?.length">
     You are not enrolled in any tournaments.

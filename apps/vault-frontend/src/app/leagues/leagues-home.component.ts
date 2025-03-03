@@ -11,7 +11,7 @@ import {
   State,
 } from '../_store';
 import {
-  initializeAllTournaments,
+  initializePublicTournaments,
   initializeAvailableTournaments,
   initializeEnrolledTournaments,
   register,
@@ -43,7 +43,7 @@ export class LeaguesHomeComponent implements OnInit {
   );
 
   ngOnInit() {
-    this.store$.dispatch(initializeAllTournaments());
+    this.store$.dispatch(initializePublicTournaments());
     this.store$.dispatch(initializeAvailableTournaments());
     this.store$.dispatch(initializeEnrolledTournaments());
   }

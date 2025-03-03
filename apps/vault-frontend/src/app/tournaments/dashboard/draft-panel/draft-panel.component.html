@@ -1,5 +1,10 @@
 <div class="card">
   <h4 class="card-header">Current Draft</h4>
-  <app-my-pool />
-  <app-match-panel />
+  <ng-container *ngIf="draft$ | ngrxPush; else noDraft">
+    <app-my-pool />
+    <app-match-panel />
+  </ng-container>
+  <ng-template #noDraft>
+    <p class="no-draft">Waiting for a draft to start</p>
+  </ng-template>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, numberAttribute, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import {
@@ -8,15 +8,26 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { PushPipe } from '@ngrx/component';
+import { Store } from '@ngrx/store';
+import { firstValueFrom, Observable } from 'rxjs';
 
+import { Match } from '@vault/shared';
 import { MatchService } from '../../_services';
 import { matchSumValidator } from '../../_helpers/match-form.validator';
+import { MatchAppState, selectCurrentMatch } from '../../_store';
 
 @Component({
   selector: 'app-report-result-form',
   standalone: true,
-  imports: [MatButtonToggleModule, ReactiveFormsModule, NgClass, NgIf, NgFor],
+  imports: [
+    PushPipe,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
+    NgClass,
+    NgIf,
+    NgFor,
+  ],
   templateUrl: './report-result-form.component.html',
   styleUrl: './report-result-form.component.css',
 })
@@ -25,9 +36,10 @@ export class ReportResultFormComponent implements OnInit {
   loading = false;
   submitted = false;
 
-  @Input({ transform: numberAttribute }) id = 0;
-  @Input() p1name: string | undefined = '';
-  @Input() p2name: string | undefined = '';
+  private readonly matchStore$ = inject(Store<MatchAppState>);
+
+  readonly currentMatch$: Observable<Match | null> =
+    this.matchStore$.select(selectCurrentMatch);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,6 +48,7 @@ export class ReportResultFormComponent implements OnInit {
     // Initialize result reporting form
     this.form = this.formBuilder.group(
       {
+        matchId: new FormControl(0, [Validators.required, Validators.min(0)]),
         player1Wins: new FormControl(0, [
           Validators.required,
           Validators.min(0),
@@ -52,9 +65,11 @@ export class ReportResultFormComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     // Initial form values
+    const matchId = await firstValueFrom(this.currentMatch$);
     this.form.setValue({
+      matchId,
       player1Wins: 0,
       player2Wins: 0,
     });
@@ -66,25 +81,14 @@ export class ReportResultFormComponent implements OnInit {
 
   async onSubmit() {
     this.submitted = true;
-    // this.alertService.clear();
 
     if (this.form.invalid) return;
     this.loading = true;
 
-    // Set the `result` field, where
-    // -1: p1 wins, 0: draw, 1: p2 wins
-    const result =
-      this.f['player1Wins'].value === this.f['player2Wins'].value
-        ? 0
-        : this.f['player1Wins'] > this.f['player2Wins']
-        ? -1
-        : 1;
-
     await firstValueFrom(
-      this.matchService.reportResult(this.id, {
+      this.matchService.reportResult(this.f['matchId'].value, {
         player1Wins: this.f['player1Wins'].value,
         player2Wins: this.f['player2Wins'].value,
-        result,
       })
     );
     this.loading = false;

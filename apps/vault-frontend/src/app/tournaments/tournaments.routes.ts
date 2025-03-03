@@ -4,10 +4,14 @@ import { provideState } from '@ngrx/store';
 
 import { Role } from '@vault/shared';
 import { AvailableTournamentsComponent } from './available-tournaments';
-import { MyTournamentsComponent } from './my-tournaments';
+import { MyTournamentsComponent } from './my-tournaments/my-tournaments.component';
 import { TournamentDashboardComponent } from './dashboard/tournament-dashboard.component';
 import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
-import { AdminTournamentDashboardComponent } from '../admin/admin-tournament-dashboard.component';
+import {
+  AdminTournamentDashboardComponent,
+  AdminDraftPanelComponent,
+  AdminMatchPanelComponent,
+} from '../admin';
 import { LeaguesHomeComponent } from '../leagues/leagues-home.component';
 import * as draftEffects from '../_store/effects/draft.effects';
 import * as enrollmentEffects from '../_store/effects/enrollment.effects';
@@ -54,12 +58,22 @@ export const TOURNAMENT_ROUTES: Routes = [
     data: { requiredRole: Role.Admin },
   },
   {
-    path: 'admin/:id',
+    path: ':tournamentId',
+    component: TournamentDashboardComponent,
+  },
+  {
+    path: 'admin/:tournamentId',
     component: AdminTournamentDashboardComponent,
     data: { requiredRole: Role.Admin },
   },
   {
-    path: ':tournamentId',
-    component: TournamentDashboardComponent,
+    path: 'admin/draft/:draftId',
+    component: AdminDraftPanelComponent,
+    data: { requiredRole: Role.Admin },
+  },
+  {
+    path: 'admin/match/:matchId',
+    component: AdminMatchPanelComponent,
+    data: { requiredRole: Role.Admin },
   },
 ];

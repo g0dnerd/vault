@@ -23,7 +23,7 @@ import {
   State,
 } from '../../_store';
 import { initCurrentDraft } from '../../_store/actions/draft.actions';
-import { initializeAllTournaments } from '../../_store/actions/tournaments.actions';
+import { initializePublicTournaments } from '../../_store/actions/tournaments.actions';
 import { initializeAllEnrollments } from '../../_store/actions/enrollment.actions';
 import { initCurrentMatch } from '../../_store/actions/match.actions';
 import { initProfile } from '../../_store/actions/auth.actions';
@@ -50,7 +50,7 @@ export class TournamentDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.authStore$.dispatch(initProfile());
-    this.store$.dispatch(initializeAllTournaments());
+    this.store$.dispatch(initializePublicTournaments());
     this.store$.dispatch(initializeAllEnrollments());
     this.draftStore$.dispatch(
       initCurrentDraft({ tournamentId: this.tournamentId })
