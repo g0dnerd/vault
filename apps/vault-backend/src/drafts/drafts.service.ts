@@ -21,15 +21,7 @@ export class DraftsService {
       include: {
         players: {
           select: {
-            enrollment: {
-              select: {
-                user: {
-                  select: {
-                    username: true,
-                  },
-                },
-              },
-            },
+            enrollment: { select: { user: { select: { username: true } } } },
           },
         },
         cube: {
@@ -59,7 +51,16 @@ export class DraftsService {
         },
       },
       include: {
-        players: true,
+        players: {
+          select: {
+            enrollment: { select: { user: { select: { username: true } } } },
+          },
+        },
+        cube: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
   }
