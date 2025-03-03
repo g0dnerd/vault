@@ -3,13 +3,11 @@ import { Player } from './player.interface';
 
 export interface Draft {
   id: number;
-  phaseId: number;
-  cubeId: number;
   tableFirst?: number;
   tableLast?: number;
-  started?: boolean;
-  finished?: boolean;
-  seated?: boolean;
+  started: boolean;
+  finished: boolean;
+  seated: boolean;
   players?: Player[];
-  cube: Cube;
+  cube?: Cube;
 }
