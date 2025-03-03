@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { KeyValuePipe, NgClass, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PushPipe } from '@ngrx/component';
@@ -40,6 +40,7 @@ export class MatchPanelComponent {
   private readonly matchWebSocketService = inject(MatchWebSocketService);
 
   loading = false;
+  result = signal(-1);
 
   currentMatch$: Observable<Match | null> =
     this.matchStore$.select(selectCurrentMatch);
@@ -57,6 +58,17 @@ export class MatchPanelComponent {
       .subscribe((game: Match) => {
         this.matchStore$.dispatch(updateCurrentMatch({ changes: game }));
       });
+    this.currentMatch$.subscribe((game) => {
+      if (game) {
+        const result =
+          game.player1Wins > game.player2Wins
+            ? 1
+            : game.player2Wins > game.player1Wins
+            ? 2
+            : 0;
+        this.result.set(result);
+      }
+    });
   }
 
   // Handles result confirmation

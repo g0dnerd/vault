@@ -10,7 +10,10 @@
       </li>
     </ul>
     <h5 class="card-subtitle mb-2">Matches:</h5>
-    <ul class="admin-match-list">
+    <ul
+      class="admin-match-list"
+      *ngIf="(matches$ | ngrxPush)?.length; else noMatches"
+    >
       <li
         *ngFor="let game of matches$ | ngrxPush; index as i"
         class="admin-match-embed"
@@ -29,17 +32,18 @@
           :
           {{ game.player2Wins }}
         </span>
-        <ng-template #pending> (Result pending) </ng-template>
-        @defer {
-        <app-report-result-form
-          *ngIf="!game.result || !game.resultConfirmed; else confirmResult"
-          [id]="game?.id"
-          [p1name]="game?.player1?.enrollment?.user?.username"
-          [p2name]="game?.player2?.enrollment?.user?.username"
-        />
-        <ng-template #confirmResult> </ng-template>
-        }
+        <ng-template #pending> (Result pending)</ng-template>
+        <a routerLink="/tournaments/admin/match/{{ game.id }}" class="card-link"
+          >View match</a
+        >
       </li>
     </ul>
+    <ng-template #noMatches>
+      <div>
+        <button class="btn btn-primary" (click)="pairRound()">
+          Pair Round
+        </button>
+      </div>
+    </ng-template>
   </div>
 </div>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
@@ -7,21 +8,20 @@ import { PushPipe } from '@ngrx/component';
 import { Tournament } from '@vault/shared';
 import { selectAllTournaments, State } from '../_store';
 import { initializeAllTournaments } from '../_store/actions/tournaments.actions';
-import { TournamentAdminCardComponent } from './tournament-admin-card.component';
 
 @Component({
   selector: 'app-admin-tournament-list',
   standalone: true,
-  imports: [CommonModule, PushPipe, TournamentAdminCardComponent],
+  imports: [CommonModule, PushPipe, RouterLink],
   templateUrl: './admin-tournament-list.component.html',
   styleUrl: './admin-tournament-list.component.css',
 })
 export class AdminTournamentListComponent implements OnInit {
   allTournaments$: Observable<Tournament[]> = of([]);
 
-  constructor(private readonly tournamentsStore$: Store<State>) {}
+  private readonly tournamentsStore$ = inject(Store<State>);
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.tournamentsStore$.dispatch(initializeAllTournaments());
     this.allTournaments$ = this.tournamentsStore$.select(selectAllTournaments);
   }

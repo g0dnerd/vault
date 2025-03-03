@@ -1,13 +1,17 @@
 <div class="admin-list tournaments all">
   <h1>All Tournaments</h1>
-
   <ul class="admin-list">
     <li *ngFor="let tournament of allTournaments$ | ngrxPush; index as i">
-      <app-tournament-admin-card
-        [tournamentId]="tournament.id"
-        [tournamentName]="tournament.name"
-        [tournamentCapacity]="tournament.playerCapacity"
-      />
+      <div class="card">
+        <h4 class="card-header">{{ tournament.name }}</h4>
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <p class="card-subtitle mb-2">
+            Capacity: {{ tournament.playerCapacity }} |
+            <a routerLink="/tournaments/admin/{{ tournament.id }}">Dashboard</a>
+          </p>
+        </div>
+      </div>
     </li>
     <li *ngIf="!(allTournaments$ | ngrxPush)?.length">
       There are no tournaments.

@@ -8,7 +8,7 @@ import { Enrollment, Tournament, User } from '@vault/shared';
 import { RegisterPanelComponent } from './register-panel.component';
 import { AuthAppState, selectAvailableTournaments, State } from '../../_store';
 import {
-  initializeAllTournaments,
+  initializePublicTournaments,
   initializeAvailableTournaments,
   register,
 } from '../../_store/actions/tournaments.actions';
@@ -27,7 +27,7 @@ export class AvailableTournamentsComponent implements OnInit {
   );
 
   ngOnInit() {
-    this.store$.dispatch(initializeAllTournaments());
+    this.store$.dispatch(initializePublicTournaments());
     this.store$.dispatch(initializeAvailableTournaments());
   }
 
