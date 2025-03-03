@@ -13,8 +13,16 @@ export class MatchService {
 
   constructor(private readonly http: HttpClient) {}
 
+  getMatchById(matchId: number) {
+    return this.http.get<Match>(`${this.apiUrl}/${matchId}`);
+  }
+
   getCurrentMatch(tournamentId: number) {
     return this.http.get<Match>(`${this.apiUrl}/current/${tournamentId}`);
+  }
+
+  getOngoingMatches(draftId: number) {
+    return this.http.get<Match[]>(`${this.apiUrl}/ongoing/${draftId}`);
   }
 
   // Reports a result to the API and returns the API response.
@@ -27,5 +35,9 @@ export class MatchService {
     return this.http.patch<Match>(`${this.apiUrl}/confirm/${matchId}`, {
       resultConfirmed: true,
     });
+  }
+
+  pairRound(draftId: number): Observable<Match[]> {
+    return this.http.get<Match[]>(`${this.apiUrl}/pair-round/${draftId}`);
   }
 }
