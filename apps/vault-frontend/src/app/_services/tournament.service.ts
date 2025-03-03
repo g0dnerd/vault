@@ -21,7 +21,7 @@ export class TournamentService {
     return this.http.get<Tournament[]>(this.apiUrl);
   }
 
-  getAllPublicTournaments(): Observable<Tournament[]> {
+  getPublicTournaments(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.apiUrl}/public`);
   }
 
