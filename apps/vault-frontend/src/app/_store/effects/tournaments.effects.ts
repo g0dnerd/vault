@@ -23,9 +23,7 @@ export const tournamentStoreFailure = createEffect(
   { functional: true, dispatch: false }
 );
 
-// Gets all tournaments from the tournamentService
-// and stores them in state.
-export const initAllTournaments = createEffect(
+export const initAllTournamentsEffect = createEffect(
   (
     actions$ = inject(Actions),
     tournamentService = inject(TournamentService)
@@ -33,7 +31,35 @@ export const initAllTournaments = createEffect(
     return actions$.pipe(
       ofType(TournamentsActions.initializeAllTournaments),
       mergeMap(() => {
-        return tournamentService.getAllPublicTournaments().pipe(
+        return tournamentService.getAllTournaments().pipe(
+          map((tournaments) => {
+            return TournamentsActions.loadTournaments({ tournaments });
+          }),
+          catchError((error) => {
+            return of(
+              TournamentsActions.tournamentStoreFailure({
+                errorMessage: error.message,
+              })
+            );
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
+// Gets all tournaments from the tournamentService
+// and stores them in state.
+export const initPublicTournamentsEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    tournamentService = inject(TournamentService)
+  ) => {
+    return actions$.pipe(
+      ofType(TournamentsActions.initializePublicTournaments),
+      mergeMap(() => {
+        return tournamentService.getPublicTournaments().pipe(
           map((tournaments) => {
             return TournamentsActions.loadTournaments({ tournaments });
           }),

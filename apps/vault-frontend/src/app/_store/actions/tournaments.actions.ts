@@ -9,6 +9,7 @@ const TYPE = '[Tournaments/API]';
 export enum TournamentActionTypes {
   TOURNAMENT_STORE_FAILURE = `${TYPE} Error`,
   INITIALIZE_ALL_TOURNAMENTS = `${TYPE} Initialize all tournaments`,
+  INITIALIZE_PUBLIC_TOURNAMENTS = `${TYPE} Initialize all public tournaments`,
   INITIALIZE_AVAILABLE_TOURNAMENTS = `${TYPE} Initialize available tournaments`,
   INITIALIZE_ENROLLED_TOURNAMENTS = `${TYPE} Initialize enrolled tournaments`,
   SET_AVAILABLE_TOURNAMENTS = `${TYPE} Set available tournaments`,
@@ -46,6 +47,9 @@ export const setEnrolledTournaments = createAction(
 );
 export const initializeAllTournaments = createAction(
   TournamentActionTypes.INITIALIZE_ALL_TOURNAMENTS
+);
+export const initializePublicTournaments = createAction(
+  TournamentActionTypes.INITIALIZE_PUBLIC_TOURNAMENTS
 );
 export const initializeAvailableTournaments = createAction(
   TournamentActionTypes.INITIALIZE_AVAILABLE_TOURNAMENTS
