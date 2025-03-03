@@ -4,7 +4,7 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Enrollment, Image, Tournament } from '@vault/shared';
+import { Draft, Enrollment, Image, Tournament } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
 import { MatchState } from './reducers/match.reducer';
@@ -32,6 +32,10 @@ export const selectMatches = (state: MatchAppState) => state.matches;
 export const selectCurrentMatch = createSelector(
   selectMatches,
   (state: MatchState) => state.current
+);
+export const selectOngoingMatches = createSelector(
+  selectMatches,
+  (state: MatchState) => state.ongoing
 );
 
 // PLAYERS
@@ -206,7 +210,7 @@ export interface DraftAppState {
   drafts: DraftState;
 }
 export const selectDrafts = (state: DraftAppState) => state.drafts;
-export const selectOngoingDraft = createSelector(
+export const selectOngoingDrafts = createSelector(
   selectDrafts,
   (state: DraftState) => state.ongoing
 );
@@ -214,6 +218,10 @@ export const selectCurrentDraft = createSelector(
   selectDrafts,
   (state: DraftState) => state.current
 );
+export const selectDraftById = (draftId: number) =>
+  createSelector(selectOngoingDrafts, (ongoing: Draft[]) => {
+    return ongoing.find((draft): draft is Draft => draft.id == draftId);
+  });
 
 // ENROLLMENTS
 export const selectEnrollmentState =

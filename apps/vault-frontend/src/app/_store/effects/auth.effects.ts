@@ -112,6 +112,28 @@ export const initProfileEffect = createEffect(
   { functional: true, dispatch: true }
 );
 
+export const initAdminStatusEffect = createEffect(
+  (actions$ = inject(Actions), accountService = inject(AccountService)) => {
+    return actions$.pipe(
+      ofType(AuthActions.initAdminStatus),
+      mergeMap(() => {
+        return accountService.isCurrentUserAdmin().pipe(
+          map((isAdmin) => {
+            return AuthActions.initAdminStatusSuccess({ isAdmin });
+          }),
+          catchError((error) => {
+            const errorMessage = error
+              ? error[0]
+              : `${AuthActions.updateUser.type} Error while updating user`;
+            return of(AuthActions.initAdminStatusFailure({ errorMessage }));
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
 export const updateUserEffect = createEffect(
   (actions$ = inject(Actions), accountService = inject(AccountService)) => {
     return actions$.pipe(

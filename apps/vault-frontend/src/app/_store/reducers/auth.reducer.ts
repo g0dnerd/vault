@@ -21,7 +21,7 @@ export const authReducer = createReducer(
   initialState,
   on(AuthActions.authSuccess, (state, { token, isAdmin }) => ({
     ...state,
-    token: token,
+    token,
     isAdmin,
     errorMessage: null,
   })),
@@ -39,8 +39,9 @@ export const authReducer = createReducer(
     errorMessage: null,
   })),
   // On failed registration, removes authentication and user from state
-  on(AuthActions.registerFailure, (state, { errorMessage }) => ({
-    ...state,
+  on(AuthActions.registerFailure, (_state, { errorMessage }) => ({
+    isAdmin: false,
+    profileData: null,
     token: null,
     errorMessage,
   })),
@@ -52,6 +53,16 @@ export const authReducer = createReducer(
   on(AuthActions.initProfileFailure, (state, { errorMessage }) => ({
     ...state,
     profileData: null,
+    errorMessage,
+  })),
+  on(AuthActions.initAdminStatusSuccess, (state, { isAdmin }) => ({
+    ...state,
+    isAdmin,
+    errorMessage: null,
+  })),
+  on(AuthActions.initAdminStatusFailure, (state, { errorMessage }) => ({
+    ...state,
+    isAdmin: false,
     errorMessage,
   }))
 );
