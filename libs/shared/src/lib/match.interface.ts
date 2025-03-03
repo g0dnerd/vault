@@ -9,9 +9,8 @@ export interface Match {
   player2Id: number;
   player2?: Player;
   tableNumber: number;
-  player1Wins?: number;
-  player2Wins?: number;
-  result?: number;
+  player1Wins: number;
+  player2Wins: number;
   reportedById?: number;
   reportedBy?: Player;
   resultConfirmed: boolean;
