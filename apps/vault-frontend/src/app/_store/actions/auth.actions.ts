@@ -10,6 +10,9 @@ export enum AuthActionTypes {
   INIT_PROFILE = `${TYPE} Initialize profile data`,
   INIT_PROFILE_SUCCESS = `${TYPE} Initialize profile data success`,
   INIT_PROFILE_FAILURE = `${TYPE} Initialize profile data failure`,
+  INIT_ADMIN_STATUS = `${TYPE} Initialize admin status`,
+  INIT_ADMIN_STATUS_SUCCESS = `${TYPE} Initialize admin status success`,
+  INIT_ADMIN_STATUS_FAILURE = `${TYPE} Initialize admin status failure`,
   LOGIN = `${TYPE} Login`,
   LOGIN_FAILURE = `${TYPE} Login Failure`,
   LOGOUT = `${TYPE} Logout`,
@@ -68,6 +71,18 @@ export const initProfileSuccess = createAction(
 
 export const initProfileFailure = createAction(
   AuthActionTypes.INIT_PROFILE_FAILURE,
+  props<{ errorMessage: string }>()
+);
+
+export const initAdminStatus = createAction(AuthActionTypes.INIT_ADMIN_STATUS);
+
+export const initAdminStatusSuccess = createAction(
+  AuthActionTypes.INIT_ADMIN_STATUS_SUCCESS,
+  props<{ isAdmin: boolean }>()
+);
+
+export const initAdminStatusFailure = createAction(
+  AuthActionTypes.INIT_ADMIN_STATUS_FAILURE,
   props<{ errorMessage: string }>()
 );
 
