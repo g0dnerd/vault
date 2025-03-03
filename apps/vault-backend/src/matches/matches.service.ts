@@ -1,3 +1,6 @@
+import { Graph } from '@dagrejs/graphlib';
+import { munkres } from 'munkres';
+
 import {
   ForbiddenException,
   Injectable,
@@ -9,7 +12,17 @@ import { UpdateMatchDto } from './dto/update-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { MatchGateway } from './matches.gateway';
 import { Role } from '@prisma/client';
-import { eloProportionality } from '@vault/shared';
+import { eloProportionality, Player } from '@vault/shared';
+
+interface PlayerScore {
+  playerId: string;
+  points: number;
+  pmw: number;
+  pgw: number;
+  omw: number;
+  ogw: number;
+  pairings: Set<string>;
+}
 
 @Injectable()
 export class MatchesService {
@@ -22,8 +35,15 @@ export class MatchesService {
     return this.prisma.match.create({ data: createMatchDto });
   }
 
-  findAll() {
+  findOngoing(draftId: number) {
     return this.prisma.match.findMany({
+      where: {
+        round: {
+          started: true,
+          finished: false,
+          draftId,
+        },
+      },
       include: {
         player1: {
           select: {
@@ -48,7 +68,7 @@ export class MatchesService {
   }
 
   async findCurrentForTournament(tournamentId: number, userId: number) {
-    const games = await this.prisma.match.findFirstOrThrow({
+    const games = await this.prisma.match.findFirst({
       where: {
         round: {
           started: true,
@@ -106,8 +126,16 @@ export class MatchesService {
     return this.prisma.match.findUnique({
       where: { id },
       include: {
-        player1: true,
-        player2: true,
+        player1: {
+          select: {
+            enrollment: { select: { user: { select: { username: true } } } },
+          },
+        },
+        player2: {
+          select: {
+            enrollment: { select: { user: { select: { username: true } } } },
+          },
+        },
       },
     });
   }
@@ -276,5 +304,299 @@ export class MatchesService {
 
   remove(id: number) {
     return this.prisma.match.delete({ where: { id } });
+  }
+
+  async pairRound(draftId: number) {
+    const draft = await this.prisma.draft.findUnique({
+      where: { id: draftId },
+      include: {
+        phase: {
+          select: { roundAmount: true },
+        },
+      },
+    });
+    // Check if there is a round to pair
+    const existingRounds = await this.prisma.round.findMany({
+      where: {
+        draftId,
+        finished: true,
+      },
+      orderBy: {
+        roundIndex: 'desc',
+      },
+    });
+    if (existingRounds) {
+      throw new InternalServerErrorException('No round to pair');
+    }
+    const currentRoundIdx = existingRounds[0].roundIndex;
+    if (currentRoundIdx >= draft.phase.roundAmount) {
+      throw new InternalServerErrorException('Maximum round number reached');
+    }
+
+    const data = {
+      draftId,
+      roundIndex: currentRoundIdx + 1,
+    };
+
+    const newRound = await this.prisma.round.create({
+      data,
+    });
+
+    let playerScores = await this.getPlayerScores(draftId);
+    let pointLists = {};
+    let pointTotals = [];
+    let countPoints = [];
+    let openTable = draft.tableFirst;
+
+    for (const player of playerScores) {
+      let found = false;
+      for (let p in pointLists) {
+        if (p === `${player.points}_1`) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        pointLists[`${player.points}_1`] = [];
+        countPoints[player.points] = 1;
+      }
+      if (
+        pointLists[`${player.points}_${countPoints[player.points]}`].length > 25
+      ) {
+        countPoints[player.points] += 1;
+        pointLists[`${player.points}_${countPoints[player.points]}`] = [];
+      }
+      pointLists[`${player.points}_${countPoints[player.points]}`].push(player);
+    }
+
+    for (const points in pointLists) {
+      pointTotals.push(points);
+    }
+
+    pointTotals.sort((a, b) => {
+      const a_pts = Number(a.split('_')[0]);
+      const b_pts = Number(b.split('_')[0]);
+      if (a_pts < b_pts) {
+        return 1;
+      }
+      if (a_pts > b_pts) {
+        return -1;
+      }
+      return 0;
+    });
+
+    const matches = [];
+    for (const points of pointTotals) {
+      const bracketGraph = new Graph();
+      pointLists[points].forEach((player: PlayerScore) => {
+        bracketGraph.setNode(String(player.playerId), player);
+      });
+
+      bracketGraph.nodes().forEach((playerId) => {
+        const player = bracketGraph.node(playerId);
+        bracketGraph.nodes().forEach((opponentId) => {
+          const opponent = bracketGraph.node(opponentId);
+          if (!player.pairings.has(opponentId) && playerId !== opponentId) {
+            let wgt = Math.floor(Math.random() * 9) + 1;
+            if (
+              player.draft_score > parseInt(points.split('_')[0]) ||
+              opponent.draft_score > parseInt(points.split('_')[0])
+            ) {
+              wgt = 10;
+            }
+            bracketGraph.setEdge(playerId, opponentId, wgt);
+          }
+        });
+      });
+
+      const pairings = this.getMaxWeightMatching(bracketGraph);
+
+      for (const p in pairings) {
+        if (
+          pointLists[points].some(
+            (player: PlayerScore) => player.playerId === p
+          )
+        ) {
+          matches.push(
+            this.pair(
+              newRound.id,
+              pointLists[points].find(
+                (player: PlayerScore) => player.playerId === p
+              )!,
+              pointLists[points].find(
+                (player: PlayerScore) => player.playerId === pairings[p]
+              )!,
+              openTable
+            )
+          );
+          openTable += 1;
+          pointLists[points] = pointLists[points].filter(
+            (player: PlayerScore) =>
+              player.playerId !== p && player.playerId !== pairings[p]
+          );
+        }
+
+        if (pointLists[points].length > 0) {
+          if (pointTotals.findIndex(points) + 1 == pointTotals.length) {
+            while (pointLists[points].length > 0) {
+              this.assignBye(pointLists[points].pop(0));
+            }
+          }
+        } else {
+          const nextPoints = pointTotals[pointTotals.findIndex(points) + 1];
+          while (pointLists[points].length > 0) {
+            pointLists[nextPoints].append(pointLists[points].pop(0));
+          }
+        }
+      }
+    }
+    return matches;
+  }
+
+  async getPlayerScores(draftId: number): Promise<PlayerScore[]> {
+    const games = await this.prisma.match.findMany({
+      where: {
+        OR: [{ player1: { draftId } }, { player2: { draftId } }],
+      },
+      orderBy: {
+        round: { roundIndex: 'desc' },
+      },
+    });
+    const players = await this.prisma.draftPlayer.findMany({
+      where: {
+        draftId,
+      },
+    });
+    let scores = [];
+    for (const p of players) {
+      const player = await this.prisma.draftPlayer.update({
+        where: {
+          id: p.id,
+        },
+        data: {
+          bye: false,
+        },
+      });
+      let points = 0;
+      let opponentIds = [];
+      let matchesPlayed = 0;
+      let gamesPlayed = 0;
+      let matchesWon = 0;
+      let gamesWon = 0;
+      for (let game of games) {
+        if (player.id === game.player1Id) {
+          opponentIds.push(game.player2Id);
+          matchesPlayed += 1;
+          gamesPlayed += game.player1Wins + game.player2Wins;
+          gamesWon += game.player1Wins;
+          if (game.player1Wins > game.player2Wins) {
+            points += 3;
+            matchesWon += 1;
+          } else if (game.player1Wins === game.player2Wins) {
+            points += 1;
+          }
+        } else if (player.id === game.player2Id) {
+          opponentIds.push(game.player1Id);
+          matchesPlayed += 1;
+          gamesPlayed += game.player1Wins + game.player2Wins;
+          gamesWon += game.player2Wins;
+          if (game.player2Wins > game.player1Wins) {
+            points += 3;
+            matchesWon += 1;
+          } else if (game.player1Wins === game.player2Wins) {
+            points += 1;
+          }
+        }
+      }
+      scores.push({
+        playerId: String(player.id),
+        score: points,
+        matchesPlayed: matchesPlayed,
+        gamesPlayed: gamesPlayed,
+        opponents: opponentIds,
+        pmw: Math.max(matchesWon / matchesPlayed, 0.33),
+        pgw: Math.max(gamesWon / gamesPlayed, 0.33),
+      });
+    }
+
+    let out = [];
+    for (const player of scores) {
+      let omw_total = 0.0;
+      let ogw_total = 0.0;
+      let count = 0;
+      let pairings = new Set<string>();
+
+      for (let opponentId of player.opponentIds) {
+        const opponent = scores.find((opp) => opp.playerId === opponentId);
+        if (opponent) {
+          pairings.add(String(opponentId));
+          count += 1;
+          omw_total += opponent.pmw;
+          ogw_total += opponent.pgw;
+        }
+      }
+      const playerScore: PlayerScore = {
+        playerId: player.playerId,
+        points: player.score,
+        pmw: player.pmw,
+        pgw: player.pgw,
+        omw: omw_total / count,
+        ogw: ogw_total / count,
+        pairings,
+      };
+      out.push(playerScore);
+    }
+    return out;
+  }
+
+  getMaxWeightMatching(graph: Graph): { [key: string]: string } {
+    const costMatrix: number[][] = [];
+    const nodes = graph.nodes();
+
+    for (let i = 0; i < nodes.length; i++) {
+      const row: number[] = [];
+      for (let j = 0; j < nodes.length; j++) {
+        const weight = graph.edge(nodes[i], nodes[j]) || 0;
+        row.push(-weight);
+      }
+      costMatrix.push(row);
+    }
+    const matches = munkres(costMatrix);
+
+    const pairings: { [key: string]: string } = {};
+    for (const [row, col] of matches) {
+      if (row < nodes.length && col < nodes.length) {
+        const player1 = nodes[row];
+        const player2 = nodes[col];
+        if (graph.edge(player1, player2)) {
+          pairings[player1] = player2;
+        }
+      }
+    }
+
+    return pairings;
+  }
+
+  pair(roundId: number, player1: Player, player2: Player, tableNumber: number) {
+    return this.prisma.match.create({
+      data: {
+        roundId,
+        player1Id: player1.id,
+        player2Id: player2.id,
+        tableNumber,
+      },
+    });
+  }
+
+  assignBye(player: Player) {
+    return this.prisma.draftPlayer.update({
+      where: {
+        id: player.id,
+      },
+      data: {
+        hadBye: true,
+        bye: true,
+      },
+    });
   }
 }
