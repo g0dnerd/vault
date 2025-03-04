@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   MinLength,
 } from 'class-validator';
 import { Role } from '@prisma/client';
@@ -30,4 +31,9 @@ export class CreateUserDto {
   @IsOptional()
   @ApiProperty({ required: false, default: [] })
   roles: Role[];
+
+  @IsOptional()
+  @IsUrl()
+  @ApiProperty()
+  profilePicture?: string;
 }

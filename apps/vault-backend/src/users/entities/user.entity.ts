@@ -21,6 +21,9 @@ export class UserEntity implements User {
   @ApiProperty()
   email: string;
 
+  @ApiProperty({ required: false, nullable: true })
+  profilePicture: string | null;
+
   @Exclude()
   createdAt: Date;
 
@@ -30,4 +33,3 @@ export class UserEntity implements User {
   @Exclude()
   password: string;
 }
-
