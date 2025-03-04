@@ -12,7 +12,15 @@ export class CubesService {
   }
 
   findAll() {
-    return this.prisma.cube.findMany();
+    return this.prisma.cube.findMany({
+      include: {
+        creator: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
   }
 
   findOne(id: number) {

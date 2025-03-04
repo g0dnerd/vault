@@ -5,9 +5,14 @@ import { AuthGuard, UnAuthGuard } from './_helpers';
 import { ProfileComponent } from './profile/profile.component';
 import { EditComponent } from './profile/edit.component';
 import { HomeComponent } from './home/home.component';
+import { CubeListComponent } from './cubes/cube-list.component';
 
 export const appRoutes: Route[] = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  {
+    path: '',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'account/login',
     component: LoginComponent,
@@ -19,14 +24,16 @@ export const appRoutes: Route[] = [
     canActivate: [UnAuthGuard],
   },
   {
+    path: 'cubes',
+    component: CubeListComponent,
+  },
+  {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: 'profile/edit',
     component: EditComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: 'tournaments',
