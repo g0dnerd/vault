@@ -55,8 +55,11 @@ export class MatchPanelComponent {
     // have it update matches on the corresponding event
     this.matchWebSocketService
       .listenForMatchUpdates()
-      .subscribe((game: Match) => {
-        this.matchStore$.dispatch(updateCurrentMatch({ changes: game }));
+      .subscribe(async (game: Match) => {
+        const currentMatch = await firstValueFrom(this.currentMatch$);
+        if (currentMatch?.id === game.id) {
+          this.matchStore$.dispatch(updateCurrentMatch({ changes: game }));
+        }
       });
     this.currentMatch$.subscribe((game) => {
       if (game) {
