@@ -18,7 +18,9 @@ import {
   UnAuthGuard,
 } from './app/_helpers';
 import * as authEffects from './app/_store/effects/auth.effects';
+import * as cubeEffects from './app/_store/effects/cube.effects';
 import { authReducer } from './app/_store/reducers/auth.reducer';
+import { cubeReducer } from './app/_store/reducers/cube.reducer';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -27,6 +29,8 @@ bootstrapApplication(AppComponent, {
     provideStore(),
     provideState({ name: 'auth', reducer: authReducer }),
     provideEffects(authEffects),
+    provideState('cubes', cubeReducer),
+    provideEffects(cubeEffects),
     provideRouter(appRoutes, withComponentInputBinding()),
     provideHttpClient(
       withFetch(),
