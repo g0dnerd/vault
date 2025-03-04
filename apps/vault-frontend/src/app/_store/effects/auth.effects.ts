@@ -35,10 +35,14 @@ export const authSuccess = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(AuthActions.authSuccess),
-      tap(({ token, returnUrl }) => {
+      tap(({ isAdmin, token, returnUrl }) => {
         localStorage.setItem('token', token);
         if (returnUrl) {
-          router.navigate([returnUrl || '/']);
+          if (isAdmin) {
+            router.navigateByUrl('/');
+          } else {
+            router.navigate([returnUrl || '/']);
+          }
         }
       })
     );

@@ -1,7 +1,7 @@
 import { PushPipe } from '@ngrx/component';
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { AuthAppState, selectAdminStatus, selectAuthStatus } from '../_store';
@@ -16,13 +16,19 @@ import { NgIf } from '@angular/common';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-  private readonly store$ = inject(Store<AuthAppState>);
+  private readonly authStore$ = inject(Store<AuthAppState>);
 
-  authState$: Observable<boolean> = this.store$.select(selectAuthStatus);
-  isAdmin$: Observable<boolean | undefined> =
-    this.store$.select(selectAdminStatus);
+  authState$: Observable<boolean> = this.authStore$.select(selectAuthStatus);
+  isAdmin$: Observable<boolean | null> = of(null);
+
+  ngOnInit() {
+    this.isAdmin$ = this.authStore$.select(selectAdminStatus);
+    this.isAdmin$.subscribe((isAdmin) => {
+      console.log(`Navbar thinks that we are ${isAdmin} admin`);
+    });
+  }
 
   logout() {
-    this.store$.dispatch(logout());
+    this.authStore$.dispatch(logout());
   }
 }

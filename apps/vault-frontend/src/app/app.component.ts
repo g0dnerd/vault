@@ -11,11 +11,7 @@ import { AlertComponent } from './alert/alert.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { Store } from '@ngrx/store';
 import { AuthAppState } from './_store';
-import {
-  initProfile,
-  logout,
-  refreshAuth,
-} from './_store/actions/auth.actions';
+import { logout, refreshAuth } from './_store/actions/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -39,7 +35,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.authStore$.dispatch(initProfile());
     const token = localStorage.getItem('token');
     if (token == null) {
       this.authStore$.dispatch(logout());

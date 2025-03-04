@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private readonly store$: Store<AuthAppState>,
+    private readonly authStore$: Store<AuthAppState>,
     private route: ActivatedRoute
   ) {}
 
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
     const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-    this.store$.dispatch(
+    this.authStore$.dispatch(
       login({
         loginData: {
           email: this.f['username'].value,

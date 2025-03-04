@@ -5,14 +5,14 @@ import { User } from '@vault/shared';
 
 export interface AuthState {
   token: string | null;
-  isAdmin: boolean;
+  isAdmin: boolean | null;
   profileData: User | null;
   errorMessage: string | null;
 }
 
 export const initialState: AuthState = {
   token: null,
-  isAdmin: false,
+  isAdmin: null,
   profileData: null,
   errorMessage: null,
 };
@@ -26,7 +26,7 @@ export const authReducer = createReducer(
     errorMessage: null,
   })),
   on(AuthActions.loginFailure, (_state, { errorMessage }) => ({
-    isAdmin: false,
+    isAdmin: null,
     profileData: null,
     token: null,
     errorMessage,
@@ -34,13 +34,13 @@ export const authReducer = createReducer(
   // On logout, clears state
   on(AuthActions.logout, (_state) => ({
     token: null,
-    isAdmin: false,
+    isAdmin: null,
     profileData: null,
     errorMessage: null,
   })),
   // On failed registration, removes authentication and user from state
   on(AuthActions.registerFailure, (_state, { errorMessage }) => ({
-    isAdmin: false,
+    isAdmin: null,
     profileData: null,
     token: null,
     errorMessage,
@@ -62,7 +62,7 @@ export const authReducer = createReducer(
   })),
   on(AuthActions.initAdminStatusFailure, (state, { errorMessage }) => ({
     ...state,
-    isAdmin: false,
+    isAdmin: null,
     errorMessage,
   }))
 );

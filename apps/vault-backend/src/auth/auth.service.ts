@@ -29,8 +29,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    const isAdmin = user.roles.includes(Role.Admin);
     return {
       token: this.jwtService.sign({ userId: user.id }),
+      isAdmin,
     };
   }
 
