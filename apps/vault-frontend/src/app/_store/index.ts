@@ -4,12 +4,13 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Draft, Enrollment, Image, Tournament } from '@vault/shared';
+import { Cube, Draft, Enrollment, Image, Tournament } from '@vault/shared';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
 import { MatchState } from './reducers/match.reducer';
 import { PlayerState } from './reducers/player.reducer';
 
+import * as fromCube from './reducers/cube.reducer';
 import * as fromEnrollment from './reducers/enrollment.reducer';
 import * as fromImage from './reducers/image.reducer';
 import * as fromTournament from './reducers/tournaments.reducer';
@@ -272,3 +273,31 @@ export const selectLeaguePlayers = (tournamentId: number) =>
             enrollment !== undefined && enrollment.tournamentId == tournamentId
         )
   );
+
+// CUBES
+export const selectCubeState =
+  createFeatureSelector<fromCube.CubeState>('cubes');
+export const selectcubeIds = createSelector(
+  selectCubeState,
+  fromCube.selectCubeIds
+);
+export const selectCubeEntities = createSelector(
+  selectCubeState,
+  fromCube.selectCubeEntities
+);
+export const selectAllCubes = createSelector(
+  selectCubeState,
+  fromCube.selectAllCubes
+);
+export const selectCubeTotal = createSelector(
+  selectCubeState,
+  fromCube.selectCubeTotal
+);
+export const selectCubeById = (cubeId: number) =>
+  createSelector(selectCubeState, (cubeState) => cubeState.entities[cubeId]);
+export const selectCubeByQuery = (query: (cube: Cube) => boolean) =>
+  createSelector(selectCubeState, (state) => {
+    return Object.values(state.entities).find(
+      (cube): cube is Cube => !!cube && query(cube)
+    );
+  });
