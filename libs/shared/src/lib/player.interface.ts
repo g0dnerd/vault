@@ -6,6 +6,9 @@ export interface Player {
   checkedIn: boolean;
   checkedOut: boolean;
   enrollment?: Enrollment;
+  bye: boolean;
+  hadBye: boolean;
+  seat: number;
 }
 
 export interface PoolStatus {

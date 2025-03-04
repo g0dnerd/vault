@@ -5,6 +5,8 @@ const prisma = new PrismaClient();
 const roundsOfHashing = 10;
 
 async function main() {
+  await prisma.match.deleteMany();
+
   const tournament1 = await prisma.tournament.upsert({
     where: { name: 'Test Tournament 1' },
     update: {
@@ -586,7 +588,10 @@ async function main() {
         enrollmentId: enrollment9.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment9.id,
@@ -600,7 +605,10 @@ async function main() {
         enrollmentId: enrollment10.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment10.id,
@@ -614,7 +622,10 @@ async function main() {
         enrollmentId: enrollment11.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment11.id,
@@ -628,7 +639,10 @@ async function main() {
         enrollmentId: enrollment12.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment12.id,
@@ -642,7 +656,10 @@ async function main() {
         enrollmentId: enrollment13.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment13.id,
@@ -656,7 +673,10 @@ async function main() {
         enrollmentId: enrollment14.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment14.id,
@@ -670,7 +690,10 @@ async function main() {
         enrollmentId: enrollment15.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment15.id,
@@ -684,7 +707,10 @@ async function main() {
         enrollmentId: enrollment16.id,
       },
     },
-    update: {},
+    update: {
+      bye: false,
+      hadBye: false,
+    },
     create: {
       draftId: leagueDraft.id,
       enrollmentId: enrollment16.id,
@@ -699,11 +725,11 @@ async function main() {
       },
     },
     update: {
-      started: true,
+      started: false,
     },
     create: {
       draftId: draft1.id,
-      started: true,
+      started: false,
       roundIndex: 1,
     },
   });
@@ -711,113 +737,85 @@ async function main() {
   const round2 = await prisma.round.upsert({
     where: {
       draftRound: {
+        draftId: draft1.id,
+        roundIndex: 2,
+      },
+    },
+    update: {
+      started: false,
+    },
+    create: {
+      draftId: draft1.id,
+      started: false,
+      roundIndex: 2,
+    },
+  });
+
+  const round3 = await prisma.round.upsert({
+    where: {
+      draftRound: {
+        draftId: draft1.id,
+        roundIndex: 3,
+      },
+    },
+    update: {
+      started: false,
+    },
+    create: {
+      draftId: draft1.id,
+      started: false,
+      roundIndex: 3,
+    },
+  });
+
+  const leagueRound1 = await prisma.round.upsert({
+    where: {
+      draftRound: {
         draftId: leagueDraft.id,
         roundIndex: 1,
       },
     },
     update: {
-      started: true,
+      started: false,
     },
     create: {
-      started: true,
       draftId: leagueDraft.id,
+      started: false,
       roundIndex: 1,
     },
   });
 
-  const match1 = await prisma.match.upsert({
+  const leagueRound2 = await prisma.round.upsert({
     where: {
-      roundPairing: {
-        roundId: round1.id,
-        player1Id: draftPlayer1.id,
-        player2Id: draftPlayer2.id,
+      draftRound: {
+        draftId: leagueDraft.id,
+        roundIndex: 2,
       },
     },
     update: {
-      roundId: round1.id,
+      started: false,
     },
     create: {
-      player1Id: draftPlayer1.id,
-      player2Id: draftPlayer2.id,
-      tableNumber: 1,
-      roundId: round1.id,
+      draftId: leagueDraft.id,
+      started: false,
+      roundIndex: 2,
     },
   });
 
-  const match2 = await prisma.match.upsert({
+  const leagueRound3 = await prisma.round.upsert({
     where: {
-      roundPairing: {
-        roundId: round1.id,
-        player1Id: draftPlayer3.id,
-        player2Id: draftPlayer4.id,
+      draftRound: {
+        draftId: leagueDraft.id,
+        roundIndex: 3,
       },
     },
     update: {
-      roundId: round1.id,
-      player1Id: draftPlayer3.id,
-      player2Id: draftPlayer4.id,
-      tableNumber: 2,
+      started: false,
     },
     create: {
-      player1Id: draftPlayer3.id,
-      player2Id: draftPlayer4.id,
-      tableNumber: 2,
-      roundId: round1.id,
-    },
-  });
-
-  const match3 = await prisma.match.upsert({
-    where: {
-      roundPairing: {
-        roundId: round1.id,
-        player1Id: draftPlayer5.id,
-        player2Id: draftPlayer6.id,
-      },
-    },
-    update: {
-      roundId: round1.id,
-    },
-    create: {
-      player1Id: draftPlayer5.id,
-      player2Id: draftPlayer6.id,
-      tableNumber: 3,
-      roundId: round1.id,
-    },
-  });
-  const match4 = await prisma.match.upsert({
-    where: {
-      roundPairing: {
-        roundId: round1.id,
-        player1Id: draftPlayer7.id,
-        player2Id: draftPlayer8.id,
-      },
-    },
-    update: {
-      roundId: round1.id,
-    },
-    create: {
-      player1Id: draftPlayer7.id,
-      player2Id: draftPlayer8.id,
-      tableNumber: 4,
-      roundId: round1.id,
-    },
-  });
-  const match5 = await prisma.match.upsert({
-    where: {
-      roundPairing: {
-        roundId: round2.id,
-        player1Id: draftPlayer9.id,
-        player2Id: draftPlayer10.id,
-      },
-    },
-    update: {
-      roundId: round2.id,
-    },
-    create: {
-      player1Id: draftPlayer9.id,
-      player2Id: draftPlayer10.id,
-      tableNumber: 1,
-      roundId: round2.id,
+      draftId: leagueDraft.id,
+      started: false,
+      roundIndex: 3,
     },
   });
 
@@ -837,7 +835,14 @@ async function main() {
   console.log({ phase1, phase2 });
   console.log({ cube1 });
   console.log({ draft1, leagueDraft });
-  console.log({ round1 });
+  console.log({
+    round1,
+    round2,
+    round3,
+    leagueRound1,
+    leagueRound2,
+    leagueRound3,
+  });
   console.log({
     user1,
     user2,
@@ -885,7 +890,6 @@ async function main() {
     draftPlayer15,
     draftPlayer16,
   });
-  console.log({ match1, match2, match3, match4, match5 });
   console.log({ image1 });
 }
 
