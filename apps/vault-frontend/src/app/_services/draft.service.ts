@@ -24,4 +24,8 @@ export class DraftService {
   getDraftById(draftId: number): Observable<Draft> {
     return this.http.get<Draft>(`${this.apiUrl}/${draftId}`);
   }
+
+  seatDraft(draftId: number): Observable<Draft> {
+    return this.http.post<Draft>(`${this.apiUrl}/make-seatings/${draftId}`, {});
+  }
 }

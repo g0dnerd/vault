@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateDraftDto } from './dto/create-draft.dto';
 import { UpdateDraftDto } from './dto/update-draft.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -22,6 +22,7 @@ export class DraftsService {
         players: {
           select: {
             enrollment: { select: { user: { select: { username: true } } } },
+            seat: true,
           },
         },
         cube: {
@@ -84,5 +85,61 @@ export class DraftsService {
       },
     });
     return draftPlayer.draft;
+  }
+
+  async makeSeatings(draftId: number) {
+    let players = await this.prisma.draftPlayer.findMany({
+      where: {
+        draftId,
+      },
+    });
+    const numPlayers = players.length;
+
+    if (numPlayers <= 0) {
+      throw new InternalServerErrorException('No players to seat');
+    }
+
+    shuffleArray(players);
+    for (const [idx, player] of players.entries()) {
+      await this.prisma.draftPlayer.update({
+        where: {
+          id: player.id,
+        },
+        data: {
+          seat: idx + 1,
+        },
+      });
+    }
+    return await this.prisma.draft.update({
+      where: { id: draftId },
+      data: {
+        seated: true,
+      },
+      include: {
+        players: {
+          select: {
+            enrollment: { select: { user: { select: { username: true } } } },
+            seat: true,
+          },
+          orderBy: {
+            seat: 'asc',
+          },
+        },
+        cube: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }
+}
+
+function shuffleArray(arr: any[]) {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
   }
 }

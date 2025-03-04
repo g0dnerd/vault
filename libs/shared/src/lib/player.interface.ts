@@ -8,7 +8,7 @@ export interface Player {
   enrollment?: Enrollment;
   bye: boolean;
   hadBye: boolean;
-  seat: number;
+  seat?: number;
 }
 
 export interface PoolStatus {

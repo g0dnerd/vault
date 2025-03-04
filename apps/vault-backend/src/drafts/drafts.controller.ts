@@ -10,6 +10,7 @@ import {
   NotFoundException,
   UseGuards,
   Req,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -99,5 +100,18 @@ export class DraftsController {
   @ApiOkResponse({ type: DraftEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.draftsService.remove(id);
+  }
+
+  @Post('make-seatings/:draftId')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
+  @ApiOkResponse({ type: DraftEntity })
+  async makeSeatings(@Param('draftId', ParseIntPipe) draftId: number) {
+    try {
+      return await this.draftsService.makeSeatings(draftId);
+    } catch (error) {
+      return new InternalServerErrorException();
+    }
   }
 }
