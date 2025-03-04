@@ -427,16 +427,42 @@ async function main() {
     },
   });
 
-  const cube1 = await prisma.cube.upsert({
+  const cubeShivan = await prisma.cube.upsert({
     where: {
-      name: 'Test Cube 1',
+      name: 'Shivan',
     },
-    update: {},
-    create: {
-      name: 'Test Cube 1',
+    update: {
+      name: 'Shivan',
+      description: 'Old man in the sea',
       cardNumber: 450,
-      description: 'Foo bar test cube',
-      url: 'https://cubecobra.com/cube/shivan/overview',
+      creatorId: user1.id,
+      url: 'https://cubecobra.com/cube/overview/shivan',
+    },
+    create: {
+      name: 'Shivan',
+      cardNumber: 450,
+      description: 'Old man in the sea',
+      creatorId: user1.id,
+      url: 'https://cubecobra.com/cube/overview/shivan',
+    },
+  });
+
+  const cubeMighty = await prisma.cube.upsert({
+    where: {
+      name: 'The Mighty Cube',
+    },
+    update: {
+      name: 'The Mighty Cube',
+      description: 'Dragon brr',
+      creatorId: user2.id,
+      url: 'https://cubecobra.com/cube/overview/the_mighty_cube',
+    },
+    create: {
+      name: 'The Mighty Cube',
+      cardNumber: 360,
+      description: 'Dragon brr',
+      creatorId: user2.id,
+      url: 'https://cubecobra.com/cube/overview/the_mighty_cube',
     },
   });
 
@@ -444,7 +470,7 @@ async function main() {
     where: {
       phaseCube: {
         phaseId: phase1.id,
-        cubeId: cube1.id,
+        cubeId: cubeShivan.id,
       },
     },
     update: {
@@ -453,7 +479,7 @@ async function main() {
     create: {
       started: true,
       phaseId: phase1.id,
-      cubeId: cube1.id,
+      cubeId: cubeShivan.id,
     },
   });
 
@@ -461,7 +487,7 @@ async function main() {
     where: {
       phaseCube: {
         phaseId: phase2.id,
-        cubeId: cube1.id,
+        cubeId: cubeShivan.id,
       },
     },
     update: {
@@ -469,7 +495,7 @@ async function main() {
     },
     create: {
       phaseId: phase2.id,
-      cubeId: cube1.id,
+      cubeId: cubeShivan.id,
       started: true,
     },
   });
@@ -859,7 +885,7 @@ async function main() {
 
   console.log({ tournament1, tournament2, tournament3 });
   console.log({ phase1, phase2 });
-  console.log({ cube1 });
+  console.log({ cubeShivan, cubeMighty });
   console.log({ draft1, leagueDraft });
   console.log({
     round1,
