@@ -23,9 +23,6 @@ export class NavbarComponent {
 
   ngOnInit() {
     this.isAdmin$ = this.authStore$.select(selectAdminStatus);
-    this.isAdmin$.subscribe((isAdmin) => {
-      console.log(`Navbar thinks that we are ${isAdmin} admin`);
-    });
   }
 
   logout() {
