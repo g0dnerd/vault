@@ -747,3 +747,15 @@ img {
   position: sticky;
   top: 0;
 }
+
+mat-button-toggle-group {
+  margin-left: 10px;
+  display: inline-block;
+  border-radius: 9999px;
+  border: var(--border);
+}
+
+.form-input.player-wins {
+  align-items: center;
+  margin-bottom: 10px;
+}

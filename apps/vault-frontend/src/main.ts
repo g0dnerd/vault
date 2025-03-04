@@ -5,6 +5,7 @@ import {
   withFetch,
   withInterceptors,
 } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideEffects } from '@ngrx/effects';
 import { provideState, provideStore } from '@ngrx/store';
 
@@ -31,5 +32,6 @@ bootstrapApplication(AppComponent, {
       withFetch(),
       withInterceptors([jwtInterceptor, errorInterceptor])
     ),
+    provideAnimationsAsync(),
   ],
 }).catch((err) => console.error(err));
