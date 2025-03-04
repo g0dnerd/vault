@@ -36,6 +36,7 @@ export class DraftPlayersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['ADMIN'])
+  @ApiCreatedResponse({ type: DraftPlayerEntity })
   create(@Body() createDraftPlayerDto: CreateDraftPlayerDto) {
     return this.draftPlayersService.create(createDraftPlayerDto);
   }
