@@ -81,8 +81,13 @@ export class MatchesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['ADMIN'])
   @ApiCreatedResponse({ type: MatchEntity, isArray: true })
-  pairRound(@Param('draftId', ParseIntPipe) draftId: number) {
-    return this.matchesService.pairRound(draftId);
+  async pairRound(@Param('draftId', ParseIntPipe) draftId: number) {
+    try {
+      return await this.matchesService.pairRound(draftId);
+    } catch (error) {
+      console.error(JSON.stringify(error));
+      throw error;
+    }
   }
 
   @Patch('/report/:id')
