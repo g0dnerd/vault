@@ -14,6 +14,7 @@ export enum MatchActionTypes {
   INIT_DRAFT_MATCHES_SUCCESS = `${TYPE} Initialize matches for draft success`,
   UPDATE_CURRENT_MATCH = `${TYPE} Update current match`,
   PAIR_ROUND = `${TYPE} Pair round`,
+  UPDATE_DRAFT_MATCH = `${TYPE} Update draft match`,
 }
 
 export const matchStoreFailure = createAction(
@@ -47,4 +48,8 @@ export const updateCurrentMatch = createAction(
 export const pairRound = createAction(
   MatchActionTypes.PAIR_ROUND,
   props<{ draftId: number }>()
+);
+export const updateDraftMatch = createAction(
+  MatchActionTypes.UPDATE_DRAFT_MATCH,
+  props<{ changes: Match }>()
 );

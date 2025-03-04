@@ -29,5 +29,12 @@ export const matchReducer = createReducer(
     ...state,
     ongoing,
     errorMessage: null,
+  })),
+  on(MatchActions.updateDraftMatch, (state, { changes }) => ({
+    ...state,
+    ongoing: state.ongoing.map((g) =>
+      g.id === changes.id ? { ...g, ...changes } : g
+    ),
+    errorMessage: null,
   }))
 );
