@@ -56,7 +56,7 @@ model DraftPlayer {
   checkedIn       Boolean    @default(false)
   checkedOut      Boolean    @default(false)
   dropped         Boolean    @default(false)
-  seat            Int        @default(0)
+  seat            Int?
   bye             Boolean    @default(false)
   hadBye          Boolean    @default(false)
   Image           Image[]
