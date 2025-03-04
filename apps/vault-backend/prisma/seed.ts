@@ -448,7 +448,7 @@ async function main() {
       },
     },
     update: {
-      started: true,
+      seated: false,
     },
     create: {
       started: true,
@@ -464,7 +464,9 @@ async function main() {
         cubeId: cube1.id,
       },
     },
-    update: {},
+    update: {
+      seated: false,
+    },
     create: {
       phaseId: phase2.id,
       cubeId: cube1.id,
@@ -479,7 +481,9 @@ async function main() {
         enrollmentId: enrollment1.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment1.id,
@@ -493,7 +497,9 @@ async function main() {
         enrollmentId: enrollment2.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment2.id,
@@ -507,7 +513,9 @@ async function main() {
         enrollmentId: enrollment3.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment3.id,
@@ -521,7 +529,9 @@ async function main() {
         enrollmentId: enrollment4.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment4.id,
@@ -535,7 +545,9 @@ async function main() {
         enrollmentId: enrollment5.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment5.id,
@@ -548,7 +560,9 @@ async function main() {
         enrollmentId: enrollment6.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment6.id,
@@ -561,7 +575,9 @@ async function main() {
         enrollmentId: enrollment7.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment7.id,
@@ -574,7 +590,9 @@ async function main() {
         enrollmentId: enrollment8.id,
       },
     },
-    update: {},
+    update: {
+      seat: null,
+    },
     create: {
       draftId: draft1.id,
       enrollmentId: enrollment8.id,
@@ -591,6 +609,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
@@ -608,6 +627,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
@@ -625,6 +645,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
@@ -642,6 +663,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
@@ -659,6 +681,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
@@ -676,6 +699,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
@@ -693,6 +717,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
@@ -710,6 +735,7 @@ async function main() {
     update: {
       bye: false,
       hadBye: false,
+      seat: null,
     },
     create: {
       draftId: leagueDraft.id,
