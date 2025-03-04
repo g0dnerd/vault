@@ -1,2 +1,4 @@
 <app-admin-tournament-list></app-admin-tournament-list>
-<app-create-tournament></app-create-tournament>
+<app-create-tournament
+  (tournamentCreated)="fetchTournaments()"
+></app-create-tournament>

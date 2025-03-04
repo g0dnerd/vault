@@ -7,7 +7,9 @@
         <div class="card-body">
           <h5 class="card-title"></h5>
           <p class="card-subtitle mb-2">
-            Capacity: {{ tournament.playerCapacity }} |
+            <span class="tournament-capacity" *ngIf="tournament.playerCapacity">
+              Capacity: {{ tournament.playerCapacity }} |
+            </span>
             <a routerLink="/tournaments/admin/{{ tournament.id }}">Dashboard</a>
           </p>
         </div>

@@ -54,10 +54,27 @@
           formControlName="public"
           class="form-check-input"
           [ngClass]="{ 'is-invalid': submitted && f['public'].errors }"
-          style="margin-left: 0.5em;"
+          style="margin-left: 0.5em"
         />
         <div *ngIf="submitted && f['public'].errors" class="invalid-feedback">
-          <div *ngIf="f['public'].errors['required']">Public setting is required</div>
+          <div *ngIf="f['public'].errors['required']">
+            Public setting is required
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">League</label>
+        <input
+          type="checkbox"
+          formControlName="league"
+          class="form-check-input"
+          [ngClass]="{ 'is-invalid': submitted && f['league'].errors }"
+          style="margin-left: 0.5em"
+        />
+        <div *ngIf="submitted && f['league'].errors" class="invalid-feedback">
+          <div *ngIf="f['league'].errors['required']">
+            League setting is required
+          </div>
         </div>
       </div>
       <button [disabled]="loading" class="btn btn-primary">

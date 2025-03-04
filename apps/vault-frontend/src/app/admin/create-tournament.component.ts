@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { first } from 'rxjs';
+// import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { NgClass, NgIf } from '@angular/common';
 
 import { AlertService, TournamentService } from '../_services';
@@ -19,6 +19,8 @@ import { AlertService, TournamentService } from '../_services';
   styleUrl: './create-tournament.component.css',
 })
 export class CreateTournamentComponent implements OnInit {
+  tournamentCreated = output<void>();
+
   form!: FormGroup;
   loading = false;
   submitted = false;
@@ -26,14 +28,14 @@ export class CreateTournamentComponent implements OnInit {
   constructor(
     private readonly tournamentService: TournamentService,
     private readonly alertService: AlertService,
-    private readonly formBuilder: FormBuilder,
-    private readonly router: Router
+    private readonly formBuilder: FormBuilder // private readonly router: Router
   ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
       public: [false, Validators.required],
+      league: [false, Validators.required],
       playerCapacity: [
         0,
         [Validators.required, Validators.pattern(/[0-9]{1,2}/)],
@@ -44,6 +46,7 @@ export class CreateTournamentComponent implements OnInit {
     this.form.setValue({
       name: 'New Tournament 1',
       public: false,
+      league: false,
       playerCapacity: 32,
       description: 'Foo Bar',
     });
@@ -54,7 +57,7 @@ export class CreateTournamentComponent implements OnInit {
     return this.form.controls;
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
     this.alertService.clear();
 
@@ -62,28 +65,32 @@ export class CreateTournamentComponent implements OnInit {
 
     this.loading = true;
 
-    this.tournamentService
-      .createTournament({
-        name: this.f['name'].value,
-        public: this.f['public'].value,
-        playerCapacity: this.f['playerCapacity'].value,
-        description: this.f['description'].value,
-      })
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.alertService.success(
-            `Tournament ${this.f['name'].value} created successfully`,
-            true
-          );
-          this.router.navigateByUrl(this.router.url, {
-            skipLocationChange: false,
-          });
-        },
-        error: (error) => {
-          this.alertService.error(error);
-          this.loading = false;
-        },
-      });
+    try {
+      await firstValueFrom(
+        this.tournamentService.createTournament({
+          name: this.f['name'].value,
+          public: this.f['public'].value,
+          isLeague: this.f['league'].value,
+          playerCapacity: this.f['playerCapacity'].value,
+          description: this.f['description'].value,
+        })
+      );
+
+      console.log('created tournament');
+      this.alertService.success(
+        `Tournament ${this.f['name'].value} created successfully`,
+        true
+      );
+
+      this.tournamentCreated.emit();
+
+      // Reset form and state
+      this.loading = false;
+      this.submitted = false;
+      this.form.reset();
+    } catch (error) {
+      this.alertService.error('Failed to create tournament');
+      this.loading = false; // Ensure loading is reset on error
+    }
   }
 }

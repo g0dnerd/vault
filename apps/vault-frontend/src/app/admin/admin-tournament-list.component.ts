@@ -7,7 +7,6 @@ import { PushPipe } from '@ngrx/component';
 
 import { Tournament } from '@vault/shared';
 import { selectAllTournaments, State } from '../_store';
-import { initializeAllTournaments } from '../_store/actions/tournaments.actions';
 
 @Component({
   selector: 'app-admin-tournament-list',
@@ -22,7 +21,6 @@ export class AdminTournamentListComponent implements OnInit {
   private readonly tournamentsStore$ = inject(Store<State>);
 
   ngOnInit() {
-    this.tournamentsStore$.dispatch(initializeAllTournaments());
     this.allTournaments$ = this.tournamentsStore$.select(selectAllTournaments);
   }
 }
