@@ -14,6 +14,7 @@ import {
 
 @Component({
   templateUrl: 'my-tournaments.component.html',
+  styleUrl: './my-tournaments.component.css',
   standalone: true,
   imports: [NgFor, NgIf, RouterLink, PushPipe],
 })
