@@ -10,9 +10,9 @@ import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
 import {
   AdminTournamentDashboardComponent,
   AdminDraftPanelComponent,
-  AdminMatchPanelComponent,
 } from '../admin';
 import { LeaguesHomeComponent } from '../leagues/leagues-home.component';
+
 import * as draftEffects from '../_store/effects/draft.effects';
 import * as enrollmentEffects from '../_store/effects/enrollment.effects';
 import * as imageEffects from '../_store/effects/image.effects';
@@ -60,6 +60,7 @@ export const TOURNAMENT_ROUTES: Routes = [
   {
     path: ':tournamentId',
     component: TournamentDashboardComponent,
+    data: { requiredRole: Role.Player },
   },
   {
     path: 'admin/:tournamentId',
@@ -69,11 +70,6 @@ export const TOURNAMENT_ROUTES: Routes = [
   {
     path: 'admin/draft/:draftId',
     component: AdminDraftPanelComponent,
-    data: { requiredRole: Role.Admin },
-  },
-  {
-    path: 'admin/match/:matchId',
-    component: AdminMatchPanelComponent,
     data: { requiredRole: Role.Admin },
   },
 ];
