@@ -20,15 +20,16 @@ model Tournament {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  roles       Role[]       @default([PLAYER])
-  username    String       @unique
-  email       String       @unique
-  createdAt   DateTime     @default(now())
-  password    String
-  updatedAt   DateTime     @default(now()) @updatedAt
-  enrollments Enrollment[]
-  cubes       Cube[]
+  id             Int          @id @default(autoincrement())
+  roles          Role[]       @default([PLAYER])
+  username       String       @unique
+  email          String       @unique
+  createdAt      DateTime     @default(now())
+  password       String
+  profilePicture String?
+  updatedAt      DateTime     @default(now()) @updatedAt
+  enrollments    Enrollment[]
+  cubes          Cube[]
 }
 
 model Enrollment {
