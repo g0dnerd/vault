@@ -78,3 +78,26 @@ export const initSingleDraftEffect = createEffect(
   },
   { functional: true, dispatch: true }
 );
+
+export const seatDraftEffect = createEffect(
+  (actions$ = inject(Actions), draftService = inject(DraftService)) => {
+    return actions$.pipe(
+      ofType(DraftActions.seatDraft),
+      mergeMap(({ draftId }) => {
+        return draftService.seatDraft(draftId).pipe(
+          map((current) => {
+            return DraftActions.initCurrentDraftSuccess({ current });
+          }),
+          catchError((error) => {
+            return of(
+              DraftActions.draftStoreFailure({
+                errorMessage: error.message,
+              })
+            );
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);

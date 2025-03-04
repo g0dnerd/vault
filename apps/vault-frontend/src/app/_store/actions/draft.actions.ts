@@ -12,6 +12,7 @@ export enum DraftActionTypes {
   INIT_CURRENT_DRAFT_SUCCESS = `${TYPE} Initialize current draft success`,
   INIT_SINGLE_DRAFT = `${TYPE} Initialize single draft`,
   INIT_SINGLE_DRAFT_SUCCESS = `${TYPE} Initialize single draft success`,
+  SEAT_DRAFT = `${TYPE} Seat draft`,
 }
 
 export const draftStoreFailure = createAction(
@@ -41,5 +42,10 @@ export const initCurrentDraftSuccess = createAction(
 
 export const initSingleDraft = createAction(
   DraftActionTypes.INIT_SINGLE_DRAFT,
+  props<{ draftId: number }>()
+);
+
+export const seatDraft = createAction(
+  DraftActionTypes.SEAT_DRAFT,
   props<{ draftId: number }>()
 );
