@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map, first } from 'rxjs';
+import { map } from 'rxjs';
 
-import { AuthAppState, selectAuthStatus } from '../_store';
+import { AuthAppState, selectAuthToken } from '../_store';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +15,8 @@ export class AuthGuard implements CanActivate {
   constructor(private readonly authStore$: Store<AuthAppState>) {}
 
   canActivate() {
-    return this.authStore$.select(selectAuthStatus).pipe(
-      // Take the first value from the subscription that is a resolved auth status
-      first((authStatus) => authStatus !== null),
-      // and return it
+    return this.authStore$.select(selectAuthToken).pipe(
+      // Take the first value from the subscription and return it
       map((authStatus) => !!authStatus)
     );
   }
@@ -31,14 +29,15 @@ export class AuthGuard implements CanActivate {
 // Waits for the store to fully resolve auth status before
 // allowing or disallowing route access.
 export class UnAuthGuard implements CanActivate {
-  constructor(private readonly authStore$: Store<AuthAppState>) {}
+  private readonly authStore$ = inject(Store<AuthAppState>);
 
   canActivate() {
-    return this.authStore$.select(selectAuthStatus).pipe(
+    return this.authStore$.select(selectAuthToken).pipe(
       // Take the first value from the subscription that is a resolved auth status
-      first((authStatus) => authStatus !== null),
       // Return the inverse of that status
-      map((authStatus) => !!!authStatus)
+      map((authToken) => {
+        return !!!authToken;
+      })
     );
   }
 }
