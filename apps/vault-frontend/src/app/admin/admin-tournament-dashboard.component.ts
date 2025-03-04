@@ -13,6 +13,7 @@ import {
   State,
 } from '../_store';
 import { initOngoingDrafts } from '../_store/actions/draft.actions';
+import { initializeAllTournaments } from '../_store/actions/tournaments.actions';
 
 @Component({
   selector: 'app-admin-tournament-dashboard',
@@ -31,6 +32,7 @@ export class AdminTournamentDashboardComponent implements OnInit {
   tournament$: Observable<Tournament | undefined> = of(undefined);
 
   ngOnInit() {
+    this.store$.dispatch(initializeAllTournaments());
     this.tournament$ = this.store$.select(
       selectTournamentById(this.tournamentId())
     );

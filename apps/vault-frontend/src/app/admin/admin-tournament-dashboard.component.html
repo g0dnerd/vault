@@ -6,7 +6,13 @@
     <ul class="draft-list">
       <li *ngFor="let draft of drafts$ | ngrxPush; index as i">
         <div class="card">
-          <h4 class="card-header">Draft playing {{ draft.cube?.name }}</h4>
+          <h4 class="card-header">
+            <a
+              routerLink="/tournaments/admin/draft/{{ draft.id }}"
+              class="card-link"
+              >Draft playing {{ draft.cube?.name }}
+            </a>
+          </h4>
           <div class="card-body">
             <h5 class="card-subtitle mb-2">Players:</h5>
             <ul class="admin-draft-panel player-list">
@@ -15,11 +21,6 @@
               </li>
             </ul>
           </div>
-          <a
-            routerLink="/tournaments/admin/draft/{{ draft.id }}"
-            class="card-link"
-            >View draft</a
-          >
         </div>
       </li>
     </ul>
