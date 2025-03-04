@@ -10,6 +10,7 @@ import {
   NotFoundException,
   UseGuards,
   Req,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import {
@@ -86,7 +87,7 @@ export class MatchesController {
       return await this.matchesService.pairRound(draftId);
     } catch (error) {
       console.error(JSON.stringify(error));
-      throw error;
+      return new InternalServerErrorException('Failed to generate pairings');
     }
   }
 
