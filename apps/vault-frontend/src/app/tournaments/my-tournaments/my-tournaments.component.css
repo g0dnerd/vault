@@ -1,0 +1,53 @@
+html {
+  --border: 1px solid RGBA(0, 0, 0, 0.2);
+  --radius: 5px;
+  --inner-padding: 5px;
+  --main-color: #00a5d6;
+}
+
+#tournament-name::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  margin-right: 5px;
+  position: relative;
+  top: 2px;
+  opacity: 0.3;
+  background: url('/images/icons/icon-calender.svg') 0 0 / contain no-repeat;
+}
+
+a {
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  color: var(--black);
+  color: white;
+  background-color: var(--yellow);
+  background-color: var(--main-color);
+  padding: 7px 5px;
+  font-weight: 500;
+  font-size: 1em;
+  border: var(--border);
+  border-radius: var(--radius);
+}
+
+a:hover,
+a:active,
+a:focus {
+  background: var(--main-color);
+  color: white;
+}
+
+a::after {
+  content: '';
+  display: inline-block;
+  margin-left: 15px;
+  left: 0;
+  position: relative;
+  width: 25px;
+  height: 10px;
+  transform: translateX(0);
+  background: url('/images/sprite-arrows.svg') 0 0px/25px no-repeat;
+}

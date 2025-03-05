@@ -1,21 +1,16 @@
-<h1>My Tournaments</h1>
-<ul class="event-list">
-  @defer {
-  <li *ngFor="let tournament of enrolledTournaments$ | ngrxPush; index as i">
-    <div class="card">
-      <div class="card-body text-white" style="background-color: #000">
-        <h5 class="card-title">{{ tournament.name }}</h5>
-        <p class="card-subtitle mb-2">
-          Capacity: {{ tournament.playerCapacity }}
-        </p>
-        <a routerLink="/tournaments/{{ tournament.id }}" class="card-link">
-          Go to tournament dashboard
-        </a>
-      </div>
-    </div>
-  </li>
-  <li *ngIf="!(enrolledTournaments$ | ngrxPush)?.length">
-    You are not enrolled in any tournaments.
-  </li>
-  }
-</ul>
+<h5 class="my-events">My tournaments</h5>
+<mat-card
+  *ngFor="let tournament of enrolledTournaments$ | ngrxPush"
+  class="my-tournaments" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title id="tournament-name">{{ tournament.name }}</mat-card-title>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+      <a routerLink="/tournaments/{{ tournament.id }}">Go to tournament dashboard
+      </a>
+</mat-card-content>
+    <mat-card *ngIf="!(enrolledTournaments$ | ngrxPush)?.length"
+      ><mat-card-content>You are not enrolled in any tournaments.</mat-card-content></mat-card>
+</mat-card>

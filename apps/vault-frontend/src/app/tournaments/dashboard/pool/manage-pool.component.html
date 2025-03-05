@@ -1,4 +1,4 @@
-<ul class="image-list">
+<mat-list class="image-list">
   @defer {
   <li *ngFor="let image of images$ | ngrxPush; index as i">
     <img
@@ -9,8 +9,7 @@
     />
   </li>
   }
-</ul>
-
+</mat-list>
 <input
   type="file"
   class="file-input"

@@ -1,5 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
@@ -16,7 +18,7 @@ import {
   templateUrl: 'my-tournaments.component.html',
   styleUrl: './my-tournaments.component.css',
   standalone: true,
-  imports: [NgFor, NgIf, RouterLink, PushPipe],
+  imports: [MatCardModule, MatListModule, NgFor, NgIf, RouterLink, PushPipe],
 })
 export class MyTournamentsComponent implements OnInit {
   private readonly store$ = inject(Store<State>);

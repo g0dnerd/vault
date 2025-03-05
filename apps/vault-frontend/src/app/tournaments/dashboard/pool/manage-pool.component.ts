@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -12,7 +13,7 @@ import { selectAllImages, State } from '../../../_store';
 @Component({
   selector: 'app-manage-pool',
   standalone: true,
-  imports: [CommonModule, PushPipe],
+  imports: [CommonModule, MatListModule, PushPipe],
   templateUrl: './manage-pool.component.html',
   styleUrl: './manage-pool.component.css',
 })

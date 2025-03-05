@@ -1,21 +1,23 @@
-<div class="card">
-  <div class="card-body text-white" style="background-color: #000">
-    <h5 class="card-title">{{ tournamentName }}</h5>
-    <table class="standings-table">
-      <thead>
-        <tr>
-          <th style="text-align: center; padding-right: 40px">#</th>
-          <th style="text-align: center; padding-right: 40px">Name</th>
-          <th style="text-align: center; padding-right: 40px">Elo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let player of players$ | ngrxPush; index as i">
-          <td>{{ i + 1 }}</td>
-          <td>{{ player?.user?.username }}</td>
-          <td>{{ player?.elo }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+<mat-card-header>
+  <mat-card-title-group>
+    <mat-card-title id="tournament-name">{{ tournamentName }}</mat-card-title>
+  </mat-card-title-group>
+</mat-card-header>
+<mat-card-content>
+  <table class="standings-table">
+    <thead>
+      <tr>
+        <th style="text-align: center; padding-right: 40px">#</th>
+        <th style="text-align: center; padding-right: 40px">Name</th>
+        <th style="text-align: center; padding-right: 40px">Elo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let player of players$ | ngrxPush; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ player?.user?.username }}</td>
+        <td>{{ player?.elo }}</td>
+      </tr>
+    </tbody>
+  </table>
+</mat-card-content>

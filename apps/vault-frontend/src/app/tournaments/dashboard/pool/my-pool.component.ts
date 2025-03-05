@@ -1,5 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { PushPipe } from '@ngrx/component';
 import { Observable } from 'rxjs';
 
@@ -11,7 +12,7 @@ import { PlayerAppState, selectCurrentPoolStatus } from '../../../_store';
 @Component({
   selector: 'app-my-pool',
   standalone: true,
-  imports: [NgIf, PushPipe, ManagePoolComponent],
+  imports: [ManagePoolComponent, MatExpansionModule, NgIf, PushPipe],
   templateUrl: './my-pool.component.html',
   styleUrl: './my-pool.component.css',
 })

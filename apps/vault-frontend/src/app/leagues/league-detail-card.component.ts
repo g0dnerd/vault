@@ -1,5 +1,6 @@
 import { NgFor } from '@angular/common';
 import { Component, inject, Input, input, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 
@@ -11,7 +12,7 @@ import { PushPipe } from '@ngrx/component';
 @Component({
   selector: 'app-league-detail-card',
   standalone: true,
-  imports: [PushPipe, NgFor],
+  imports: [MatCardModule, PushPipe, NgFor],
   templateUrl: './league-detail-card.component.html',
   styleUrl: './league-detail-card.component.css',
 })

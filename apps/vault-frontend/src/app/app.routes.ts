@@ -1,11 +1,12 @@
 import { Route } from '@angular/router';
 
-import { LoginComponent, RegisterComponent } from './account';
 import { AuthGuard, UnAuthGuard } from './_helpers';
+import { LoginComponent, RegisterComponent } from './account';
 import { ProfileComponent } from './profile/profile.component';
 import { EditComponent } from './profile/edit.component';
 import { HomeComponent } from './home/home.component';
 import { CubeListComponent } from './cubes/cube-list.component';
+import { CubeDetailComponent } from './cubes/cube-detail.component';
 
 export const appRoutes: Route[] = [
   {
@@ -26,6 +27,10 @@ export const appRoutes: Route[] = [
   {
     path: 'cubes',
     component: CubeListComponent,
+  },
+  {
+    path: 'cubes/:cubeId',
+    component: CubeDetailComponent,
   },
   {
     path: 'profile',

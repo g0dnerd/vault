@@ -1,20 +1,20 @@
-<h5 class="card-title">My pool</h5>
-<app-manage-pool />
-<p
-  class="card-text"
-  *ngIf="(poolStatus$ | ngrxPush)?.checkedIn; else notCheckedIn"
->
-  I am checked in.
-</p>
-<p
-  class="card-text"
-  *ngIf="(poolStatus$ | ngrxPush)?.checkedOut; else notCheckedOut"
->
-  I am checked out.
-</p>
-<ng-template #notCheckedIn>
-  <p class="card-text">I am not checked in.</p>
-</ng-template>
-<ng-template #notCheckedOut>
-  <p class="card-text">I am not checked out.</p>
-</ng-template>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Decklist</mat-panel-title>
+    <ng-template *ngIf="(poolStatus$ | ngrxPush)?.checkedIn; else notCheckedIn">
+      <mat-panel-description> I am checked in. </mat-panel-description>
+      <mat-panel-description
+        *ngIf="(poolStatus$ | ngrxPush)?.checkedOut; else notCheckedOut"
+      >
+        I am checked out.
+      </mat-panel-description>
+    </ng-template>
+    <ng-template #notCheckedIn>
+      <mat-panel-description>I am not checked in.</mat-panel-description>
+    </ng-template>
+    <ng-template #notCheckedOut>
+      <mat-panel-description>I am not checked out.</mat-panel-description>
+    </ng-template>
+  </mat-expansion-panel-header>
+  <app-manage-pool />
+</mat-expansion-panel>

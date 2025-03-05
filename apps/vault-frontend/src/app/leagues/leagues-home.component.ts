@@ -1,5 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -23,6 +24,7 @@ import { RegisterPanelComponent } from '../tournaments/available-tournaments';
   selector: 'app-leagues-home',
   standalone: true,
   imports: [
+    MatCardModule,
     LeagueDetailCardComponent,
     NgIf,
     NgFor,

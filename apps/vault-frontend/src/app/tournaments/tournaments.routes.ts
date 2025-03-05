@@ -25,6 +25,7 @@ import { imageReducer } from '../_store/reducers/image.reducer';
 import { matchReducer } from '../_store/reducers/match.reducer';
 import { playerReducer } from '../_store/reducers/player.reducer';
 import { tournamentReducer } from '../_store/reducers/tournaments.reducer';
+import { CreateTournamentComponent } from '../admin/create-tournament.component';
 
 export const TOURNAMENT_ROUTES: Routes = [
   {
@@ -55,6 +56,11 @@ export const TOURNAMENT_ROUTES: Routes = [
   {
     path: 'admin',
     component: AdminDashboardComponent,
+    data: { requiredRole: Role.Admin },
+  },
+  {
+    path: 'admin/create',
+    component: CreateTournamentComponent,
     data: { requiredRole: Role.Admin },
   },
   {

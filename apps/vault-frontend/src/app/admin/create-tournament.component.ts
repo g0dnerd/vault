@@ -1,3 +1,4 @@
+import { NgClass, NgIf } from '@angular/common';
 import { Component, OnInit, output } from '@angular/core';
 import {
   FormBuilder,
@@ -5,16 +6,26 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-// import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { firstValueFrom } from 'rxjs';
-import { NgClass, NgIf } from '@angular/common';
 
 import { AlertService, TournamentService } from '../_services';
 
 @Component({
   selector: 'app-create-tournament',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgIf],
+  imports: [
+    MatCardModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatFormFieldModule,
+    NgClass,
+    NgIf,
+    ReactiveFormsModule,
+  ],
   templateUrl: './create-tournament.component.html',
   styleUrl: './create-tournament.component.css',
 })
@@ -81,8 +92,6 @@ export class CreateTournamentComponent implements OnInit {
         `Tournament ${this.f['name'].value} created successfully`,
         true
       );
-
-      this.tournamentCreated.emit();
 
       // Reset form and state
       this.loading = false;

@@ -6,6 +6,7 @@ import {
   numberAttribute,
   OnInit,
 } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -32,7 +33,7 @@ import { initCurrentPoolStatus } from '../../_store/actions/player.actions';
 @Component({
   selector: 'app-tournament-dashboard',
   standalone: true,
-  imports: [NgIf, RouterLink, DraftPanelComponent, PushPipe],
+  imports: [DraftPanelComponent, MatCardModule, NgIf, PushPipe, RouterLink],
   templateUrl: './tournament-dashboard.component.html',
   styleUrl: './tournament-dashboard.component.css',
 })
