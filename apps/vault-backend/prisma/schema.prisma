@@ -97,14 +97,16 @@ model Phase {
 }
 
 model Cube {
-  id          Int     @id @default(autoincrement())
-  creator     User?   @relation(fields: [creatorId], references: [id])
-  creatorId   Int?
-  name        String  @unique
-  cardNumber  Int
-  description String?
-  url         String  @unique
-  drafts      Draft[]
+  id              Int     @id @default(autoincrement())
+  creator         User?   @relation(fields: [creatorId], references: [id])
+  creatorId       Int?
+  name            String  @unique
+  cardNumber      Int
+  description     String?
+  longDescription String?
+  imageUrl        String?
+  url             String  @unique
+  drafts          Draft[]
 }
 
 model Draft {

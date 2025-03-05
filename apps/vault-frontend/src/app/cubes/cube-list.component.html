@@ -1,32 +1,23 @@
-<h1>Cube Overview</h1>
-<div class="card">
-  <div class="card-body">
-    <mat-accordion class="cube-list">
-      <mat-expansion-panel
-        *ngFor="let cube of cubes$ | ngrxPush; index as i"
-        class="cube-detail-embed"
-      >
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ cube.name }}
-          </mat-panel-title>
-          <mat-panel-description>
-            <div>
-              {{ cube.cardNumber }} card cube
-              <span *ngIf="cube.creator">by {{ cube.creator.username }}</span>
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <a class="cube-link-external" href="{{ cube.url }}" target="_blank">
-          View on CubeCobra
-          <mat-icon
-            aria-hidden="false"
-            aria-label="External link icon"
-            fontIcon="open_in_new"
-          ></mat-icon>
-        </a>
-        <div class="cube-description">{{ cube.description }}</div>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-</div>
+<mat-card class="cube-list-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>All cubes</mat-card-title>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-list class="cube-list">
+    <mat-list-item
+      *ngFor="let cube of cubes$ | ngrxPush; index as i"
+      class="cube-detail-preview"
+    >
+      <span matListItemTitle>
+        <a class="cube-link-internal" routerLink="/cubes/{{ cube.id }}">{{
+          cube.name
+        }}</a>
+      </span>
+      <span matListItemLine
+        >{{ cube.cardNumber }} card cube
+        <span *ngIf="cube.creator">by {{ cube.creator.username }}</span>
+      </span>
+    </mat-list-item>
+  </mat-list>
+</mat-card>

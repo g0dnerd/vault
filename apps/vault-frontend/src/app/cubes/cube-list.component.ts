@@ -1,12 +1,13 @@
-import { CommonModule } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
   OnInit,
 } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
@@ -18,7 +19,7 @@ import { initializeAllCubes } from '../_store/actions/cube.actions';
 @Component({
   selector: 'app-cube-list',
   standalone: true,
-  imports: [MatExpansionModule, MatIconModule, CommonModule, PushPipe],
+  imports: [MatCardModule, MatListModule, NgFor, NgIf, PushPipe, RouterLink],
   templateUrl: './cube-list.component.html',
   styleUrl: './cube-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

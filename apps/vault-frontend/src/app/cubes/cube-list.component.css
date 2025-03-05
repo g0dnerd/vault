@@ -5,21 +5,6 @@
   font-weight: 400;
 }
 
-.cube-detail-embed a {
-  text-decoration: none;
-}
-
 mat-panel-title {
   font-weight: 700;
-}
-
-.cube-description {
-  margin-top: 10px;
-}
-
-mat-icon {
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-  vertical-align: bottom;
 }

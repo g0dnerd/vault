@@ -433,17 +433,23 @@ async function main() {
     },
     update: {
       name: 'Shivan',
-      description: 'Old man in the sea',
+      description: 'Powered Vintage Cube',
+      longDescription:
+        "It's a Dragon alright! It's old, powerful and a little mean. This Cube started with the ambition to make Shivan Dragon and Old Man of the Sea playable cards. It turned into an (mostly) old bordered vintage cube, which hits a lot of the classic notes of the game. Fast mana and enablers are often broken but the payoffs are way worse than modern cards. Aggro, Midrange and Control are all viable strategies as well as some more synergistic themes like Madness, Reanimator, Enchantress, Artifacts or Stax for example. These themes span over multiple colors and are not restricted to certain color pairs (although some are more obvious). Fixing is amped up a little as Shock- and Fetchlands are included as well as ABU Duals and Painlands. Note that land destruction is also supported so build your manabases with care.",
       cardNumber: 450,
       creatorId: user1.id,
       url: 'https://cubecobra.com/cube/overview/shivan',
+      imageUrl: 'cubes/shivan.jpg',
     },
     create: {
       name: 'Shivan',
       cardNumber: 450,
-      description: 'Old man in the sea',
+      description: 'Vintage Cube',
+      longDescription:
+        "It's a Dragon alright! It's old, powerful and a little mean. This Cube started with the ambition to make Shivan Dragon and Old Man of the Sea playable cards. It turned into an (mostly) old bordered vintage cube, which hits a lot of the classic notes of the game. Fast mana and enablers are often broken but the payoffs are way worse than modern cards. Aggro, Midrange and Control are all viable strategies as well as some more synergistic themes like Madness, Reanimator, Enchantress, Artifacts or Stax for example. These themes span over multiple colors and are not restricted to certain color pairs (although some are more obvious). Fixing is amped up a little as Shock- and Fetchlands are included as well as ABU Duals and Painlands. Note that land destruction is also supported so build your manabases with care.",
       creatorId: user1.id,
       url: 'https://cubecobra.com/cube/overview/shivan',
+      imageUrl: 'cubes/shivan.jpg',
     },
   });
 
@@ -454,15 +460,21 @@ async function main() {
     update: {
       name: 'The Mighty Cube',
       description: 'Dragon brr',
+      longDescription:
+        'A fully powered Vintage cube. Get ahead with fast mana, take the Initiative, or straight up combo kill your opponents. No holding back with this cube.',
       creatorId: user2.id,
       url: 'https://cubecobra.com/cube/overview/the_mighty_cube',
+      imageUrl: 'cubes/mighty.jpg',
     },
     create: {
       name: 'The Mighty Cube',
       cardNumber: 360,
       description: 'Dragon brr',
+      longDescription:
+        'A fully powered Vintage cube. Get ahead with fast mana, take the Initiative, or straight up combo kill your opponents. No holding back with this cube.',
       creatorId: user2.id,
       url: 'https://cubecobra.com/cube/overview/the_mighty_cube',
+      imageUrl: 'cubes/mighty.jpg',
     },
   });
 

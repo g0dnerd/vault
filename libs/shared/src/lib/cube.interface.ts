@@ -6,5 +6,7 @@ export interface Cube {
   name: string;
   cardNumber: number;
   description?: string;
+  longDescription?: string;
+  imageUrl?: string;
   url: string;
 }

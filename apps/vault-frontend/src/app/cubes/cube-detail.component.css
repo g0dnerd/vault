@@ -1,0 +1,23 @@
+.mat-mdc-list-item-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.cube-card-footer {
+  padding: 16px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  max-height: 400px;
+  margin: auto;
+}
+
+.cube-card-footer a {
+  text-decoration: none;
+}
+
+.mdc-evolution-chip--with-avatar.mdc-evolution-chip--with-primary-graphic
+  .mdc-evolution-chip__graphic {
+  padding-right: 0;
+}

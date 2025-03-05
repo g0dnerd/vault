@@ -17,6 +17,12 @@ export class CubeEntity implements Cube {
   @ApiProperty({ required: false, nullable: true })
   description: string | null;
 
+  @ApiProperty({ required: false, nullable: true })
+  longDescription: string | null;
+
+  @ApiProperty({ required: false, nullable: true })
+  imageUrl: string | null;
+
   @ApiProperty()
   url: string;
 }

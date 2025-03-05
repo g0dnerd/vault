@@ -34,8 +34,21 @@ export class CreateCubeDto {
   @ApiProperty({ required: false })
   description?: string;
 
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  @ApiProperty({ required: false })
+  longDescription?: string;
+
   @IsUrl()
   @IsNotEmpty()
   @ApiProperty()
   url: string;
+
+  @IsOptional()
+  @IsUrl()
+  @IsNotEmpty()
+  @ApiProperty({ required: false })
+  imageUrl?: string;
 }
