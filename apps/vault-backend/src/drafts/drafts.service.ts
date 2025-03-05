@@ -81,7 +81,16 @@ export class DraftsService {
         },
       },
       select: {
-        draft: true,
+        draft: {
+          include: {
+            cube: {
+              select: {
+                name: true,
+                id: true,
+              },
+            },
+          },
+        },
       },
     });
     return draftPlayer.draft;

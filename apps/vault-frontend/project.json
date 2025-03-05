@@ -21,7 +21,10 @@
             "input": "apps/vault-frontend/public"
           }
         ],
-        "styles": ["apps/vault-frontend/src/styles.css"],
+        "styles": [
+          "@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "apps/vault-frontend/src/app/app.component.css"
+        ],
         "scripts": []
       },
       "configurations": {
