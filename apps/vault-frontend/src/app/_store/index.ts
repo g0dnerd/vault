@@ -5,15 +5,14 @@ import {
 } from '@ngrx/store';
 
 import { Cube, Draft, Enrollment, Image, Tournament } from '@vault/shared';
+import * as fromCube from './reducers/cube.reducer';
+import * as fromEnrollment from './reducers/enrollment.reducer';
+import * as fromImage from './reducers/image.reducer';
+import * as fromTournament from './reducers/tournament.reducer';
 import { AuthState } from './reducers/auth.reducer';
 import { DraftState } from './reducers/draft.reducer';
 import { MatchState } from './reducers/match.reducer';
 import { PlayerState } from './reducers/player.reducer';
-
-import * as fromCube from './reducers/cube.reducer';
-import * as fromEnrollment from './reducers/enrollment.reducer';
-import * as fromImage from './reducers/image.reducer';
-import * as fromTournament from './reducers/tournaments.reducer';
 
 export interface State {
   images: fromImage.ImageState;

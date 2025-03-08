@@ -1,14 +1,7 @@
-<mat-card class="event-dashboard" appearance="outlined">
-  <mat-card-header>
-    <mat-card-title-group>
-      <mat-card-title>{{ (tournament$ | ngrxPush)?.name }}</mat-card-title>
-      <mat-card-subtitle>Tournament Dashboard </mat-card-subtitle>
-    </mat-card-title-group>
-  </mat-card-header>
-  <mat-card-content>
-    <ng-container *ngIf="(tournament$ | ngrxPush)?.isLeague">
-      <p class="elo-panel">Your elo: {{ (enrollment$ | ngrxPush)?.elo }}</p>
-    </ng-container>
-    <app-draft-panel />
-  </mat-card-content>
-</mat-card>
+<h1 *ngIf="tournament$ | ngrxPush as tournament">{{ tournament.name }}</h1>
+<h5>Tournament Dashboard</h5>
+@defer {
+<ng-container *ngIf="tournament$ | ngrxPush">
+  <app-draft-panel></app-draft-panel
+></ng-container>
+}

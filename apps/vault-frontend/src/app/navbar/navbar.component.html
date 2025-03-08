@@ -18,13 +18,16 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <div *ngIf="isAdmin$ | ngrxPush as isAdmin; else noAdmin">
+        <ng-container *ngIf="isAdmin$ | ngrxPush as isAdmin; else noAdmin">
           <li class="nav-item">
-            <a class="nav-link" routerLink="tournaments/admin"
-              >Admin Dashboard</a
+            <a class="nav-link" routerLink="tournaments/admin">Tournaments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="tournaments/admin/create"
+              >Create Tournament</a
             >
           </li>
-        </div>
+        </ng-container>
         <ng-template #noAdmin>
           <li class="nav-item">
             <a class="nav-link" routerLink="/tournaments">My Tournaments</a>
@@ -35,9 +38,6 @@
             >
           </li>
         </ng-template>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/tournaments/leagues">Leagues</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/cubes">Cubes</a>
         </li>

@@ -18,17 +18,17 @@ export class RoundsService {
   findOne(id: number) {
     return this.prisma.round.findUnique({
       where: { id },
-    })
+    });
   }
 
   update(id: number, updateRoundDto: UpdateRoundDto) {
     return this.prisma.round.update({
       where: { id },
       data: updateRoundDto,
-    })
+    });
   }
 
   remove(id: number) {
-    return this.prisma.round.delete({ where: { id } })
+    return this.prisma.round.delete({ where: { id } });
   }
 }

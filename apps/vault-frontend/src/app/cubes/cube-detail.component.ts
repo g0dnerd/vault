@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
@@ -12,7 +13,6 @@ import { Observable, of } from 'rxjs';
 import { Cube } from '@vault/shared';
 import { selectCubeById, State } from '../_store';
 import { initializeAllCubes } from '../_store/actions/cube.actions';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-cube-detail',
@@ -28,7 +28,7 @@ import { NgIf } from '@angular/common';
     PushPipe,
   ],
   templateUrl: './cube-detail.component.html',
-  styleUrl: './cube-detail.component.css',
+  styleUrl: './cube-detail.component.scss',
 })
 export class CubeDetailComponent implements OnInit {
   cubeId = input.required<number>();

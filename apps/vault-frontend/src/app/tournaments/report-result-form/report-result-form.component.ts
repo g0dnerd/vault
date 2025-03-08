@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import {
   FormBuilder,
   FormControl,
@@ -20,16 +20,9 @@ import { MatchAppState, selectCurrentMatch } from '../../_store';
 @Component({
   selector: 'app-report-result-form',
   standalone: true,
-  imports: [
-    PushPipe,
-    MatButtonToggleModule,
-    ReactiveFormsModule,
-    NgClass,
-    NgIf,
-    NgFor,
-  ],
+  imports: [NgIf, PushPipe, MatButtonToggleModule, ReactiveFormsModule],
   templateUrl: './report-result-form.component.html',
-  styleUrl: './report-result-form.component.css',
+  styleUrl: './report-result-form.component.scss',
 })
 export class ReportResultFormComponent implements OnInit {
   form: FormGroup;
@@ -49,12 +42,12 @@ export class ReportResultFormComponent implements OnInit {
     this.form = this.formBuilder.group(
       {
         matchId: new FormControl(0, [Validators.required, Validators.min(0)]),
-        player1Wins: new FormControl(0, [
+        player1Wins: new FormControl([
           Validators.required,
           Validators.min(0),
           Validators.max(2),
         ]),
-        player2Wins: new FormControl(0, [
+        player2Wins: new FormControl([
           Validators.required,
           Validators.min(0),
           Validators.max(2),
@@ -70,8 +63,6 @@ export class ReportResultFormComponent implements OnInit {
     const matchId = await firstValueFrom(this.currentMatch$);
     this.form.setValue({
       matchId,
-      player1Wins: 0,
-      player2Wins: 0,
     });
   }
 

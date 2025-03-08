@@ -1,8 +1,8 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { createReducer, on } from '@ngrx/store';
 
 import { Image } from '@vault/shared';
 import * as ImageActions from '../actions/image.actions';
-import { createReducer, on } from '@ngrx/store';
 
 export interface ImageState extends EntityState<Image> {
   selectedImageId: number | null;

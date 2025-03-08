@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Image, API_ROUTES } from '@vault/shared';
 import { dev } from '../../environments/environment';
+import { Image, API_ROUTES } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',

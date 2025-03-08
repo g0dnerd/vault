@@ -6,8 +6,6 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-// Intercepts HttpException responses from the API
-// and adds metadata to them
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {

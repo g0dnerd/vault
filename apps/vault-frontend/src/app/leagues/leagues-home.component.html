@@ -1,8 +1,0 @@
-<h5 class="leagues">My Leagues</h5>
-<mat-card
-  *ngFor="let league of enrolledLeagues$ | ngrxPush"
-  class="my-leagues"
-  appearance="outlined"
->
-  <app-league-detail-card [id]="league.id" [tournamentName]="league.name" />
-</mat-card>

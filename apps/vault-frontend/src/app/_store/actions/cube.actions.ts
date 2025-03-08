@@ -1,5 +1,6 @@
 import { EntityMap, EntityMapOne, Predicate, Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
+
 import { Cube } from '@vault/shared';
 
 const TYPE = '[Cubes/API]';

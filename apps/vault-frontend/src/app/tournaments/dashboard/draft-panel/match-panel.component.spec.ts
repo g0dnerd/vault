@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatchPanelComponent } from './match-panel.component';
 
-describe('MatchPreviewComponent', () => {
+describe('MatchPanelComponent', () => {
   let component: MatchPanelComponent;
   let fixture: ComponentFixture<MatchPanelComponent>;
 

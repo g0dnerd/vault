@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { AuthGuard, UnAuthGuard } from './_helpers';
 import { LoginComponent, RegisterComponent } from './account';
 import { ProfileComponent } from './profile/profile.component';
-import { EditComponent } from './profile/edit.component';
+import { EditProfileComponent } from './profile/edit-profile.component';
 import { HomeComponent } from './home/home.component';
 import { CubeListComponent } from './cubes/cube-list.component';
 import { CubeDetailComponent } from './cubes/cube-detail.component';
@@ -38,7 +38,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'profile/edit',
-    component: EditComponent,
+    component: EditProfileComponent,
   },
   {
     path: 'tournaments',

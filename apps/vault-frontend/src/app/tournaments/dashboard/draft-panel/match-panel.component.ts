@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { KeyValuePipe, NgClass, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
@@ -24,15 +25,14 @@ import { ReportResultFormComponent } from '../../report-result-form/report-resul
   selector: 'app-match-panel',
   standalone: true,
   imports: [
-    ReportResultFormComponent,
-    PushPipe,
-    KeyValuePipe,
-    ReactiveFormsModule,
-    NgClass,
+    MatExpansionModule,
     NgIf,
+    PushPipe,
+    ReactiveFormsModule,
+    ReportResultFormComponent,
   ],
   templateUrl: './match-panel.component.html',
-  styleUrl: './match-panel.component.css',
+  styleUrl: './match-panel.component.scss',
 })
 export class MatchPanelComponent {
   private readonly authStore$ = inject(Store<AuthAppState>);

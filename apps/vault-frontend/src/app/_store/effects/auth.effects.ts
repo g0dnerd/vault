@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, tap } from 'rxjs';
 
 import { AccountService, AuthService } from '../../_services';
@@ -86,6 +86,7 @@ export const logout = createEffect(
     return actions$.pipe(
       ofType(AuthActions.logout),
       tap(() => {
+        console.log('Logging out');
         localStorage.removeItem('token');
         router.navigateByUrl('/account/login');
       })

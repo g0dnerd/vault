@@ -1,32 +1,19 @@
-import {
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { PushPipe } from '@ngrx/component';
+import { Router, RouterOutlet } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 import { AlertComponent } from './alert/alert.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { Store } from '@ngrx/store';
 import { AuthAppState } from './_store';
 import { logout, refreshAuth } from './_store/actions/auth.actions';
 
 @Component({
-  selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
-    AlertComponent,
-    NavbarComponent,
-    PushPipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterOutlet, AlertComponent, NavbarComponent],
+  selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   constructor(
@@ -40,6 +27,7 @@ export class AppComponent implements OnInit {
       this.authStore$.dispatch(logout());
       this.router.navigateByUrl('/account/login');
     } else {
+      console.log('Dispatching auth refresh to store');
       this.authStore$.dispatch(refreshAuth());
     }
   }

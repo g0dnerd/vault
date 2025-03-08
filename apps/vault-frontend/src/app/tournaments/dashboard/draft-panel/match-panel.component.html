@@ -1,13 +1,14 @@
-<ng-container *ngIf="currentMatch$ | ngrxPush">
-  <h5 class="card-title">My current match</h5>
-  <p class="card-text">
-    My Opponent at Table
-    <span id="my-table">{{ (currentMatch$ | ngrxPush)?.tableNumber }}</span
-    >:
-    <span id="my-opponent">{{
-      (currentMatch$ | ngrxPush)?.opponentName | ngrxPush
-    }}</span>
-  </p>
+<mat-expansion-panel class="match-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title> My Opponent </mat-panel-title>
+    <mat-panel-description *ngIf="currentMatch$ | ngrxPush as game">
+      {{ game.opponentName | ngrxPush }}
+      <ng-container *ngIf="game.tableNumber > 0">
+        at Table
+        <span class="my-table">{{ game.tableNumber }}</span></ng-container
+      >
+    </mat-panel-description>
+  </mat-expansion-panel-header>
 
   @defer {
   <div class="match-result-forms">
@@ -80,4 +81,4 @@
     </ng-template>
   </div>
   }
-</ng-container>
+</mat-expansion-panel>

@@ -1,27 +1,41 @@
 import { NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
-import { Observable, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { User } from '@vault/shared';
-import { AuthAppState, selectProfileData } from '../_store';
-import { initProfile } from '../_store/actions/auth.actions';
+import { AuthAppState, selectAdminStatus, selectProfileData } from '../_store';
+import { initAdminStatus, initProfile } from '../_store/actions/auth.actions';
 
 @Component({
-  templateUrl: 'profile.component.html',
   standalone: true,
-  imports: [NgIf, RouterLink, PushPipe],
-  styleUrls: ['./profile.component.css'],
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatChipsModule,
+    MatIconModule,
+    NgIf,
+    PushPipe,
+    RouterLink,
+  ],
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss',
 })
 export class ProfileComponent implements OnInit {
-  private readonly store$ = inject(Store<AuthAppState>);
+  private readonly authStore$ = inject(Store<AuthAppState>);
 
-  user$: Observable<User | null> = this.store$.select(selectProfileData);
-  isAdmin$: Observable<boolean | undefined> = of(false);
+  user$: Observable<User | null> = this.authStore$.select(selectProfileData);
+  isAdmin$: Observable<boolean | null> =
+    this.authStore$.select(selectAdminStatus);
 
   ngOnInit() {
-    this.store$.dispatch(initProfile());
+    this.authStore$.dispatch(initProfile());
+    this.authStore$.dispatch(initAdminStatus());
   }
 }

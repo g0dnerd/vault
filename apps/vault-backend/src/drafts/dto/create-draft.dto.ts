@@ -1,10 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNumber,
-  IsPositive,
-  IsBoolean,
-  IsOptional,
-} from 'class-validator';
+import { IsNumber, IsPositive, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateDraftDto {
   @IsNumber()

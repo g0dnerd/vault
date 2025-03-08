@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MyTournamentsComponent } from './my-tournaments.component';
 
-describe('HomeComponent', () => {
+describe('MyTournamentsComponent', () => {
   let component: MyTournamentsComponent;
   let fixture: ComponentFixture<MyTournamentsComponent>;
 

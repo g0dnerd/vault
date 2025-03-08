@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'vault-frontend',
   preset: '../../jest.preset.js',

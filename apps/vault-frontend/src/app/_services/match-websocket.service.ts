@@ -8,17 +8,9 @@ import { Match } from '@vault/shared';
   providedIn: 'root',
 })
 export class MatchWebSocketService {
-  private webSocket: Socket;
-  constructor() {
-    this.webSocket = new Socket({
-      url: dev.webSocketUrl,
-      options: {
-        transports: ['websocket'],
-      },
-    });
-  }
+  constructor(private webSocket: Socket) {}
 
   listenForMatchUpdates() {
-    return this.webSocket.fromEvent<Match>('matchUpdated');
+    return this.webSocket.fromEvent<Match, any>('matchUpdated');
   }
 }

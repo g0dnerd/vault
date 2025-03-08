@@ -1,16 +1,13 @@
-import { HttpRequest, HttpEvent, HttpHandlerFn } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, throwError, catchError } from 'rxjs';
+import { throwError, catchError } from 'rxjs';
 
 import { AuthAppState } from '../_store';
 import { logout } from '../_store/actions/auth.actions';
 
-export function errorInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> {
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authStore$ = inject(Store<AuthAppState>);
 
@@ -25,4 +22,4 @@ export function errorInterceptor(
       return throwError(() => error);
     })
   );
-}
+};

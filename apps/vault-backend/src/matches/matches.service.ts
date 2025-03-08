@@ -12,7 +12,7 @@ import { UpdateMatchDto } from './dto/update-match.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { MatchGateway } from './matches.gateway';
 import { Role } from '@prisma/client';
-import { eloProportionality } from '@vault/shared';
+import { ELO_PROPORTIONALITY } from './matches.module';
 
 interface PlayerScore {
   playerId: string;
@@ -68,7 +68,7 @@ export class MatchesService {
   }
 
   async findCurrentForTournament(tournamentId: number, userId: number) {
-    const games = await this.prisma.match.findFirst({
+    const game = await this.prisma.match.findFirst({
       where: {
         round: {
           started: true,
@@ -119,7 +119,14 @@ export class MatchesService {
         },
       },
     });
-    return games;
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const p1Name = game.player1.enrollment.user.username;
+    const p2Name = game.player2.enrollment.user.username;
+    const opponentName = user.username == p1Name ? p2Name : p1Name;
+    return {
+      ...game,
+      opponentName,
+    };
   }
 
   findOne(id: number) {
@@ -265,15 +272,15 @@ export class MatchesService {
       }
 
       if (game.player1Wins > game.player2Wins) {
-        const p1EloGain = p2WinProb * eloProportionality;
+        const p1EloGain = p2WinProb * ELO_PROPORTIONALITY;
         p1EloNew = p1Elo + p1EloGain;
         p2EloNew = p2Elo - p1EloGain;
       } else if (game.player1Wins < game.player2Wins) {
-        const p2EloGain = p1WinProb * eloProportionality;
+        const p2EloGain = p1WinProb * ELO_PROPORTIONALITY;
         p1EloNew = p1Elo - p2EloGain;
         p2EloNew = p2Elo + p2EloGain;
       } else {
-        const eloGain = p2WinProb * eloProportionality;
+        const eloGain = p2WinProb * ELO_PROPORTIONALITY;
         p1EloNew = p1Elo + eloGain / 2;
         p2EloNew = p2Elo - eloGain / 2;
       }
@@ -397,6 +404,8 @@ export class MatchesService {
       }
 
       const pairings = this.getMaxWeightMatching(bracketGraph);
+
+      console.log('Generated pairings ', JSON.stringify(pairings));
 
       for (const playerId in pairings) {
         if (
@@ -570,14 +579,32 @@ export class MatchesService {
       if (row < nodes.length && col < nodes.length) {
         const player1 = nodes[row];
         const player2 = nodes[col];
+        console.log('Looking at p1 ', player1, ' and p2 ', player2);
         if (
           graph.edge(player1, player2) &&
           !pairedPlayers.has(player1) &&
           !pairedPlayers.has(player2)
         ) {
+          console.log('Pairing them.');
           pairings[player1] = player2;
           pairedPlayers.add(player1);
           pairedPlayers.add(player2);
+        } else {
+          console.log('Not pairing them.');
+        }
+      }
+    }
+
+    // Handle unpaired players if necessary
+    const unpairedPlayers = nodes.filter(
+      (player) => !pairedPlayers.has(player)
+    );
+    if (unpairedPlayers.length > 0) {
+      // Implement logic to pair remaining unpaired players if needed
+      // For example, you could pair them randomly or based on their scores
+      for (let i = 0; i < unpairedPlayers.length; i += 2) {
+        if (i + 1 < unpairedPlayers.length) {
+          pairings[unpairedPlayers[i]] = unpairedPlayers[i + 1];
         }
       }
     }

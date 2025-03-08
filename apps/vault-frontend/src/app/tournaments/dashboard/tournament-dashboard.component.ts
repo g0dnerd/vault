@@ -1,19 +1,11 @@
 import { NgIf } from '@angular/common';
-import {
-  Component,
-  inject,
-  Input,
-  numberAttribute,
-  OnInit,
-} from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { RouterLink } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { PushPipe } from '@ngrx/component';
+import { Store } from '@ngrx/store';
 
 import { Enrollment, Tournament } from '@vault/shared';
-import { DraftPanelComponent } from '.';
+import { DraftPanelComponent } from './draft-panel/draft-panel.component';
 import {
   AuthAppState,
   DraftAppState,
@@ -24,21 +16,21 @@ import {
   State,
 } from '../../_store';
 import { initCurrentDraft } from '../../_store/actions/draft.actions';
-import { initializePublicTournaments } from '../../_store/actions/tournaments.actions';
+import { initializePublicTournaments } from '../../_store/actions/tournament.actions';
 import { initializeAllEnrollments } from '../../_store/actions/enrollment.actions';
 import { initCurrentMatch } from '../../_store/actions/match.actions';
 import { initProfile } from '../../_store/actions/auth.actions';
 import { initCurrentPoolStatus } from '../../_store/actions/player.actions';
+import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: 'app-tournament-dashboard',
   standalone: true,
-  imports: [DraftPanelComponent, MatCardModule, NgIf, PushPipe, RouterLink],
+  imports: [DraftPanelComponent, MatCardModule, NgIf, PushPipe],
   templateUrl: './tournament-dashboard.component.html',
-  styleUrl: './tournament-dashboard.component.css',
+  styleUrl: './tournament-dashboard.component.scss',
 })
 export class TournamentDashboardComponent implements OnInit {
-  @Input({ required: true, transform: numberAttribute }) tournamentId = 0;
+  tournamentId = input.required<number>();
 
   private readonly store$ = inject(Store<State>);
   private readonly authStore$ = inject(Store<AuthAppState>);
@@ -54,21 +46,21 @@ export class TournamentDashboardComponent implements OnInit {
     this.store$.dispatch(initializePublicTournaments());
     this.store$.dispatch(initializeAllEnrollments());
     this.draftStore$.dispatch(
-      initCurrentDraft({ tournamentId: this.tournamentId })
+      initCurrentDraft({ tournamentId: this.tournamentId() })
     );
     this.matchStore$.dispatch(
-      initCurrentMatch({ tournamentId: this.tournamentId })
+      initCurrentMatch({ tournamentId: this.tournamentId() })
     );
     this.playerStore$.dispatch(
-      initCurrentPoolStatus({ tournamentId: this.tournamentId })
+      initCurrentPoolStatus({ tournamentId: this.tournamentId() })
     );
     this.tournament$ = this.store$.select(
-      selectTournamentById(this.tournamentId)
+      selectTournamentById(this.tournamentId())
     );
     this.enrollment$ = this.store$.select(
       selectEnrollmentByQuery(
         (enrollment: Enrollment) =>
-          enrollment?.tournamentId == this.tournamentId
+          enrollment?.tournamentId == this.tournamentId()
       )
     );
   }
