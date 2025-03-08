@@ -7,12 +7,12 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
+      "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/vault-frontend",
         "index": "apps/vault-frontend/src/index.html",
-        "browser": "apps/vault-frontend/src/main.ts",
+        "main": "apps/vault-frontend/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/vault-frontend/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
