@@ -15,8 +15,9 @@ import { AuthAppState } from '../_store';
 import { AlertService } from '../_services';
 
 @Component({
-  templateUrl: 'register.component.html',
-  imports: [ReactiveFormsModule, NgClass, NgIf, RouterLink],
+  imports: [NgClass, NgIf, ReactiveFormsModule, RouterLink],
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss',
   standalone: true,
 })
 export class RegisterComponent {

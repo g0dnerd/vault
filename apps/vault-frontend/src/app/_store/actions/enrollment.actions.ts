@@ -10,7 +10,6 @@ export enum EnrollmentActionTypes {
   ENROLLMENT_STORE_FAILURE = `${TYPE} Error`,
   INITIALIZE_ALL_ENROLLMENTS = `${TYPE} Initialize all enrollments`,
   INITIALIZE_ALL_LEAGUE_PLAYERS = `${TYPE} Initialize league players`,
-  INITIALIZE_ALL_LEAGUE_ENROLLMENTS = `${TYPE} Initialize league enrollments`,
   SET_LEAGUE_PLAYERS = `${TYPE} Set league players`,
   SELECT_ENROLLMENT = `${TYPE} Select enrollment`,
   LOAD_ENROLLMENTS = `${TYPE} Load enrollments`,

@@ -27,7 +27,7 @@ import { AlertService, TournamentService } from '../_services';
     ReactiveFormsModule,
   ],
   templateUrl: './create-tournament.component.html',
-  styleUrl: './create-tournament.component.css',
+  styleUrl: './create-tournament.component.scss',
 })
 export class CreateTournamentComponent implements OnInit {
   tournamentCreated = output<void>();
@@ -39,7 +39,7 @@ export class CreateTournamentComponent implements OnInit {
   constructor(
     private readonly tournamentService: TournamentService,
     private readonly alertService: AlertService,
-    private readonly formBuilder: FormBuilder // private readonly router: Router
+    private readonly formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -78,13 +78,13 @@ export class CreateTournamentComponent implements OnInit {
 
     try {
       await firstValueFrom(
-        this.tournamentService.createTournament({
-          name: this.f['name'].value,
-          public: this.f['public'].value,
-          isLeague: this.f['league'].value,
-          playerCapacity: this.f['playerCapacity'].value,
-          description: this.f['description'].value,
-        })
+        this.tournamentService.createTournament(
+          this.f['name'].value,
+          this.f['public'].value,
+          this.f['league'].value,
+          this.f['playerCapacity'].value,
+          this.f['description'].value
+        )
       );
 
       console.log('created tournament');

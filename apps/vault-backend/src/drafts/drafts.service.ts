@@ -23,6 +23,8 @@ export class DraftsService {
           select: {
             enrollment: { select: { user: { select: { username: true } } } },
             seat: true,
+            bye: true,
+            hadBye: true,
           },
         },
         cube: {

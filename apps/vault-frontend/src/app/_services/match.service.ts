@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { API_ROUTES, Match, Result } from '@vault/shared';
 import { dev } from '../../environments/environment';
+import { API_ROUTES, Match, Result } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MatchService {
-  private apiUrl = `${dev.apiUrl}${API_ROUTES.MATCHES}`;
+  private readonly apiUrl = `${dev.apiUrl}${API_ROUTES.MATCHES}`;
 
   constructor(private readonly http: HttpClient) {}
 

@@ -1,13 +1,11 @@
-import { HttpRequest, HttpHandlerFn } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
 
 import { AuthAppState, selectAuthToken } from '../_store';
 
-// Intercepts any outgoing HTTP request and inserts the JWT token
-// into the `Authorization` header
-export function jwtInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authStore$ = inject(Store<AuthAppState>);
   let accessToken = authStore$.select(selectAuthToken).pipe(take(1));
 
@@ -27,4 +25,4 @@ export function jwtInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
     }
   });
   return next(req);
-}
+};

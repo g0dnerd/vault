@@ -1,0 +1,2 @@
+- Login button in LoginComponent and Logout button in NavbarComponent are tiny
+  - Register button in LoginComponent is not

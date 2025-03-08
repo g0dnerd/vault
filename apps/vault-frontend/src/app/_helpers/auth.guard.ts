@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 
 import { AuthAppState, selectAuthToken } from '../_store';
+import { logout, refreshAuth } from '../_store/actions/auth.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,18 @@ export class AuthGuard implements CanActivate {
   canActivate() {
     return this.authStore$.select(selectAuthToken).pipe(
       // Take the first value from the subscription and return it
-      map((authStatus) => !!authStatus)
+      switchMap((authStatus) => {
+        if (!!authStatus) {
+          return of(true);
+        }
+        const token = localStorage.getItem('token');
+        if (!token) {
+          this.authStore$.dispatch(logout());
+          return of(false);
+        }
+        this.authStore$.dispatch(refreshAuth());
+        return of(true);
+      })
     );
   }
 }

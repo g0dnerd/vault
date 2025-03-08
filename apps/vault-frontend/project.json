@@ -7,24 +7,22 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/vault-frontend",
         "index": "apps/vault-frontend/src/index.html",
-        "main": "apps/vault-frontend/src/main.ts",
+        "browser": "apps/vault-frontend/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/vault-frontend/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
             "input": "apps/vault-frontend/public"
           }
         ],
-        "styles": [
-          "@angular/material/prebuilt-themes/deeppurple-amber.css",
-          "apps/vault-frontend/src/app/app.component.css"
-        ],
+        "styles": ["apps/vault-frontend/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -37,30 +35,22 @@
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
             }
           ],
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
-      "options": {
-        "host": "localhost",
-        "port": 4200,
-        "proxyConfig": "apps/vault-frontend/src/proxy.conf.json"
-      },
       "configurations": {
         "production": {
           "buildTarget": "vault-frontend:build:production"
@@ -91,7 +81,7 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "vault-frontend:build",
-        "port": 4200,
+        "staticFilePath": "dist/apps/vault-frontend/browser",
         "spa": true
       }
     }

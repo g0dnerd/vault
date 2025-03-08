@@ -3,32 +3,17 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/vault-backend/src",
   "projectType": "application",
-  "tags": [],
   "targets": {
-    "prisma": {
-      "command": "prisma",
+    "build": {
+      "executor": "nx:run-commands",
       "options": {
-        "cwd": "apps/vault-backend"
-      }
-    },
-    "migrate": {
-      "command": "prisma migrate dev",
-      "options": {
-        "cwd": "apps/vault-backend"
-      }
-    },
-    "generate-types": {
-      "command": "prisma generate",
-      "options": {
-        "cwd": "apps/vault-backend"
-      }
-    },
-    "seed-db": {
-      "executor": "@nx-tools/nx-prisma:seed",
-      "options": {
-        "tsConfig": "apps/vault-backend/tsconfig.app.json",
-        "script": "apps/vault-backend/prisma/seed.ts",
-        "schema": "apps/vault-backend/prisma/schema.prisma"
+        "command": "webpack-cli build",
+        "args": ["node-env=production"]
+      },
+      "configurations": {
+        "development": {
+          "args": ["node-env=development"]
+        }
       }
     },
     "serve": {
@@ -48,41 +33,30 @@
         }
       }
     },
-    "prisma-deploy": {
-      "executor": "@nx-tools/nx-prisma:deploy"
+    "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "apps/vault-backend"
+      }
     },
-    "prisma-format": {
-      "executor": "@nx-tools/nx-prisma:format"
+    "migrate": {
+      "command": "prisma migrate dev",
+      "options": {
+        "cwd": "apps/vault-backend"
+      }
     },
-    "prisma-generate": {
-      "executor": "@nx-tools/nx-prisma:generate"
+    "generate-types": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "apps/vault-backend"
+      }
     },
-    "prisma-migrate": {
-      "executor": "@nx-tools/nx-prisma:migrate"
-    },
-    "prisma-pull": {
-      "executor": "@nx-tools/nx-prisma:pull"
-    },
-    "prisma-push": {
-      "executor": "@nx-tools/nx-prisma:push"
-    },
-    "prisma-reset": {
-      "executor": "@nx-tools/nx-prisma:reset"
-    },
-    "prisma-resolve": {
-      "executor": "@nx-tools/nx-prisma:resolve"
-    },
-    "prisma-seed": {
-      "executor": "@nx-tools/nx-prisma:seed"
-    },
-    "prisma-status": {
-      "executor": "@nx-tools/nx-prisma:status"
-    },
-    "prisma-studio": {
-      "executor": "@nx-tools/nx-prisma:studio"
-    },
-    "prisma-validate": {
-      "executor": "@nx-tools/nx-prisma:validate"
+    "seed-db": {
+      "command": "npx ts-node prisma/seed.ts",
+      "options": {
+        "cwd": "apps/vault-backend"
+      }
     }
-  }
+  },
+  "tags": []
 }

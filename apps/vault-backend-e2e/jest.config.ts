@@ -1,6 +1,5 @@
-/* eslint-disable */
 export default {
-  displayName: 'vault-backend-e2e',
+  displayName: 'vault-backend-bump-e2e',
   preset: '../../jest.preset.js',
   globalSetup: '<rootDir>/src/support/global-setup.ts',
   globalTeardown: '<rootDir>/src/support/global-teardown.ts',
@@ -15,5 +14,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/vault-backend-e2e',
+  coverageDirectory: '../../coverage/vault-backend-bump-e2e',
 };

@@ -11,12 +11,12 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     const message = exception.message.replace(/\n/g, '');
 
     switch (exception.code) {
-      // Unique constraint violation
+      // Unique contraint violation
       case 'P2002': {
         const status = HttpStatus.CONFLICT;
         response.status(status).json({
           statusCode: status,
-          message: message,
+          message,
         });
         break;
       }

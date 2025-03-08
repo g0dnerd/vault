@@ -1,5 +1,4 @@
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
@@ -34,15 +33,15 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    if (updateUserDto.password) {
-      updateUserDto.password = await bcrypt.hash(
-        updateUserDto.password,
-        roundsOfHashing
-      );
-    }
+  async update(id: number, data: { email: string; username: string }) {
+    // if (data.password) {
+    //   updateUserDto.password = await bcrypt.hash(
+    //     updateUserDto.password,
+    //     roundsOfHashing
+    //   );
+    // }
 
-    return this.prisma.user.update({ where: { id }, data: updateUserDto });
+    return this.prisma.user.update({ where: { id }, data });
   }
 
   remove(id: number) {

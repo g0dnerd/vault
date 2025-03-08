@@ -1,3 +1,4 @@
+import { NgClass, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -6,16 +7,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { NgClass, NgIf } from '@angular/common';
 import { Store } from '@ngrx/store';
 
 import { login } from '../_store/actions/auth.actions';
 import { AuthAppState } from '../_store';
 
 @Component({
-  templateUrl: 'login.component.html',
-  imports: [ReactiveFormsModule, NgClass, NgIf, RouterLink],
-  standalone: true,
+  imports: [NgClass, NgIf, RouterLink, ReactiveFormsModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
   errorMessage: string | null = null;
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private readonly authStore$: Store<AuthAppState>,
-    private route: ActivatedRoute
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {

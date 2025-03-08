@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { dev } from '../../environments/environment';
-import { API_ROUTES, CreateTournamentDto, Tournament } from '@vault/shared';
+import { API_ROUTES, Tournament } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,20 @@ export class TournamentService {
 
   constructor(private readonly http: HttpClient) {}
 
-  createTournament(tournament: CreateTournamentDto): Observable<Tournament> {
+  createTournament(
+    name: string,
+    isLeague: boolean,
+    isPublic: boolean,
+    playerCapacity: number,
+    description: string | null
+  ): Observable<Tournament> {
+    const tournament = {
+      name,
+      isLeague,
+      public: isPublic,
+      playerCapacity,
+      description,
+    };
     return this.http.post<Tournament>(this.apiUrl, tournament);
   }
 
@@ -29,11 +42,11 @@ export class TournamentService {
     return this.http.get<Tournament[]>(`${this.apiUrl}/available`);
   }
 
-  getEnrolled(): Observable<Tournament[]> {
+  getEnrolledTournaments(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.apiUrl}/enrolled`);
   }
 
-  getUserLeagues(): Observable<Tournament[]> {
+  getEnrolledLeagues(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(`${this.apiUrl}/enrolled-leagues`);
   }
 }

@@ -1,10 +1,9 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-
-import { AlertService } from '../../_services';
-import * as ImageActions from '../actions/image.actions';
 import { catchError, map, mergeMap, of, tap } from 'rxjs';
-import { ImageService } from '../../_services/image.service';
+
+import { AlertService, ImageService } from '../../_services';
+import * as ImageActions from '../actions/image.actions';
 
 export const imageStoreFailure = createEffect(
   (actions$ = inject(Actions), alertService = inject(AlertService)) => {

@@ -1,17 +1,20 @@
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import expressSession from 'express-session';
 
 import { AppModule } from './app/app.module';
-import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-client-exception.filter';
 import { HttpExceptionFilter } from './http-exception-filter/http-exception.filter';
+import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-client-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       origin: [
-        '192.168.2.65',
         'http://localhost',
         'http://localhost:4200',
         'https://vault.paulkukowski.net',
@@ -21,11 +24,13 @@ async function bootstrap() {
     },
   });
 
-  app.setGlobalPrefix('api');
+  const globalPrefix = 'api';
+  app.setGlobalPrefix(globalPrefix);
+
   app.use(
     expressSession({
       cookie: {
-        maxAge: 60 * 1000, // ms
+        maxAge: 60 * 1000,
       },
       secret: 'local-secret-super-secret-oh-no-ive-been-hacked',
       name: 'session',
@@ -45,7 +50,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup(globalPrefix, app, document);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(
@@ -53,6 +58,11 @@ async function bootstrap() {
     new PrismaClientExceptionFilter(httpAdapter)
   );
 
-  await app.listen(3000);
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  Logger.log(
+    `Application is running on: http://localhost:${port}/${globalPrefix}`
+  );
 }
+
 bootstrap();

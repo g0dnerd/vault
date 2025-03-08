@@ -7,31 +7,29 @@ import { AlertService } from '../_services';
 @Component({
   selector: 'app-alert',
   standalone: true,
-  imports: [NgIf, NgClass],
+  imports: [NgClass, NgIf],
   templateUrl: './alert.component.html',
-  styleUrl: './alert.component.css',
+  styleUrl: './alert.component.scss',
 })
 export class AlertComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   alert: any;
 
-  constructor(private alertService: AlertService) { }
+  constructor(private alertService: AlertService) {}
 
   ngOnInit() {
-    this.subscription = this.alertService.onAlert()
-      .subscribe(alert => {
-        switch (alert?.type) {
-          case 'success':
-            alert.cssClass = 'alert alert-success';
-            break;
-          case 'error':
-            alert.cssClass = 'alert alert-danger';
-            break;
-        }
+    this.subscription = this.alertService.onAlert().subscribe((alert) => {
+      switch (alert?.type) {
+        case 'success':
+          alert.cssClass = 'alert alert-success';
+          break;
+        case 'error':
+          alert.cssClass = 'alert alert-danger';
+          break;
+      }
 
-        this.alert = alert;
-      });
+      this.alert = alert;
+    });
   }
 
   ngOnDestroy() {

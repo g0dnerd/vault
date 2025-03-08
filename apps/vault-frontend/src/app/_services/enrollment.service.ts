@@ -11,7 +11,7 @@ import { Enrollment, API_ROUTES } from '@vault/shared';
 export class EnrollmentsService {
   private readonly apiUrl = `${dev.apiUrl}${API_ROUTES.ENROLLMENTS}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getForUser(): Observable<Enrollment[]> {
     return this.http.get<Enrollment[]>(`${this.apiUrl}/current`);

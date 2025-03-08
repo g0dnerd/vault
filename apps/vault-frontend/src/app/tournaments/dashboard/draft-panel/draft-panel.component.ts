@@ -1,15 +1,18 @@
-import { Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
 
-import { Draft } from '@vault/shared';
 import { DraftAppState, selectCurrentDraft } from '../../../_store';
-import { MatchPanelComponent, MyPoolComponent } from '..';
+import { MatchPanelComponent } from './match-panel.component';
+import { MyPoolComponent } from './my-pool.component';
 
 @Component({
   selector: 'app-draft-panel',
@@ -17,21 +20,23 @@ import { MatchPanelComponent, MyPoolComponent } from '..';
   imports: [
     MatCardModule,
     MatchPanelComponent,
-    MatDividerModule,
     MyPoolComponent,
     NgIf,
     PushPipe,
     RouterLink,
   ],
   templateUrl: './draft-panel.component.html',
-  styleUrl: './draft-panel.component.css',
+  styleUrl: './draft-panel.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DraftPanelComponent {
+export class DraftPanelComponent implements OnInit {
   private readonly draftStore$ = inject(Store<DraftAppState>);
 
-  draft$: Observable<Draft | null> = of(null);
+  readonly draft$ = this.draftStore$.select(selectCurrentDraft);
 
-  ngOnInit() {
-    this.draft$ = this.draftStore$.select(selectCurrentDraft);
+  ngOnInit(): void {
+    this.draft$.subscribe((draft) => {
+      console.log('Draft Panel has draft ', JSON.stringify(draft));
+    });
   }
 }

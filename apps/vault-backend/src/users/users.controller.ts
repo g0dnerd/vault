@@ -3,7 +3,6 @@ import { Controller, Get, Body, Patch, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -28,13 +27,14 @@ export class UsersController {
     return this.usersService.getProfile(req.user['id']);
   }
 
-  @Patch(':id')
+  @Patch()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
-  async update(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
-    return new UserEntity(
-      await this.usersService.update(req.user['id'], updateUserDto)
-    );
+  async update(
+    @Req() req: Request,
+    @Body() data: { email: string; username: string }
+  ) {
+    return new UserEntity(await this.usersService.update(req.user['id'], data));
   }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -10,7 +9,7 @@ export class AlertService {
   private subject = new Subject<any>();
   private showAfterRedirect = false;
 
-  constructor(private router: Router) {
+  constructor(private readonly router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         if (this.showAfterRedirect) {
