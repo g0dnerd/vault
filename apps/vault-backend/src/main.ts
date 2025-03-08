@@ -58,11 +58,9 @@ async function bootstrap() {
     new PrismaClientExceptionFilter(httpAdapter)
   );
 
-  const port = process.env.PORT || 3000;
+  const port = 3000;
   await app.listen(port);
-  Logger.log(
-    `Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  Logger.log(`Application is running on port ${port}/${globalPrefix}`);
 }
 
 bootstrap();
