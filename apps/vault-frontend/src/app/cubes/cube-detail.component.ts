@@ -6,6 +6,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
@@ -24,6 +25,7 @@ import { initializeAllCubes } from '../_store/actions/cube.actions';
     MatExpansionModule,
     MatIconModule,
     MatListModule,
+    MatProgressSpinnerModule,
     NgIf,
     PushPipe,
   ],

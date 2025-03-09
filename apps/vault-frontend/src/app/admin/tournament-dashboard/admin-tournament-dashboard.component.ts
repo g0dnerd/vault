@@ -1,5 +1,8 @@
 import { NgFor } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
@@ -18,7 +21,14 @@ import { initializeAllTournaments } from '../../_store/actions/tournament.action
 @Component({
   selector: 'app-admin-tournament-dashboard',
   standalone: true,
-  imports: [NgFor, PushPipe, RouterLink],
+  imports: [
+    MatCardModule,
+    MatExpansionModule,
+    MatListModule,
+    NgFor,
+    PushPipe,
+    RouterLink,
+  ],
   templateUrl: './admin-tournament-dashboard.component.html',
   styleUrl: './admin-tournament-dashboard.component.scss',
 })

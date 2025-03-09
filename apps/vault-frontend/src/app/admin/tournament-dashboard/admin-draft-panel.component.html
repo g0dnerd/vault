@@ -1,8 +1,12 @@
-<div class="card">
-  <h4 class="card-header">
-    Draft playing {{ (draft$ | ngrxPush)?.cube?.name }}
-  </h4>
-  <div class="card-body">
+<mat-card class="draft-card admin">
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>
+        Draft playing {{ (draft$ | ngrxPush)?.cube?.name }}
+      </mat-card-title>
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
     <div *ngIf="(draft$ | ngrxPush)?.seated; else notSeated">
       <div *ngIf="!(matches$ | ngrxPush)?.length">
         <h5 class="card-subtitle mb-2">Seatings:</h5>
@@ -137,5 +141,5 @@
         </button>
       </div>
     </ng-template>
-  </div>
-</div>
+  </mat-card-content>
+</mat-card>

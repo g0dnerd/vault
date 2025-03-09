@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
@@ -33,9 +34,11 @@ import { MatchService, MatchWebSocketService } from '../../_services';
   selector: 'app-admin-draft-panel',
   standalone: true,
   imports: [
-    CommonModule,
     MatButtonToggleModule,
+    MatCardModule,
     MatExpansionModule,
+    NgFor,
+    NgIf,
     PushPipe,
     ReactiveFormsModule,
   ],
