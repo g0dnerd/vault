@@ -4,6 +4,7 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState, provideStore } from '@ngrx/store';
@@ -44,6 +45,6 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([jwtInterceptor, errorInterceptor])
     ),
     importProvidersFrom(SocketIoModule.forRoot(config)),
-    // provideAnimationsAsync(),
+    provideAnimationsAsync(),
   ],
 };
