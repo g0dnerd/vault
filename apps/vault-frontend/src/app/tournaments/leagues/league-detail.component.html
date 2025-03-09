@@ -2,7 +2,7 @@
 <mat-card class="event-dashboard" appearance="outlined">
   <mat-card-header>
     <mat-card-title-group>
-      <mat-card-title id="tournament-name">{{
+      <mat-card-title class="tournament-name">{{
         (league$ | ngrxPush)?.name
       }}</mat-card-title>
     </mat-card-title-group>
