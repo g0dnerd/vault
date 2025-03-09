@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -31,6 +32,10 @@ import { MatchesService } from '../matches/matches.service';
     RoundsModule,
     TournamentsModule,
     UsersModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      ignoreEnvFile: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, MatchGateway, MatchesService],
