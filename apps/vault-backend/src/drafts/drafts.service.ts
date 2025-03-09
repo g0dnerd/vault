@@ -61,6 +61,7 @@ export class DraftsService {
         },
         cube: {
           select: {
+            id: true,
             name: true,
           },
         },
