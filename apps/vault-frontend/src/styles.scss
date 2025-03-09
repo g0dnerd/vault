@@ -1547,7 +1547,7 @@ img {
         position: relative;
         top: 2px;
         opacity: 0.3;
-        background: url('/images/icons/icon-calender.svg') 0 0 / contain
+        background: url('/images/icons/icon-calender-white.svg') 0 0 / contain
           no-repeat;
       }
     }
@@ -1763,4 +1763,56 @@ img {
 }
 .mat-button-toggle-group {
   margin-left: 15px;
+}
+
+mat-card-content {
+  a.dashboard-link {
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: var(--inner-padding);
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    color: $color_1;
+    color: $color_2;
+    background-color: $background-color_1;
+    background-color: $background-color_2;
+    padding: 7px 5px;
+    font-weight: 500;
+    font-size: 1em;
+    margin: 10px 0;
+
+    &:hover {
+      background-color: $background-color_3;
+      color: $color_4;
+    }
+    &:active {
+      background-color: $background-color_3;
+      color: $color_4;
+    }
+    &:focus {
+      background-color: $background-color_3;
+      color: $color_4;
+    }
+    &:after {
+      content: '';
+      display: inline-block;
+      margin-left: 15px;
+      left: 0;
+      position: relative;
+      width: 25px;
+      height: 10px;
+      transform: translateX(0);
+      background: url('/images/sprite-arrows.svg') 0 0px/25px no-repeat;
+    }
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
