@@ -69,6 +69,15 @@ export class EnrollmentsController {
     return enrollment;
   }
 
+  @Get('tournament/:tournamentId')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN', 'PLAYER_ADMIN'])
+  @ApiOkResponse({ type: EnrollmentEntity, isArray: true })
+  findForTournament(@Param('tournamentId', ParseIntPipe) tournamentId: number) {
+    return this.enrollmentsService.findByTournament(tournamentId);
+  }
+
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -22,6 +22,7 @@ import { authReducer } from './_store/reducers/auth.reducer';
 import { cubeReducer } from './_store/reducers/cube.reducer';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { dev } from '../environments/environment';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 const config: SocketIoConfig = {
   url: dev.webSocketUrl,
@@ -32,6 +33,12 @@ const config: SocketIoConfig = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: {
+        appearance: 'outline',
+      },
+    },
     AuthGuard,
     UnAuthGuard,
     provideStore(),

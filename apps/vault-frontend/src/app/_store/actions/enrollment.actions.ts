@@ -10,6 +10,7 @@ export enum EnrollmentActionTypes {
   ENROLLMENT_STORE_FAILURE = `${TYPE} Error`,
   INITIALIZE_ALL_ENROLLMENTS = `${TYPE} Initialize all enrollments`,
   INITIALIZE_ALL_LEAGUE_PLAYERS = `${TYPE} Initialize league players`,
+  INITIALIZE_ENROLLMENTS_FOR_TOURNAMENT = `${TYPE} Initialize enrollments for tournament`,
   SET_LEAGUE_PLAYERS = `${TYPE} Set league players`,
   SELECT_ENROLLMENT = `${TYPE} Select enrollment`,
   LOAD_ENROLLMENTS = `${TYPE} Load enrollments`,
@@ -39,6 +40,10 @@ export const setLeaguePlayers = createAction(
 );
 export const initializeAllEnrollments = createAction(
   EnrollmentActionTypes.INITIALIZE_ALL_ENROLLMENTS
+);
+export const initializeEnrollmentsForTournament = createAction(
+  EnrollmentActionTypes.INITIALIZE_ENROLLMENTS_FOR_TOURNAMENT,
+  props<{ tournamentId: number }>()
 );
 export const initializeAllLeaguePlayers = createAction(
   EnrollmentActionTypes.INITIALIZE_ALL_LEAGUE_PLAYERS

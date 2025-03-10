@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { firstValueFrom } from 'rxjs';
 
 import { AlertService, TournamentService } from '../_services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-tournament',
@@ -39,10 +40,9 @@ export class CreateTournamentComponent implements OnInit {
   constructor(
     private readonly tournamentService: TournamentService,
     private readonly alertService: AlertService,
-    private readonly formBuilder: FormBuilder
-  ) {}
-
-  ngOnInit() {
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
+  ) {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
       public: [false, Validators.required],
@@ -53,7 +53,9 @@ export class CreateTournamentComponent implements OnInit {
       ],
       description: ['', Validators.required],
     });
+  }
 
+  ngOnInit() {
     this.form.setValue({
       name: 'New Tournament 1',
       public: false,
@@ -61,7 +63,6 @@ export class CreateTournamentComponent implements OnInit {
       playerCapacity: 32,
       description: 'Foo Bar',
     });
-    this.loading = false;
   }
 
   get f() {
@@ -77,7 +78,7 @@ export class CreateTournamentComponent implements OnInit {
     this.loading = true;
 
     try {
-      await firstValueFrom(
+      const tournament = await firstValueFrom(
         this.tournamentService.createTournament(
           this.f['name'].value,
           this.f['public'].value,
@@ -88,7 +89,7 @@ export class CreateTournamentComponent implements OnInit {
       );
 
       this.alertService.success(
-        `Tournament ${this.f['name'].value} created successfully`,
+        `Tournament ${tournament.name} created successfully`,
         true
       );
 
@@ -96,6 +97,7 @@ export class CreateTournamentComponent implements OnInit {
       this.loading = false;
       this.submitted = false;
       this.form.reset();
+      this.router.navigate([`/admin/tournament/create/${tournament.id}`]);
     } catch (error) {
       this.alertService.error('Failed to create tournament');
       this.loading = false; // Ensure loading is reset on error

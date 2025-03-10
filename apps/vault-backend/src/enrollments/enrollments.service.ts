@@ -60,7 +60,11 @@ export class EnrollmentsService {
     return this.prisma.enrollment.findMany({
       where: { tournamentId },
       include: {
-        user: true,
+        user: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
   }

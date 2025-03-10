@@ -27,6 +27,7 @@ import {
   AdminTournamentListComponent,
 } from '../admin';
 import { LeagueDetailComponent } from './leagues/league-detail.component';
+import { CreateDraftComponent } from '../admin/create-draft.component';
 
 export const TOURNAMENT_ROUTES: Routes = [
   {
@@ -62,6 +63,11 @@ export const TOURNAMENT_ROUTES: Routes = [
   {
     path: 'admin/create',
     component: CreateTournamentComponent,
+    data: { requiredRole: Role.Admin },
+  },
+  {
+    path: 'admin/create/:tournamentId',
+    component: CreateDraftComponent,
     data: { requiredRole: Role.Admin },
   },
   {

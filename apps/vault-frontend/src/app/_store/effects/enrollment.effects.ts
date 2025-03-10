@@ -17,7 +17,7 @@ export const enrollmentStoreFailure = createEffect(
   { functional: true, dispatch: false }
 );
 
-export const initAllEnrollments = createEffect(
+export const initializeAllEnrollmentsEffect = createEffect(
   (
     actions$ = inject(Actions),
     enrollmentService = inject(EnrollmentsService)
@@ -43,7 +43,33 @@ export const initAllEnrollments = createEffect(
   { functional: true, dispatch: true }
 );
 
-export const initLeaguePlayers = createEffect(
+export const initializeEnrollmentsForTournamentEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    enrollmentService = inject(EnrollmentsService)
+  ) => {
+    return actions$.pipe(
+      ofType(EnrollmentActions.initializeEnrollmentsForTournament),
+      mergeMap(({ tournamentId }) => {
+        return enrollmentService.getForTournament(tournamentId).pipe(
+          map((enrollments) => {
+            return EnrollmentActions.loadEnrollments({ enrollments });
+          }),
+          catchError((error) => {
+            return of(
+              EnrollmentActions.enrollmentStoreFailure({
+                errorMessage: error.message,
+              })
+            );
+          })
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
+export const initializeLeaguePlayersEffect = createEffect(
   (
     actions$ = inject(Actions),
     enrollmentService = inject(EnrollmentsService)
