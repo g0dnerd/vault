@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { join } from 'path';
+import { createWriteStream, existsSync, mkdirSync } from 'fs';
+
+import { Role } from '@vault/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
-import { Role } from '../users/role.enum';
-import { join } from 'path';
-import { createWriteStream, existsSync, mkdirSync } from 'fs';
 
 @Injectable()
 export class ImagesService {

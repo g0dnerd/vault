@@ -2,7 +2,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
-import { Role } from './role.enum';
 
 export const roundsOfHashing = 10;
 
@@ -48,9 +47,12 @@ export class UsersService {
     return this.prisma.user.delete({ where: { id } });
   }
 
-  async isAdmin(userId: number) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    return user.roles.includes(Role.Admin);
+  async getRoles(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { roles: true },
+    });
+    return user.roles;
   }
 
   async getProfile(userId: number) {

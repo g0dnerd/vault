@@ -49,6 +49,7 @@ async function main() {
     where: { email: 'JnLkA@example.com' },
     update: {
       password: user1Password,
+      username: 'paul',
     },
     create: {
       username: 'testuser1',

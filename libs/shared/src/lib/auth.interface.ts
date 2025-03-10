@@ -1,6 +1,8 @@
+import { Role } from './user.interface';
+
 export interface AuthInterface {
   token: string;
-  isAdmin?: boolean;
+  roles: Role[];
 }
 
 export interface AuthPayload {

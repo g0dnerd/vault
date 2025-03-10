@@ -11,12 +11,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('is-admin')
+  @Get('roles')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: Boolean })
-  isAdmin(@Req() req: Request) {
-    return this.usersService.isAdmin(req.user['id']);
+  @ApiOkResponse({ isArray: true })
+  getRoles(@Req() req: Request) {
+    return this.usersService.getRoles(req.user['id']);
   }
 
   @Get('profile')

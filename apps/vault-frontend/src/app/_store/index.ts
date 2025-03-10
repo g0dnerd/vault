@@ -4,7 +4,14 @@ import {
   createSelector,
 } from '@ngrx/store';
 
-import { Cube, Draft, Enrollment, Image, Tournament } from '@vault/shared';
+import {
+  Cube,
+  Draft,
+  Enrollment,
+  Image,
+  Role,
+  Tournament,
+} from '@vault/shared';
 import * as fromCube from './reducers/cube.reducer';
 import * as fromEnrollment from './reducers/enrollment.reducer';
 import * as fromImage from './reducers/image.reducer';
@@ -198,7 +205,11 @@ export const selectUsername = createSelector(
 );
 export const selectAdminStatus = createSelector(
   selectAuth,
-  (state: AuthState) => state.isAdmin
+  (state: AuthState) => state.roles.includes(Role.Admin)
+);
+export const selectPlayerAdminStatus = createSelector(
+  selectAuth,
+  (state: AuthState) => state.roles.includes(Role.PlayerAdmin)
 );
 export const selectErrorMessage = createSelector(
   selectAuth,

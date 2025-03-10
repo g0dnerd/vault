@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+import { Role } from '@vault/shared';
 import { CreateDraftPlayerDto } from './dto/create-draft-player.dto';
 import { UpdateDraftPlayerDto } from './dto/update-draft-player.dto';
-import { Role } from '../users/role.enum';
 
 @Injectable()
 export class DraftPlayersService {

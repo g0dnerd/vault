@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { dev } from '../../environments/environment';
-import { API_ROUTES, User } from '@vault/shared';
+import { API_ROUTES, Role, User } from '@vault/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +22,7 @@ export class AccountService {
     return this.http.patch<User>(this.apiUrl, user);
   }
 
-  isCurrentUserAdmin(): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/is-admin`);
+  getCurrentUserRoles(): Observable<Role[]> {
+    return this.http.get<Role[]>(`${this.apiUrl}/roles`);
   }
 }

@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { AuthPayload, User } from '@vault/shared';
+import { AuthPayload, Role, User } from '@vault/shared';
 
 const TYPE = '[Auth]';
 
@@ -10,9 +10,9 @@ export enum AuthActionTypes {
   INIT_PROFILE = `${TYPE} Initialize profile data`,
   INIT_PROFILE_SUCCESS = `${TYPE} Initialize profile data success`,
   INIT_PROFILE_FAILURE = `${TYPE} Initialize profile data failure`,
-  INIT_ADMIN_STATUS = `${TYPE} Initialize admin status`,
-  INIT_ADMIN_STATUS_SUCCESS = `${TYPE} Initialize admin status success`,
-  INIT_ADMIN_STATUS_FAILURE = `${TYPE} Initialize admin status failure`,
+  INIT_ROLES = `${TYPE} Initialize roles`,
+  INIT_ROLES_SUCCESS = `${TYPE} Initialize roles success`,
+  INIT_ROLES_FAILURE = `${TYPE} Initialize roles failure`,
   LOGIN = `${TYPE} Login`,
   LOGIN_FAILURE = `${TYPE} Login Failure`,
   LOGOUT = `${TYPE} Logout`,
@@ -29,7 +29,7 @@ export const refreshAuth = createAction(AuthActionTypes.REFRESH_AUTH);
 // to returnUrl, if given
 export const authSuccess = createAction(
   AuthActionTypes.AUTH_SUCCESS,
-  props<{ token: string; isAdmin: boolean; returnUrl?: string }>()
+  props<{ token: string; roles: Role[]; returnUrl?: string }>()
 );
 
 // Tries to authenticate to the backend using loginData and
@@ -74,15 +74,15 @@ export const initProfileFailure = createAction(
   props<{ errorMessage: string }>()
 );
 
-export const initAdminStatus = createAction(AuthActionTypes.INIT_ADMIN_STATUS);
+export const initRoles = createAction(AuthActionTypes.INIT_ROLES);
 
-export const initAdminStatusSuccess = createAction(
-  AuthActionTypes.INIT_ADMIN_STATUS_SUCCESS,
-  props<{ isAdmin: boolean }>()
+export const initRolesSuccess = createAction(
+  AuthActionTypes.INIT_ROLES_SUCCESS,
+  props<{ roles: Role[] }>()
 );
 
-export const initAdminStatusFailure = createAction(
-  AuthActionTypes.INIT_ADMIN_STATUS_FAILURE,
+export const initRolesFailure = createAction(
+  AuthActionTypes.INIT_ROLES_FAILURE,
   props<{ errorMessage: string }>()
 );
 

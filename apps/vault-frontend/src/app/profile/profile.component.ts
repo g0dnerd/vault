@@ -7,11 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { PushPipe } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 
-import { User } from '@vault/shared';
 import { AuthAppState, selectAdminStatus, selectProfileData } from '../_store';
-import { initAdminStatus, initProfile } from '../_store/actions/auth.actions';
+import { initRoles, initProfile } from '../_store/actions/auth.actions';
 
 @Component({
   standalone: true,
@@ -30,12 +28,11 @@ import { initAdminStatus, initProfile } from '../_store/actions/auth.actions';
 export class ProfileComponent implements OnInit {
   private readonly authStore$ = inject(Store<AuthAppState>);
 
-  user$: Observable<User | null> = this.authStore$.select(selectProfileData);
-  isAdmin$: Observable<boolean | null> =
-    this.authStore$.select(selectAdminStatus);
+  readonly user$ = this.authStore$.select(selectProfileData);
+  readonly isAdmin$ = this.authStore$.select(selectAdminStatus);
 
   ngOnInit() {
     this.authStore$.dispatch(initProfile());
-    this.authStore$.dispatch(initAdminStatus());
+    this.authStore$.dispatch(initRoles());
   }
 }

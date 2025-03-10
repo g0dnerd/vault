@@ -1,32 +1,32 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { User } from '@vault/shared';
+import { Role, User } from '@vault/shared';
 import * as AuthActions from '../actions/auth.actions';
 
 export interface AuthState {
   token: string | null;
-  isAdmin: boolean | null;
+  roles: Role[];
   profileData: User | null;
   errorMessage: string | null;
 }
 
 export const initialState: AuthState = {
   token: null,
-  isAdmin: null,
+  roles: [],
   profileData: null,
   errorMessage: null,
 };
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.authSuccess, (state, { token, isAdmin }) => ({
+  on(AuthActions.authSuccess, (state, { token, roles }) => ({
     ...state,
     token,
-    isAdmin,
+    roles,
     errorMessage: null,
   })),
   on(AuthActions.loginFailure, (_state, { errorMessage }) => ({
-    isAdmin: null,
+    roles: [],
     profileData: null,
     token: null,
     errorMessage,
@@ -34,13 +34,13 @@ export const authReducer = createReducer(
   // On logout, clears state
   on(AuthActions.logout, (_state) => ({
     token: null,
-    isAdmin: null,
+    roles: [],
     profileData: null,
     errorMessage: null,
   })),
   // On failed registration, removes authentication and user from state
   on(AuthActions.registerFailure, (_state, { errorMessage }) => ({
-    isAdmin: null,
+    roles: [],
     profileData: null,
     token: null,
     errorMessage,
@@ -55,14 +55,14 @@ export const authReducer = createReducer(
     profileData: null,
     errorMessage,
   })),
-  on(AuthActions.initAdminStatusSuccess, (state, { isAdmin }) => ({
+  on(AuthActions.initRolesSuccess, (state, { roles }) => ({
     ...state,
-    isAdmin,
+    roles,
     errorMessage: null,
   })),
-  on(AuthActions.initAdminStatusFailure, (state, { errorMessage }) => ({
+  on(AuthActions.initRolesFailure, (state, { errorMessage }) => ({
     ...state,
-    isAdmin: null,
+    roles: [Role.Player],
     errorMessage,
   }))
 );

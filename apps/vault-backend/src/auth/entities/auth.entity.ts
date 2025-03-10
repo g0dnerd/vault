@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
+
+import { Role } from '@prisma/client';
 
 export class AuthEntity {
   @ApiProperty()
@@ -7,6 +9,5 @@ export class AuthEntity {
   token: string;
 
   @ApiProperty()
-  @IsBoolean()
-  isAdmin?: boolean;
+  roles: Role[];
 }

@@ -163,4 +163,5 @@ enum ImageType {
 enum Role {
   ADMIN
   PLAYER
+  PLAYER_ADMIN
 }

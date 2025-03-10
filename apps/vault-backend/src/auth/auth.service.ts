@@ -1,5 +1,3 @@
-import { AuthEntity } from './entities/auth.entity';
-import { PrismaService } from '../prisma/prisma.service';
 import {
   Injectable,
   NotFoundException,
@@ -7,12 +5,17 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+
+import { PrismaService } from '../prisma/prisma.service';
+import { AuthEntity } from './entities/auth.entity';
 import { UserEntity } from '../users/entities/user.entity';
-import { Role } from '../users/role.enum';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService
+  ) {}
 
   async login(email: string, password: string): Promise<AuthEntity> {
     const user = await this.prisma.user.findUnique({
@@ -29,10 +32,9 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isAdmin = user.roles.includes(Role.Admin);
     return {
       token: this.jwtService.sign({ userId: user.id }),
-      isAdmin,
+      roles: user.roles,
     };
   }
 
@@ -51,6 +53,7 @@ export class AuthService {
     });
     return {
       token: this.jwtService.sign({ userId: user.id }),
+      roles: user.roles,
     };
   }
 
@@ -60,10 +63,9 @@ export class AuthService {
         where: { id: userId },
       })
     );
-    const isAdmin = user.roles.includes(Role.Admin);
     return {
       token: this.jwtService.sign({ userId: user.id }),
-      isAdmin,
+      roles: user.roles,
     };
   }
 }

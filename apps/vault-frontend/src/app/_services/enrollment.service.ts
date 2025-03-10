@@ -17,6 +17,12 @@ export class EnrollmentsService {
     return this.http.get<Enrollment[]>(`${this.apiUrl}/current`);
   }
 
+  getForTournament(tournamentId: number): Observable<Enrollment[]> {
+    return this.http.get<Enrollment[]>(
+      `${this.apiUrl}/tournament/${tournamentId}`
+    );
+  }
+
   getForLeague(): Observable<Enrollment[]> {
     return this.http.get<Enrollment[]>(`${this.apiUrl}/league`);
   }
