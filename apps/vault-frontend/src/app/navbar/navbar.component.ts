@@ -18,11 +18,9 @@ export class NavbarComponent {
   private readonly authStore$ = inject(Store<AuthAppState>);
 
   authState$: Observable<boolean> = this.authStore$.select(selectAuthStatus);
-  isAdmin$: Observable<boolean | null> =
-    this.authStore$.select(selectAdminStatus);
+  isAdmin$ = this.authStore$.select(selectAdminStatus);
 
   logout() {
-    console.log('Click');
     this.authStore$.dispatch(logout());
   }
 }

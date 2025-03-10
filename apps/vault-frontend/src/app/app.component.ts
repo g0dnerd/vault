@@ -27,7 +27,6 @@ export class AppComponent implements OnInit {
       this.authStore$.dispatch(logout());
       this.router.navigateByUrl('/account/login');
     } else {
-      console.log('Dispatching auth refresh to store');
       this.authStore$.dispatch(refreshAuth());
     }
   }

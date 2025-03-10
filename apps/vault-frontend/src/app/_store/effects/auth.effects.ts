@@ -86,7 +86,6 @@ export const logout = createEffect(
     return actions$.pipe(
       ofType(AuthActions.logout),
       tap(() => {
-        console.log('Logging out');
         localStorage.removeItem('token');
         router.navigateByUrl('/account/login');
       })

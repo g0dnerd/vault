@@ -87,7 +87,6 @@ export class CreateTournamentComponent implements OnInit {
         )
       );
 
-      console.log('created tournament');
       this.alertService.success(
         `Tournament ${this.f['name'].value} created successfully`,
         true

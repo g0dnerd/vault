@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
@@ -29,14 +24,8 @@ import { MyPoolComponent } from './my-pool.component';
   styleUrl: './draft-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DraftPanelComponent implements OnInit {
+export class DraftPanelComponent {
   private readonly draftStore$ = inject(Store<DraftAppState>);
 
   readonly draft$ = this.draftStore$.select(selectCurrentDraft);
-
-  ngOnInit(): void {
-    this.draft$.subscribe((draft) => {
-      console.log('Draft Panel has draft ', JSON.stringify(draft));
-    });
-  }
 }
